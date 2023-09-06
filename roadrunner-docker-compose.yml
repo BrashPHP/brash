@@ -9,9 +9,9 @@ services:
         PHP_IMAGE_VERSION: ${PHP_IMAGE_VERSION}
     ports:
       - 8080:8080
-    working_dir: /var/www/
+    working_dir: /app/
     volumes:
-      - .:/var/www
+      - .:/app
       - .docker/roadrunner/conf/rr.yaml:/etc/rr.yaml:ro
     env_file:
       - .docker/roadrunner/conf/rr.env

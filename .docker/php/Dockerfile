@@ -4,7 +4,7 @@ FROM php:8.2-fpm
 RUN apt-get update && apt-get install -y git
 
 RUN apt-get update && \
-  apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat libxml2-dev libpq-dev libzip-dev&& \
+  apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip libxml2-dev libpq-dev libzip-dev&& \
   pecl install apcu && \
   docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
   docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql sockets && \
@@ -62,12 +62,12 @@ RUN ln -s /usr/bin/php8 /usr/bin/php
 COPY custom.ini "$PHP_INI_DIR/conf.d/"
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /app
 
-RUN chown -R root:www-data /var/www
-RUN chmod u+rwx,g+rx,o+rx /var/www
-RUN find /var/www -type d -exec chmod u+rwx,g+rx,o+rx {} +
-RUN find /var/www -type f -exec chmod u+rw,g+rw,o+r {} +
+RUN chown -R root:www-data /app
+RUN chmod u+rwx,g+rx,o+rx /app
+RUN find /app -type d -exec chmod u+rwx,g+rx,o+rx {} +
+RUN find /app -type f -exec chmod u+rw,g+rw,o+r {} +
 
 ENV X_LISTEN 0.0.0.0:9000
 

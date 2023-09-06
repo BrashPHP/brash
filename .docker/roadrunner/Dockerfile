@@ -6,11 +6,15 @@ FROM ${RR_IMAGE} as rr
 
 FROM ${PHP_IMAGE}
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+ENTRYPOINT ["ls"]
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y git
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat libxml2-dev libpq-dev libzip-dev && \
+    apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip libxml2-dev libpq-dev libzip-dev && \
     pecl install apcu && \
     docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
     docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql && \
@@ -69,10 +73,26 @@ COPY conf/custom.ini "$PHP_INI_DIR/conf.d/"
 # Copy Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+RUN composer self-update
+
 # Copy RoadRunner
 COPY --from=rr /usr/bin/rr /usr/bin/rr
 
 # Copy RoadRunner config
 COPY --from=rr /etc/rr.yaml /etc/rr.yaml
+
+WORKDIR /app
+
+COPY . .
+
+RUN chown -R root:www-data /app
+RUN chmod u+rwx,g+rx,o+rx /app
+RUN find /app -type d -exec chmod u+rwx,g+rx,o+rx {} +
+RUN find /app -type f -exec chmod u+rw,g+rw,o+r {} +
+
+RUN touch tmpfile.txt && ls >> ./tmpfile.txt
+RUN ls
+
+RUN composer install
 
 CMD ["/usr/bin/rr", "serve", "-d", "-c", "/etc/rr.yaml"]

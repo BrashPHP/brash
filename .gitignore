@@ -1,0 +1,14 @@
+.idea/
+/coverage/
+/vendor/
+/logs/*
+!/logs/README.md
+*.cache
+.env
+/tools/**/vendor
+/.phpunit.cache
+.phpunit.result.cache
+/var
+app/logs/app.log
+/pgdata
+DEVSENSE/

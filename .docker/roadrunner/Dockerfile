@@ -8,8 +8,6 @@ FROM ${PHP_IMAGE}
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-ENTRYPOINT ["ls"]
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y git
 
@@ -68,12 +66,10 @@ RUN curl -OL https://phar.phpunit.de/phpunit.phar \
     && mv phpunit.phar /usr/local/bin/ \
     && ln -s /usr/local/bin/phpunit.phar /usr/local/bin/phpunit
 
-COPY conf/custom.ini "$PHP_INI_DIR/conf.d/"
+COPY .docker/roadrunner/conf/custom.ini "$PHP_INI_DIR/conf.d/"
 
 # Copy Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-RUN composer self-update
 
 # Copy RoadRunner
 COPY --from=rr /usr/bin/rr /usr/bin/rr
@@ -90,9 +86,6 @@ RUN chmod u+rwx,g+rx,o+rx /app
 RUN find /app -type d -exec chmod u+rwx,g+rx,o+rx {} +
 RUN find /app -type f -exec chmod u+rw,g+rw,o+r {} +
 
-RUN touch tmpfile.txt && ls >> ./tmpfile.txt
-RUN ls
-
-RUN composer install
+RUN composer install 
 
 CMD ["/usr/bin/rr", "serve", "-d", "-c", "/etc/rr.yaml"]

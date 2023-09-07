@@ -4,7 +4,8 @@ services:
   roadrunner:
     container_name: roadrunner
     build:
-      context: ./.docker/roadrunner
+      context: .
+      dockerfile: .docker/roadrunner/Dockerfile
       args:
         PHP_IMAGE_VERSION: ${PHP_IMAGE_VERSION}
     ports:

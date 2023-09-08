@@ -4,14 +4,14 @@ namespace App\Data\Entities\Cycle\Rbac;
 
 use App\Data\Entities\Cycle\Traits\TimestampsTrait;
 use App\Data\Entities\Cycle\Traits\UuidTrait;
-use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\BelongsTo;
 use Cycle\Annotated\Annotation\Table\Index;
 use Cycle\ORM\Entity\Behavior\{CreatedAt, UpdatedAt};
 use Cycle\ORM\Entity\Behavior\Uuid\Uuid4;
 
-#[Entity(table: 'cycle_permissions')]
+#[Entity]
 #[Uuid4]
 #[CreatedAt(
     field: 'createdAt',
@@ -26,17 +26,19 @@ class CyclePermission
 {
 
     use TimestampsTrait, UuidTrait;
-    #[Column(type: "primary")]
-    private int $id;
-    #[Column(type: 'string', nullable: false)]
-    private string $name;
-    #[Column(type: 'string', nullable: false)]
-    private string $context;
-    #[BelongsTo(target: CycleRole::class)]
-    private CycleRole $role;
 
-    #[BelongsTo(target: CycleResource::class)]
-    private CycleResource $resource;
+    #[Column(type: "primary")]
+    public int $id;
+    #[Column(type: 'string', nullable: false)]
+    public string $name;
+    #[Column(type: 'string', nullable: false)]
+    public string $context;
+
+    #[BelongsTo(target: CycleRole::class, nullable: false)]
+    public CycleRole $role;
+
+    #[BelongsTo(target: CycleResource::class, nullable: false)]
+    public CycleResource $resource;
 
     public function getContext(): string
     {
@@ -83,6 +85,7 @@ class CyclePermission
     public function setRole(CycleRole $role): self
     {
         $this->role = $role;
+
         return $this;
     }
 
@@ -94,6 +97,7 @@ class CyclePermission
     public function setResource(CycleResource $resource): self
     {
         $this->resource = $resource;
+
         return $this;
     }
 }

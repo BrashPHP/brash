@@ -4,14 +4,16 @@ namespace App\Data\Entities\Cycle\Rbac;
 
 use App\Data\Entities\Cycle\Traits\TimestampsTrait;
 use App\Data\Entities\Cycle\Traits\UuidTrait;
-use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\HasMany;
 use Cycle\Annotated\Annotation\Table\Index;
 use Cycle\ORM\Entity\Behavior\{CreatedAt, UpdatedAt};
 use Cycle\ORM\Entity\Behavior\Uuid\Uuid4;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-#[Entity(table: 'cycle_resources')]
+#[Entity]
 #[Uuid4]
 #[CreatedAt(
     field: 'createdAt',
@@ -25,20 +27,23 @@ use Cycle\ORM\Entity\Behavior\Uuid\Uuid4;
 class CycleResource
 {
     use TimestampsTrait, UuidTrait;
-    #[Column(type: "primary")]
-    private int $id;
-    #[Column(type: 'string', nullable: false)]
-    private string $name;
-    #[Column(type: 'string', nullable: false, default: '')]
-    private string $description;
-    #[Column(type: 'bool', nullable: false)]
-    private bool $isActive = true;
 
-    /**
-     * @var CyclePermission[] $extendedRoles
-     */
-    #[HasMany(target: CyclePermission::class)]
-    private array $permissions;
+    #[Column(type: "primary")]
+    public int $id;
+    #[Column(type: 'string', nullable: false)]
+    public string $name;
+    #[Column(type: 'string', nullable: false, default: '')]
+    public string $description;
+    #[Column(type: 'bool', nullable: false)]
+    public bool $isActive = true;
+
+    #[HasMany(target: CyclePermission::class, nullable: true)]
+    public Collection $permissions;
+
+    public function __construct()
+    {
+        $this->permissions = new ArrayCollection();
+    }
 
     public function getDescription(): string
     {
@@ -84,24 +89,36 @@ class CycleResource
         return $this;
     }
 
-    public function getPermissions(): array
+    public function getPermissions(): Collection
     {
         return $this->permissions;
     }
 
-    public function setPermissions(array $permissions): self
+    /**
+     * @param Collection $permissions
+     */
+    public function setPermissions(Collection $permissions): self
     {
         $this->permissions = $permissions;
+
         return $this;
     }
 
+    /**
+     * @param CyclePermission $permission
+     */
     public function addPermission(CyclePermission $permission): void
     {
-        $this->permissions[] = $permission;
+        $this->permissions->add($permission);
+
+        $permission->setResource($this);
     }
 
+    /**
+     * @param CyclePermission $permission
+     */
     public function removePermission(CyclePermission $permission): void
     {
-        $this->permissions = array_filter($this->permissions, static fn(CyclePermission $p) => $p !== $post);
+        $this->permissions = $this->permissions->filter(static fn(CyclePermission $p) => $p !== $post);
     }
 }

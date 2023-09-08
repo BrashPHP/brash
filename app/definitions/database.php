@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
-use Core\Data\Doctrine\EntityManagerBuilder;
 use Cycle\Database\Config;
 use Cycle\Database\DatabaseManager;
 use Cycle\Database\Config\DatabaseConfig;

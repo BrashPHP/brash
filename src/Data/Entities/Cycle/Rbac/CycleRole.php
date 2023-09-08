@@ -4,14 +4,16 @@ namespace App\Data\Entities\Cycle\Rbac;
 
 use App\Data\Entities\Cycle\Traits\TimestampsTrait;
 use App\Data\Entities\Cycle\Traits\UuidTrait;
-use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Table\Index;
 use Cycle\ORM\Entity\Behavior\{CreatedAt, UpdatedAt};
 use Cycle\ORM\Entity\Behavior\Uuid\Uuid4;
-use Cycle\Schema\Relation\HasMany;
+use Cycle\Annotated\Annotation\Relation\HasMany;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-#[Entity(table: 'cycle_roles')]
+#[Entity]
 #[Uuid4]
 #[CreatedAt(
     field: 'createdAt',
@@ -26,25 +28,26 @@ class CycleRole
 {
     use TimestampsTrait, UuidTrait;
     #[Column(type: "primary")]
-    private int $id;
+    public int $id;
     #[Column(type: 'string', nullable: false)]
-    private string $name;
+    public string $name;
     #[Column(type: 'string', nullable: false, default: '')]
-    private string $description;
+    public string $description;
     #[Column(type: 'bool', nullable: false)]
-    private bool $isActive = true;
+    public bool $isActive = true;
 
-    /**
-     * @var CycleRole[] $extendedRoles
-     */
-    #[HasMany(target: CycleRole::class)]
-    private array $extendedRoles;
 
-    /**
-     * @var CyclePermission[] $extendedRoles
-     */
-    #[HasMany(target: CyclePermission::class)]
-    private array $permissions;
+    #[HasMany(target: CycleRole::class, nullable: true)]
+    public Collection $extendedRoles;
+
+    #[HasMany(target: CyclePermission::class, nullable: true)]
+    public Collection $permissions;
+
+    public function __construct()
+    {
+        $this->permissions = new ArrayCollection();
+        $this->extendedRoles = new ArrayCollection();
+    }
 
 
     public function getDescription(): string
@@ -98,12 +101,12 @@ class CycleRole
         return $this;
     }
 
-    public function getExtendedRoles(): array
+    public function getExtendedRoles(): Collection
     {
         return $this->extendedRoles;
     }
 
-    public function setExtendedRoles(array $extendedRoles): self
+    public function setExtendedRoles(Collection $extendedRoles): self
     {
         $this->extendedRoles = $extendedRoles;
         return $this;
@@ -111,20 +114,20 @@ class CycleRole
 
     public function extendRole(CycleRole $role): void
     {
-        $this->extendedRoles[] = $role;
+        $this->extendedRoles->add($role);
     }
 
     public function removeRole(CycleRole $permission): void
     {
-        $this->extendedRoles = array_filter($this->extendedRoles, static fn(CycleRole $p) => $p !== $post);
+        $this->extendedRoles = $this->extendedRoles->filter(static fn(CycleRole $p) => $p !== $post);
     }
 
-    public function getPermissions(): array
+    public function getPermissions(): Collection
     {
         return $this->permissions;
     }
 
-    public function setPermissions(array $permissions): self
+    public function setPermissions(Collection $permissions): self
     {
         $this->permissions = $permissions;
         return $this;
@@ -132,11 +135,11 @@ class CycleRole
 
     public function addPermission(CyclePermission $permission): void
     {
-        $this->permissions[] = $permission;
+        $this->permissions->add($permission);
     }
 
     public function removePermission(CyclePermission $permission): void
     {
-        $this->permissions = array_filter($this->permissions, static fn(CyclePermission $p) => $p !== $post);
+        $this->permissions = $this->permissions->filter(static fn(CyclePermission $p) => $p !== $post);
     }
 }

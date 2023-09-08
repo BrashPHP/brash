@@ -9,7 +9,7 @@ use WeakMap;
 class Role implements JsonSerializable
 {
     /** @var WeakMap<Resource, Permission[]> */
-    public WeakMap $keyMap;
+    public readonly WeakMap $keyMap;
     /** @var Role[] */
     public readonly array $extendedRoles;
     public DateTimeInterface $createdAt;

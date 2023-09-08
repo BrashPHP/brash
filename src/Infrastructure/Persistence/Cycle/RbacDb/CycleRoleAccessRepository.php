@@ -23,6 +23,7 @@ class CycleRoleAccessRepository
                 "permissions.isActive",
                 true
             )
-            ->andWhere("permissions.resource.name", $resource->name);
+            ->andWhere("permissions.resource.name", $resource->name)
+            ->where("name", "=", $role->name);
     }
 }

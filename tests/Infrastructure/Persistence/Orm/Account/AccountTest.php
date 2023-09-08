@@ -10,7 +10,6 @@ use App\Domain\Models\Account;
 use App\Domain\Repositories\AccountRepository;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertSame;
 use Tests\TestCase;
 
 /**
@@ -30,7 +29,7 @@ class AccountTest extends TestCase
 
     public static function tearDownAfterClass(): void
     {
-        self::createDatabaseDoctrine();
+        self::truncateDatabaseDoctrine();
     }
 
     public function setUp(): void

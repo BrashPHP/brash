@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Handlers;
 
-use App\Presentation\ResponseEmitter\ResponseEmitter;
+use Slim\ResponseEmitter;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Interfaces\ErrorHandlerInterface;
@@ -55,7 +55,25 @@ class ShutdownHandler
             }
 
             $exception = new HttpInternalServerErrorException($this->request, $message);
+
             $response = $this->errorHandler->__invoke($this->request, $exception, $this->displayErrorDetails, false, false);
+
+            $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+            $response = $response
+                ->withHeader('Access-Control-Allow-Credentials', 'true')
+                ->withHeader('Access-Control-Allow-Origin', $origin)
+                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-Renew-Token')
+                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+                ->withHeader('Access-Control-Expose-Headers', 'X-Renew-Token')
+                ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+                ->withAddedHeader('Cache-Control', 'post-check=0, pre-check=0')
+                ->withHeader('Pragma', 'no-cache')
+            ;
+
+            if (ob_get_contents()) {
+                ob_clean();
+            }
 
             $responseEmitter = new ResponseEmitter();
             $responseEmitter->emit($response);

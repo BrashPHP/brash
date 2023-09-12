@@ -98,4 +98,19 @@ class InMemoryMarkerRepository implements MarkerRepositoryInterface
 
         return $this->markers->remove($subject);
     }
+
+    public function all(bool $paginate = false, $page = 1, $limit = 20): ResultSetInterface
+    {
+        if ($paginate) {
+            $count = $this->markers->count();
+
+            $offset = $page * $limit;
+
+            $items = $this->markers->slice((int) $offset, $limit);
+
+            return new PaginationResponse($count, (int) ceil($count / $limit), !!count($items), $items);
+        }
+
+        return new SearchResult($this->markers->toArray());
+    }
 }

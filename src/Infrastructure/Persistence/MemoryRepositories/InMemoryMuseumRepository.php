@@ -100,4 +100,23 @@ class InMemoryMuseumRepository implements MuseumRepository
 
         return new SearchResult($this->museums->toArray());
     }
+
+    function update(int $id, array $values): ?Museum
+    {
+        $updatable = $this->findByID($id);
+        if ($updatable) {
+            $fields = [
+                "email",
+                "name",
+                "description",
+                "info",
+            ];
+
+            foreach ($fields as $key) {
+                $updatable->$key = $values[$key];
+            }
+        }
+
+        return $updatable;
+    }
 }

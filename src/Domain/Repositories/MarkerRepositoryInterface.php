@@ -27,5 +27,5 @@ interface MarkerRepositoryInterface
 
     public function delete(ModelInterface|int $subject): ?Marker;
 
-    public function all(bool $paginate = false, $page = 1, $limit = 20): ResultSetInterface;
+    public function all(bool $paginate = false, int $page = 1, int $limit = 20): ResultSetInterface;
 }

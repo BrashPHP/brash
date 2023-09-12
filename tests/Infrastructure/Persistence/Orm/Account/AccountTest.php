@@ -9,13 +9,13 @@ use App\Domain\Dto\AccountDto;
 use App\Domain\Models\Account;
 use App\Domain\Repositories\AccountRepository;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 use function PHPUnit\Framework\assertInstanceOf;
 use Tests\TestCase;
 
-/**
- * @internal
- * @coversNothing
- */
+#[CoversNothing]
+#[Group('doctrine')]
 class AccountTest extends TestCase
 {
     private AccountRepository $repository;
@@ -51,9 +51,6 @@ class AccountTest extends TestCase
         $entityManager->clear();
     }
 
-    /**
-     * @group doctrine
-     */
     public function testShouldInsertAccount()
     {
         $account = new AccountDto(email: 'mail.com', username: 'user', password: 'pass');
@@ -63,9 +60,6 @@ class AccountTest extends TestCase
         $this->assertEquals($total, 1);
     }
 
-    /**
-     * @group doctrine
-     */
     public function testShouldRetrieveAccount()
     {
         $account = new AccountDto(email: 'mail.com', username: 'user', password: 'pass');

@@ -130,7 +130,7 @@ class MarkerDoctrineRepository extends DoctrineAbstractCrud implements MarkerRep
 
     public function all(bool $paginate = false, int $page = 1, int $limit = 20): ResultSetInterface
     {
-        return $this->findAll(
+        return parent::findAll(
             $paginate,
             $page,
             $limit

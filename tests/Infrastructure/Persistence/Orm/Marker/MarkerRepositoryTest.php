@@ -12,13 +12,13 @@ use App\Domain\Models\Marker\Marker;
 use App\Domain\Models\PlacementObject\PlacementObject;
 use App\Domain\Repositories\MarkerRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
+use PHPUnit\Framework\Attributes\Group;
 use function PHPUnit\Framework\assertInstanceOf;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
 
-/**
- * @internal
- * @coversNothing
- */
+#[CoversNothing]
+#[Group('doctrine')]
 class MarkerRepositoryTest extends TestCase
 {
     private MarkerRepositoryInterface $repository;
@@ -54,9 +54,6 @@ class MarkerRepositoryTest extends TestCase
         $entityManager->clear();
     }
 
-    /**
-     * @group doctrine
-     */
     public function testShouldInsertMarker()
     {
         $marker = new Marker(
@@ -73,9 +70,6 @@ class MarkerRepositoryTest extends TestCase
         $this->assertEquals($total, 1);
     }
 
-    /**
-     * @group doctrine
-     */
     public function testShouldRetrieveMarker()
     {
         $marker = new Marker(
@@ -95,9 +89,6 @@ class MarkerRepositoryTest extends TestCase
         assertInstanceOf(DoctrineMarker::class, $new_marker);
     }
 
-    /**
-     * @group doctrine
-     */
     public function testShouldInsertMarkerWithAsset()
     {
         $asset = new PictureAsset();
@@ -127,9 +118,6 @@ class MarkerRepositoryTest extends TestCase
         assertInstanceOf(DoctrineMarkerAsset::class, $new_asset);
     }
 
-    /**
-     * @group doctrine
-     */
     public function testShouldInsertMarkerWithResources()
     {
         $marker = new Marker(

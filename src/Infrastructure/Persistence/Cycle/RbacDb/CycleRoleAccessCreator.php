@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence\Cycle\RbacDb;
 use App\Data\Entities\Cycle\Rbac\CyclePermission;
 use App\Data\Entities\Cycle\Rbac\CycleResource;
 use App\Data\Entities\Cycle\Rbac\CycleRole;
+use App\Domain\Models\RBAC\AccessControl;
 use App\Domain\Models\RBAC\ContextIntent;
 use App\Domain\Models\RBAC\Permission;
 use App\Domain\Models\RBAC\Resource;
@@ -14,37 +15,42 @@ use Cycle\ORM\ORM;
 
 class CycleRoleAccessCreator
 {
-    public function __construct(private ORM $orm)
-    {
+    public function __construct(
+        private ORM $orm,
+        private AccessControl $accessControl
+    ) {
     }
 
-    public function create(): Role
-    {
+    public function create(
+        Role $role,
+        Resource $resource,
+        Permission $permission
+    ): Role {
         $t = new EntityManager($this->orm);
-        $role = new CycleRole();
-        $role
+        $cycleRole = new CycleRole();
+        $cycleRole
             ->setName("resource_owner_1")
             ->setDescription("Resource Owner Role")
             ->setIsActive(true);
 
-        $resource = new CycleResource();
-        $resource->setName("museum")->setDescription("museum description");
+        $cycleResource = new CycleResource();
+        $cycleResource->setName("museum")->setDescription("museum description");
 
-        $permission = new CyclePermission();
-        $permission
-            ->setContext('READ')
+        $cyclePermission = new CyclePermission();
+        $cyclePermission
+            ->setContext($permission->intent->value)
             ->setName("permission_name")
-            ->setResource($resource)->setRole($role);
+            ->setResource($cycleResource)->setRole($cycleRole);
 
-        $t->persist($permission);
+        $t->persist($cyclePermission);
 
         $t->run();
 
-        $roleObject = new Role("resource_owner", "Resource Owner Role");
-        $resource = new Resource('image', 'images resources');
-        $canCreate = new Permission('can:create', ContextIntent::READ);
-        $roleObject->addPermissionToResource($canCreate, $resource);
+        $this->accessControl
+            ->appendRole($role)
+            ->appendResource($resource)
+            ->grantAccessOn($role, $resource, [$permission]);
 
-        return $roleObject;
+        return $this->accessControl->getRole($role)->get();
     }
 }

@@ -27,7 +27,7 @@ class InMemorySignatureTokenRepository implements
     /**
      * Inserts a new token in the database.
      *
-     * @throws DuplicatedTokenException
+     * @throws \App\Domain\Exceptions\Security\DuplicatedTokenException
      */
     public function save(SignatureToken $token): bool
     {

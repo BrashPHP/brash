@@ -6,13 +6,16 @@ namespace Tests\Infrastructure\Persistence\Orm;
 
 use DI\Container;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertDirectoryExists;
 use function PHPUnit\Framework\assertIsObject;
 
-
+#[CoversNothing]
+#[Group('doctrine')]
 class DoctrineImplementationTest extends TestCase
 {
   public function testSetEnvironmentCorrectly()

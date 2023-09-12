@@ -26,4 +26,6 @@ interface MarkerRepositoryInterface
     public function update(int $id, array $values): ?Marker;
 
     public function delete(ModelInterface|int $subject): ?Marker;
+
+    public function all(bool $paginate = false, $page = 1, $limit = 20): ResultSetInterface;
 }

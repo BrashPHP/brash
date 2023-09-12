@@ -23,9 +23,9 @@ class GetAllMuseumAction extends Action
         if (isset($params['paginate'])) {
             $params['paginate'] = (bool) $params['paginate'];
 
-            $museums = $this->museumRepository->findAll(...$params);
+            $museums = $this->museumRepository->all(...$params);
         } else {
-            $museums = $this->museumRepository->findAll();
+            $museums = $this->museumRepository->all();
         }
 
         return $this->respondWithData($museums);

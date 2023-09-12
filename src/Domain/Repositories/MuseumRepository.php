@@ -18,11 +18,13 @@ interface MuseumRepository
     /**
      * Inserts a museum model.
      *
-     * @throws MuseumAlreadyRegisteredException
+     * @throws \App\Domain\Exceptions\Museum\MuseumAlreadyRegisteredException
      */
     public function add(Museum $model): bool;
 
     public function remove(int $museum): ?Museum;
 
     public function all(bool $paginate = false, $page = 1, $limit = 20): ResultSetInterface;
+
+    public function update(int $id, array $values): ?Museum;
 }

@@ -127,4 +127,13 @@ class MarkerDoctrineRepository extends DoctrineAbstractCrud implements MarkerRep
     {
         return parent::delete($subject);
     }
+
+    public function all(bool $paginate = false, int $page = 1, int $limit = 20): ResultSetInterface
+    {
+        return $this->findAll(
+            $paginate,
+            $page,
+            $limit
+        );
+    }
 }

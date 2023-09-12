@@ -23,7 +23,10 @@ class UpdateMuseumAction extends Action
         $name = $parsedBody['name'] ?? '';
         $parsedBody['name'] = htmlspecialchars($name);
 
-        $museum = $this->museumRepository->update((int) $this->resolveArg('id'), $parsedBody);
+        $museum = $this->museumRepository->update(
+            (int) $this->resolveArg('id'),
+            $parsedBody
+        );
 
         return $this->respondWithData(['message' => 'Success! Museum updated', 'museum' => $museum]);
     }

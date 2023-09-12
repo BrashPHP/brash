@@ -23,9 +23,9 @@ class GetAllMarkersAction extends Action
         if (isset($params['paginate'])) {
             $params['paginate'] = (bool) $params['paginate'];
 
-            $markers = $this->repo->findAll(...$params);
+            $markers = $this->repo->all(...$params);
         } else {
-            $markers = $this->repo->findAll();
+            $markers = $this->repo->all();
         }
 
         return $this->respondWithData($markers);

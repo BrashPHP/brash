@@ -18,7 +18,7 @@ class Role implements JsonSerializable
     public function __construct(
         public readonly string $name,
         public readonly string $description,
-        private bool $isActive = true,
+        public bool $isActive = true,
     ) {
         $this->keyMap = new WeakMap();
         $this->extendedRoles = [];

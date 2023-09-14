@@ -4,6 +4,7 @@ namespace App\Data\Entities\Cycle\Rbac;
 
 use App\Data\Entities\Cycle\Traits\TimestampsTrait;
 use App\Data\Entities\Cycle\Traits\UuidTrait;
+use App\Domain\Models\RBAC\Resource;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\HasMany;
@@ -34,15 +35,25 @@ class CycleResource
     public string $name;
     #[Column(type: 'string', nullable: false, default: '')]
     public string $description;
-    #[Column(type: 'bool', nullable: false)]
+    #[Column(type: 'boolean', nullable: false, typecast: 'bool')]
     public bool $isActive = true;
 
-    #[HasMany(target: CyclePermission::class, nullable: true)]
+    #[HasMany(target: CyclePermission::class, nullable: true, collection: 'doctrine')]
     public Collection $permissions;
 
     public function __construct()
     {
         $this->permissions = new ArrayCollection();
+    }
+
+    public static function fromModel(Resource $resource)
+    {
+        return (new self())
+            ->setCreatedAt($resource->createdAt)
+            ->setDescription($resource->description)
+            ->setIsActive($resource->isActive)
+            ->setName($resource->name)
+            ->setUpdated($resource->updatedAt);
     }
 
     public function getDescription(): string

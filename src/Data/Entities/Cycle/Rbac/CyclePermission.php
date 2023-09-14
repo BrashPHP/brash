@@ -4,6 +4,7 @@ namespace App\Data\Entities\Cycle\Rbac;
 
 use App\Data\Entities\Cycle\Traits\TimestampsTrait;
 use App\Data\Entities\Cycle\Traits\UuidTrait;
+use App\Domain\Models\RBAC\Permission;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\BelongsTo;
@@ -39,6 +40,15 @@ class CyclePermission
 
     #[BelongsTo(target: CycleResource::class, nullable: false)]
     public CycleResource $resource;
+
+    public static function fromModel(Permission $permission)
+    {
+        return (new self())
+            ->setContext($permission->intent->value)
+            ->setCreatedAt($permission->createdAt)
+            ->setName($permission->name)
+            ->setUpdated($permission->updatedAt);
+    }
 
     public function getContext(): string
     {

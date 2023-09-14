@@ -4,6 +4,7 @@ namespace App\Data\Entities\Cycle\Rbac;
 
 use App\Data\Entities\Cycle\Traits\TimestampsTrait;
 use App\Data\Entities\Cycle\Traits\UuidTrait;
+use App\Domain\Models\RBAC\Role;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Table\Index;
@@ -33,14 +34,13 @@ class CycleRole
     public string $name;
     #[Column(type: 'string', nullable: false, default: '')]
     public string $description;
-    #[Column(type: 'bool', nullable: false)]
+    #[Column(type: 'boolean', nullable: false, typecast: 'bool')]
     public bool $isActive = true;
 
-
-    #[HasMany(target: CycleRole::class, nullable: true)]
+    #[HasMany(target: CycleRole::class, nullable: true, collection: 'doctrine')]
     public Collection $extendedRoles;
 
-    #[HasMany(target: CyclePermission::class, nullable: true)]
+    #[HasMany(target: CyclePermission::class, nullable: true, collection: 'doctrine')]
     public Collection $permissions;
 
     public function __construct()
@@ -49,6 +49,23 @@ class CycleRole
         $this->extendedRoles = new ArrayCollection();
     }
 
+    public static function fromModel(Role $role)
+    {
+        return (new self())
+            ->setCreatedAt($role->createdAt)
+            ->setDescription($role->description)
+            ->setIsActive($role->isActive)
+            ->setName($role->name)
+            ->setUpdated($role->updatedAt)
+            ->setExtendedRoles(
+                new ArrayCollection(
+                    array_map(
+                        fn(Role $role) => static::fromModel($role),
+                        $role->extendedRoles
+                    )
+                )
+            );
+    }
 
     public function getDescription(): string
     {

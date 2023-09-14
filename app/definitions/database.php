@@ -116,8 +116,16 @@ return [
             $container
         );
 
+        $ormFactory = new ORM\Factory($database);
+        $ormFactory = $ormFactory->withCollectionFactory(
+            'doctrine',
+                // Alias
+            new ORM\Collection\DoctrineCollectionFactory,
+            \Doctrine\Common\Collections\Collection::class // <= Base collection
+        );
+
         $orm = new ORM\ORM(
-            new ORM\Factory($database),
+            $ormFactory,
             $schema,
             $commandGenerator
         );

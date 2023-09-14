@@ -7,22 +7,11 @@ namespace Tests\Presentation\Middleware;
 use App\Data\Protocols\Rbac\ResourceFetcherInterface;
 use App\Data\Protocols\Rbac\RoleFetcherInterface;
 use App\Domain\Models\RBAC\AccessControl;
-use App\Domain\Models\RBAC\ContextIntent;
-use App\Domain\Models\RBAC\Permission;
 use App\Domain\Models\RBAC\Resource;
-use App\Domain\Models\RBAC\Role;
 use App\Presentation\Factories\RbacValidationFactory;
 use App\Presentation\Middleware\RoleValidationMiddleware;
-use App\Presentation\Protocols\RbacFallbackInterface;
-use Middlewares\Utils\RequestHandler;
-use Nyholm\Psr7\Response;
-use PhpOption\Option;
 use PhpOption\Some;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
-use Slim\Exception\HttpForbiddenException;
 use Tests\TestCase;
 
 class RbacValidationFactoryTest extends TestCase

@@ -1,12 +1,8 @@
 <?php
+
 namespace App\Infrastructure\Persistence\Cycle\RbacDb;
 
-use App\Data\Entities\Cycle\Rbac\CyclePermission;
-use App\Data\Entities\Cycle\Rbac\CycleResource;
 use App\Data\Entities\Cycle\Rbac\CycleRole;
-use App\Domain\Models\RBAC\AccessControl;
-use App\Domain\Models\RBAC\Permission;
-use App\Domain\Models\RBAC\Resource;
 use App\Domain\Models\RBAC\Role;
 use App\Domain\OptionalApi\Result;
 use App\Domain\OptionalApi\Result\Err;
@@ -14,8 +10,7 @@ use App\Domain\OptionalApi\Result\Ok;
 use Cycle\ORM\EntityManager;
 use Cycle\ORM\ORM;
 
-
-class CycleRoleAccessCreator
+final class CycleRoleExtender
 {
     public function __construct(
         private ORM $orm
@@ -25,20 +20,25 @@ class CycleRoleAccessCreator
     /**
      * @return Result<CycleRole>
      */
-    public function create(
-        Role $role,
-        Resource $resource,
-        Permission $permission
+    public function extend(
+        Role $target,
+        Role $parent
     ): Result {
         try {
             $t = new EntityManager($this->orm);
-            $cycleRole = CycleRole::fromModel($role);
-            $cycleResource = CycleResource::fromModel($resource);
-            $cyclePermission = CyclePermission::fromModel($permission)
-                ->setResource($cycleResource)
-                ->setRole($cycleRole);
+            $repository = new CycleRoleAccessRepository($this->orm);
+            $cycleRole = $repository
+                ->getOneByName($target->name)
+                ->ok()
+                ->map(fn($el) => $el ?? CycleRole::fromModel($target))
+                ->get();
+            $cycleParentRole = $repository
+                ->getOneByName($parent->name)
+                ->ok()
+                ->map(fn($el) => $el ?? CycleRole::fromModel($parent))
+                ->get();
 
-            $cycleRole->addPermission($cyclePermission);
+            $cycleRole->extendRole($cycleParentRole);
 
             $t->persist($cycleRole);
 
@@ -46,6 +46,7 @@ class CycleRoleAccessCreator
 
             return new Ok($cycleRole);
         } catch (\Throwable $th) {
+            dd($th);
             return new Err($th);
         }
     }

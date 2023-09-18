@@ -15,7 +15,7 @@ final class ResponseAdapterMiddleware implements Middleware
     public function process(Request $request, RequestHandler $handler): Response
     {
         // This variable should be set to the allowed host from which your API can be accessed with
-        $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+        $origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
 
         $response = $handler->handle($request);
 

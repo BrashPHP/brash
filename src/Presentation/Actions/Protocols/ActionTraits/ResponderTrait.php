@@ -10,9 +10,9 @@ trait ResponderTrait
     /**
      * @param null|array|object $data
      */
-    protected function respondWithData($data = null): Response
+    protected function respondWithData($data = null, int $statusCode = 200): Response
     {
-        $payload = new ActionPayload(200, $data);
+        $payload = new ActionPayload($statusCode, $data);
 
         return $this->respond($payload);
     }

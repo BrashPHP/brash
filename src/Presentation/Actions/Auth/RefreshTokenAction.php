@@ -3,20 +3,53 @@
 namespace App\Presentation\Actions\Auth;
 
 use App\Presentation\Actions\Protocols\Action;
-use App\Presentation\Factories\RefreshTokenHandlerFactory;
+use App\Presentation\Handlers\RefreshTokenHandler;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
 
 class RefreshTokenAction extends Action
 {
-    public function __construct(private RefreshTokenHandlerFactory $refreshTokenHandlerFactory)
-    {
+    public function __construct(
+        private RefreshTokenHandler $refreshTokenHandler,
+        protected LoggerInterface $logger
+    ) {
     }
 
     public function action(Request $request): Response
     {
-        $refreshTokenHandler = $this->refreshTokenHandlerFactory->create($request);
+        $secretBody = $_ENV["JWT_SECRET"];
+        $secretCookie = $_ENV["JWT_SECRET_COOKIE"];
+        $cookies = $request->getCookieParams();
 
-        return $refreshTokenHandler($this->response);
+        $this->logger->info('Reading cookies from request: ' . print_r($cookies, true));
+
+        $cookieName = REFRESH_TOKEN;
+
+        $refreshToken = $cookies[$cookieName] ?? "";
+
+        $this->logger->debug('Refresh token: ' . print_r($refreshToken, true));
+
+        return $this->refreshTokenHandler
+            ->refresh($refreshToken, $secretBody, $secretCookie)
+            ->map(
+                function (string $token) {
+                    return $this->respondWithData([
+                        "status" => "Success",
+                        "message" => "Token successfully created",
+                    ])
+                        ->withHeader("X-RENEW-TOKEN", $token)
+                        ->withStatus(201);
+                }
+            )
+            ->unwrapOrElse(
+                function (\Exception $exception) {
+                    $this->logger->warning($exception->getPrevious()->getMessage());
+                    return $this->respondWithData([
+                        "status" => "error",
+                        "message" => $exception->getMessage(),
+                    ], 401)->withStatus(401);
+                }
+            );
     }
 }

@@ -20,7 +20,7 @@ class CookieTokenCreator implements TokenGeneratorInterface
         $future = new DateTime();
         $future->add(new DateInterval('P15D'));
 
-        $jti = base64_encode(random_bytes(16)).$now->getTimeStamp();
+        $jti = base64_encode(random_bytes(16)) . $now->getTimeStamp();
 
         $payload = [
             'iat' => $now->getTimeStamp(),

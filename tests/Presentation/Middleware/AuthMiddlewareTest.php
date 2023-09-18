@@ -8,7 +8,6 @@ use App\Domain\Dto\AccountDto;
 use App\Domain\Repositories\AccountRepository;
 use App\Infrastructure\Cryptography\BodyTokenCreator;
 use App\Presentation\Handlers\RefreshTokenHandler;
-use App\Presentation\Helpers\Interceptors\RefreshTokenInterceptor;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

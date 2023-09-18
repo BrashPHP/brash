@@ -2,12 +2,19 @@
 
 namespace App\Presentation\Handlers;
 
+use App\Domain\OptionalApi\Result;
+use App\Domain\OptionalApi\Result\Err;
+use App\Domain\OptionalApi\Result\Ok;
 use App\Domain\Repositories\AccountRepository;
 use App\Infrastructure\Cryptography\BodyTokenCreator;
+use App\Presentation\Errors\UnauthorizedException;
+use Exception;
+use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use Throwable;
+use UnexpectedValueException;
 
 /**
  * This class is called once the validation of a user's JWT throws invalid.
@@ -18,43 +25,54 @@ class RefreshTokenHandler
 {
     public function __construct(
         private AccountRepository $repository,
-        private string $refreshToken,
-        private string $secretBody,
-        private string $secretToken,
+        private LoggerInterface $loggerInterface
     ) {
     }
 
-    public function __invoke(ResponseInterface $response, array $arguments = []): ResponseInterface
-    {
-        $statusCode = 201;
-
+    /**
+     * @return \App\Domain\OptionalApi\Result<string,UnauthorizedException>
+     */
+    public function refresh(
+        string $refreshToken,
+        string $secretBody,
+        string $secretCookie
+    ): Result {
         try {
-            $key = new Key(
-                $this->secretToken,
-                'HS256'
-            );
-            $payload = JWT::decode($this->refreshToken, $key);
-            $token = $this->createRenewToken($payload);
+            $key = new Key($secretCookie, 'HS256');
+            $payload = JWT::decode($refreshToken, $key);
+            $uuid = $payload->sub;
+            $user = $this->repository->findByUUID($uuid);
+            if ($user) {
+                $tokenCreator = new BodyTokenCreator($user);
+                return new Ok($tokenCreator->createToken($secretBody));
+            }
 
-            $response = $response->withHeader('X-RENEW-TOKEN', $token);
-        } catch (Throwable) {
-            $statusCode = 401;
-            $status = 'error';
+            throw new Exception('User Not Existent in Database');
+        } catch (ExpiredException | UnexpectedValueException $exception) {
             $message = 'You are not logged to access this resource';
-            $data = ['status' => $status, 'message' => $message];
 
-            $response->getBody()->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+            $this->loggerInterface->alert('Token Expired');
+            $this->loggerInterface->alert($exception);
+
+            return new Err(
+                new UnauthorizedException(
+                    $message,
+                    code: 401,
+                    previous: $exception
+                )
+            );
+        } catch (Throwable $exception) {
+            $message = 'You are not logged to access this resource';
+
+            $this->loggerInterface->alert($exception);
+
+            return new Err(
+                new UnauthorizedException(
+                    $message,
+                    code: 401,
+                    previous: $exception
+                )
+            );
         }
-
-        return $response->withStatus($statusCode)->withHeader('Content-Type', 'application/json');
-    }
-
-    private function createRenewToken(object $payload): string
-    {
-        $uuid = $payload->sub;
-        $user = $this->repository->findByUUID($uuid);
-        $tokenCreator = new BodyTokenCreator($user);
-
-        return $tokenCreator->createToken($this->secretBody);
     }
 }

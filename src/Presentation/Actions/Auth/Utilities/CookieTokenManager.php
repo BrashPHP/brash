@@ -2,6 +2,8 @@
 
 namespace App\Presentation\Actions\Auth\Utilities;
 
+use function Core\functions\isProd;
+
 class CookieTokenManager
 {
     public function implant(string $refreshToken)
@@ -16,7 +18,10 @@ class CookieTokenManager
     public function delete()
     {
         $options = $this->mountOptions();
-        $options['expires'] = time() - 3600;
+        $time = new \DateTimeImmutable();
+        $time = $time->sub(new \DateInterval('PT1H'));
+        $options['expires'] = $time->format(\DateTime::COOKIE);
+        dd($options);
         setcookie(
             REFRESH_TOKEN,
             '',
@@ -24,18 +29,16 @@ class CookieTokenManager
         );
     }
 
-    private function isProduction()
-    {
-        return 'PRODUCTION' === $_ENV['MODE'];
-    }
-
     private function mountOptions(): array
     {
-        $sameSite = $this->isProduction() ? 'None' : '';
-        $secure = $this->isProduction();
+        $isProd = isProd();
+        $sameSite = $isProd ? 'None' : '';
+        $secure = $isProd;
+        $time = new \DateTimeImmutable();
+        $time = $time->add(new \DateInterval('P15D'));
 
         return [
-            'expires' => time() + 31536000,
+            'expires' => $time->format(\DateTime::COOKIE),
             'path' => '/',
             'httponly' => true,
             'samesite' => $sameSite,

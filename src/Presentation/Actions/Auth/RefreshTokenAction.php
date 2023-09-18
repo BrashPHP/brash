@@ -22,13 +22,11 @@ class RefreshTokenAction extends Action
         $secretCookie = $_ENV["JWT_SECRET_COOKIE"];
         $cookies = $request->getCookieParams();
 
-        $this->logger->info('Reading cookies from request: ' . print_r($cookies, true));
-
         $cookieName = REFRESH_TOKEN;
 
         $refreshToken = $cookies[$cookieName] ?? "";
 
-        $this->logger->debug('Refresh token: ' . print_r($refreshToken, true));
+        $this->logger->info("Attempt to renew token {$refreshToken}");
 
         return $this->refreshTokenHandler
             ->refresh($refreshToken, $secretBody, $secretCookie)
@@ -44,7 +42,9 @@ class RefreshTokenAction extends Action
             )
             ->unwrapOrElse(
                 function (\Exception $exception) {
-                    $this->logger->warning($exception->getPrevious()->getMessage());
+                    $this->logger->warning(
+                        $exception->getPrevious()->getMessage()
+                    );
                     return $this->respondWithData([
                         "status" => "error",
                         "message" => $exception->getMessage(),

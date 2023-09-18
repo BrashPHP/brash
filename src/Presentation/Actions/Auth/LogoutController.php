@@ -13,10 +13,17 @@ class LogoutController extends Action
 {
     public function action(Request $request): Response
     {
-        $cookieManager = new CookieTokenManager();
+        try {
+            $cookieManager = new CookieTokenManager();
 
-        $cookieManager->delete();
+            $cookieManager->delete();
 
-        return $this->respondWithData(['message' => 'You have been unlogged'])->withStatus(200, 'Unlogged');
+            return $this->respondWithData(['message' => 'You have been unlogged'])->withStatus(200, 'Unlogged');
+        } catch (\Throwable $th) {
+            $this->logger->critical($th);
+
+            throw $th;
+        }
+
     }
 }

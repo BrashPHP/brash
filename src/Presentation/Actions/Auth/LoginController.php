@@ -10,33 +10,42 @@ use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
 use App\Presentation\Actions\Protocols\Action;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
 use Respect\Validation\Validator;
 
 class LoginController extends Action
 {
-    private CookieTokenManager $cookieManager;
 
     public function __construct(
-        private LoginServiceInterface $loginService
+        private LoginServiceInterface $loginService,
+        protected LoggerInterface $logger
     ) {
-        $this->cookieManager = new CookieTokenManager();
     }
 
     public function action(Request $request): Response
     {
+        $this->logger->info('Start new login');
         $parsedBody = $request->getParsedBody();
         [
             'access' => $access,
             'password' => $password
         ] = $parsedBody;
 
+        $body = print_r($parsedBody, true);
+        $this->logger->info("Received value {$body} for input login");
         $credentials = new Credentials($access, $password);
         $tokenize = $this->loginService->auth($credentials);
         $refreshToken = $tokenize->renewToken;
 
-        $this->cookieManager->implant($refreshToken);
+        $cookieManager = new CookieTokenManager();
 
-        return $this->respondWithData(['token' => $tokenize->token])->withStatus(201, 'Created token');
+        $cookieManager->implant($refreshToken);
+
+        $this->logger->info("Successfully implanted token {$refreshToken}");
+
+        return $this->respondWithData(
+            ['token' => $tokenize->token]
+        )->withStatus(201, 'Created token');
     }
 
     public function messages(): ?array

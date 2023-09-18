@@ -44,7 +44,7 @@ class RefreshTokenTest extends TestCase
             'statusCode' => 401,
             'data' => [
                 'status' => 'error',
-                'message' => 'You are not logged to access this resource'
+                'message' => 'Cannot craft new token for invalid refresh token'
             ],
         ]);
         $this->assertSame($response->getStatusCode(), 401);
@@ -78,7 +78,7 @@ class RefreshTokenTest extends TestCase
             'statusCode' => 401,
             'data' => [
                 'status' => 'error',
-                'message' => 'You are not logged to access this resource'
+                'message' => 'Cannot craft new token for invalid refresh token'
             ],
         ]);
         $this->assertSame($response->getStatusCode(), 401);

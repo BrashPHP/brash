@@ -21,7 +21,6 @@ class CookieTokenManager
         $time = new \DateTimeImmutable();
         $time = $time->sub(new \DateInterval('PT1H'));
         $options['expires'] = $time->format(\DateTime::COOKIE);
-        dd($options);
         setcookie(
             REFRESH_TOKEN,
             '',
@@ -36,6 +35,8 @@ class CookieTokenManager
         $secure = $isProd;
         $time = new \DateTimeImmutable();
         $time = $time->add(new \DateInterval('P15D'));
+
+        echo $time->format(\DateTime::COOKIE);
 
         return [
             'expires' => $time->format(\DateTime::COOKIE),

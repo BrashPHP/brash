@@ -36,16 +36,15 @@ class LoginController extends Action
         $credentials = new Credentials($access, $password);
         $tokenize = $this->loginService->auth($credentials);
         $refreshToken = $tokenize->renewToken;
-
-        $cookieManager = new CookieTokenManager();
-
-        $cookieManager->implant($refreshToken);
+        $cookieTokenManager = new CookieTokenManager();
 
         $this->logger->info("Successfully implanted token {$refreshToken}");
 
-        return $this->respondWithData(
-            ['token' => $tokenize->token]
-        )->withStatus(201, 'Created token');
+        $response = $this
+            ->respondWithData(['token' => $tokenize->token])
+            ->withStatus(201, 'Created token');
+
+        return $cookieTokenManager->appendCookieHeader($response, $refreshToken);
     }
 
     public function messages(): ?array

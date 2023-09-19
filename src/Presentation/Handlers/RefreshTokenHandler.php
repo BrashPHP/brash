@@ -51,7 +51,6 @@ class RefreshTokenHandler
         } catch (ExpiredException | UnexpectedValueException $exception) {
             $message = 'Cannot craft new token for invalid refresh token';
 
-            $this->loggerInterface->alert('Token Expired');
             $this->loggerInterface->alert($exception);
 
             return new Err(

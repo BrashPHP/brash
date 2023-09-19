@@ -22,7 +22,7 @@ final class ResponseAdapterMiddleware implements Middleware
         $response = $response
             ->withHeader('Access-Control-Allow-Credentials', 'true')
             ->withHeader('Access-Control-Allow-Origin', $origin)
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-Renew-Token')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-Renew-Token, Set-Cookie')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
             ->withHeader('Access-Control-Expose-Headers', 'X-Renew-Token')
             ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')

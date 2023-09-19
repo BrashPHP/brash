@@ -2,48 +2,50 @@
 
 namespace App\Presentation\Actions\Auth\Utilities;
 
+use Slim\Psr7\Cookies;
+use Psr\Http\Message\ResponseInterface as Response;
 use function Core\functions\isProd;
 
 class CookieTokenManager
 {
-    public function implant(string $refreshToken)
+    public function appendCookieHeader(Response $response, string $refreshToken): Response
     {
-        setcookie(
-            REFRESH_TOKEN,
-            $refreshToken,
-            $this->mountOptions()
-        );
+        $cookie = new Cookies();
+        $values = $this->arrayValues();
+        $values['value'] = $refreshToken;
+
+        $cookie->set(REFRESH_TOKEN, $values);
+
+        foreach ($cookie->toHeaders() as $header) {
+            $response = $response->withAddedHeader('Set-Cookie', $header);
+        }
+
+        return $response;
     }
 
-    public function delete()
+    public function delete(Response $response): Response
     {
-        $options = $this->mountOptions();
-        $time = new \DateTimeImmutable();
-        $time = $time->sub(new \DateInterval('PT1H'));
-        $options['expires'] = $time->format(\DateTime::COOKIE);
-        setcookie(
-            REFRESH_TOKEN,
-            '',
-            $options
-        );
+        $options = $this->arrayValues();
+        $options['expires'] = time() - 3600;
+        $cookie = new Cookies();
+        $cookie->set(REFRESH_TOKEN, $options);
+
+        foreach ($cookie->toHeaders() as $header) {
+            $response = $response->withAddedHeader('Set-Cookie', $header);
+        }
+
+        return $response;
     }
 
-    private function mountOptions(): array
+    private function arrayValues(): array
     {
-        $isProd = isProd();
-        $sameSite = $isProd ? 'None' : '';
-        $secure = $isProd;
-        $time = new \DateTimeImmutable();
-        $time = $time->add(new \DateInterval('P15D'));
-
-        echo $time->format(\DateTime::COOKIE);
+        $sameSite = isProd() ? 'Strict' : '';
 
         return [
-            'expires' => $time->format(\DateTime::COOKIE),
-            'path' => '/',
-            'httponly' => true,
+            'expires' => time() + 31536000,
+            'httponly' => 'true',
             'samesite' => $sameSite,
-            'secure' => $secure,
+            'path' => '/'
         ];
     }
 }

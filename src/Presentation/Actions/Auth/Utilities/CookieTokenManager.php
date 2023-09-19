@@ -44,7 +44,7 @@ class CookieTokenManager
         return [
             'expires' => time() + 31536000,
             'httponly' => 'true',
-            'samesite' => $sameSite,
+            // 'samesite' => $sameSite,
             'path' => '/'
         ];
     }

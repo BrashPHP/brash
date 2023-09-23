@@ -36,9 +36,8 @@ class GoogleAction extends Action
         $tokenize = $this->socialLoginAuth->authenticate($dto);
         $refreshToken = $tokenize->renewToken;
 
-        $this->cookieTokenManager->implant($refreshToken);
+        $response = $this->respondWithData(['token' => $tokenize->token])->withStatus(201, 'Created token');
 
-        return $this->respondWithData(['token' => $tokenize->token])->withStatus(201, 'Created token');
-
+        return $this->cookieTokenManager->appendCookieHeader($response, $refreshToken);
     }
 }

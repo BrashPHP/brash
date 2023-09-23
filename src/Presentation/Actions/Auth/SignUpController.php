@@ -38,11 +38,11 @@ class SignUpController extends Action
         $tokenize = $this->service->register($account);
         $refreshToken = $tokenize->renewToken;
 
-        $this->cookieManager->implant($refreshToken);
-
-        return $this
+        $response = $this
             ->respondWithData(['token' => $tokenize->token])
             ->withStatus(201, 'Created token');
+
+        return $this->cookieManager->appendCookieHeader($response, $refreshToken);
     }
 
     public function messages(): ?array

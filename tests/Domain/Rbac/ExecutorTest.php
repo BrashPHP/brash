@@ -58,7 +58,7 @@ class ExecutorTest extends TestCase
 
         $this->assertStringContainsStringIgnoringCase(
             json_encode($role->jsonSerialize()),
-            $accessControl->constructObject()
+            $accessControl->toJson()
         );
     }
 

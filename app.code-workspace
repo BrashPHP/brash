@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"name": "app",
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.fontFamily": "Fira Code Retina",
+		"php.suggest.basic": false
+	}
+}

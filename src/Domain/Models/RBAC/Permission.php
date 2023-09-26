@@ -1,7 +1,6 @@
 <?php
 namespace App\Domain\Models\RBAC;
 
-use App\Domain\Models\RBAC\Utilities\ExtractNameUtility as extractName;
 use DateTimeImmutable;
 use DateTimeInterface;
 
@@ -21,7 +20,8 @@ readonly class Permission
         ContextIntent $contextIntent,
         Resource|string $resource
     ) {
-        $resourceName = extractName::extractName($resource);
+        $resourceName = is_string($resource) ? $resource : $resource->name;
+
         $name = implode(':', [
             'can',
             strtolower($contextIntent->value),

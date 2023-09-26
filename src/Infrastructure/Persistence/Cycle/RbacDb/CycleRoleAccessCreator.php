@@ -4,7 +4,6 @@ namespace App\Infrastructure\Persistence\Cycle\RbacDb;
 use App\Data\Entities\Cycle\Rbac\CyclePermission;
 use App\Data\Entities\Cycle\Rbac\CycleResource;
 use App\Data\Entities\Cycle\Rbac\CycleRole;
-use App\Domain\Models\RBAC\AccessControl;
 use App\Domain\Models\RBAC\Permission;
 use App\Domain\Models\RBAC\Resource;
 use App\Domain\Models\RBAC\Role;

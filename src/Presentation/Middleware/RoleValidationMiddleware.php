@@ -36,25 +36,27 @@ class RoleValidationMiddleware implements Middleware
     {
         /** @var array */
         $rawToken = $request->getAttribute("token");
-        $token = new Token(...$rawToken["data"]);
+        if (is_array($rawToken) && !empty($rawToken)) {
+            $token = new Token(...$rawToken["data"]);
 
-        $permission = $this->getAccessGrantRequest($request);
-        $maybeRole = $this->getOptionRole($token->role);
-        $maybeResource = $this->getOptionResource();
+            $permission = $this->getAccessGrantRequest($request);
+            $maybeRole = $this->getOptionRole($token->role);
+            $maybeResource = $this->getOptionResource();
 
-        if ($maybeRole->isDefined() && $maybeResource->isDefined()) {
-            $role = $maybeRole->get();
-            $resource = $maybeResource->get();
+            if ($maybeRole->isDefined() && $maybeResource->isDefined()) {
+                $role = $maybeRole->get();
+                $resource = $maybeResource->get();
 
-            $canAccess = $this->accessControl->tryAccess(
-                $role,
-                $resource,
-                $permission,
-                $this->getFallback()
-            );
+                $canAccess = $this->accessControl->tryAccess(
+                    $role,
+                    $resource,
+                    $permission,
+                    $this->getFallback()
+                );
 
-            if ($canAccess) {
-                return $handler->handle($request);
+                if ($canAccess) {
+                    return $handler->handle($request);
+                }
             }
         }
 

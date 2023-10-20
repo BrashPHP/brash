@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Middleware;
 
 use App\Infrastructure\Cryptography\Exceptions\AppHasNoDefinedSecrets;
+use Core\Http\Middlewares\Jwt\JwtAuthentication\JwtAuthOptions;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
@@ -34,13 +35,11 @@ class JWTAuthMiddleware implements Middleware
 
         $options = [
             "secret" => $secret,
-            "path" => "/api",
+            "path" => ["/api"],
             "ignore" => ["/api/auth", "/admin/ping"],
-            // 'before' => $beforeFunction,
-            "logger" => $this->logger,
             "relaxed" => ["localhost", "dev.example.com"],
             "secure" => false,
-            "error" => function (Response $response, array $args): Response {
+            "error" => function (Response $response): Response {
                 $response = $response->withHeader('Content-Type', 'application/json');
 
                 $response
@@ -56,7 +55,10 @@ class JWTAuthMiddleware implements Middleware
             }
         ];
 
-        $jwtAuth = new JwtAuthentication($options);
+        $jwtAuth = new JwtAuthentication(
+            new JwtAuthOptions(...$options),
+            $this->logger
+        );
 
         return $jwtAuth->process($request, $handler);
     }

@@ -220,7 +220,6 @@ final class JwtAuthentication implements MiddlewareInterface
             }
             return $cookieParams[$this->options->cookie];
         }
-        ;
 
         /* If everything fails log and throw. */
         $this->log(LogLevel::WARNING, "Token not found");
@@ -230,17 +229,16 @@ final class JwtAuthentication implements MiddlewareInterface
 
     private function decodeToken(string $token): array
     {
+        $keys = $this->createKeysFromAlgorithms();
+
+        if (count($keys) === 1) {
+            $keys = current($keys);
+        }
+
         try {
-            $algo = $this->options->algorithm;
-
-            $key = new Key(
-                keyMaterial: $this->options->secret,
-                algorithm: $algo
-            );
-
             $decoded = JWT::decode(
                 $token,
-                $key
+                $keys
             );
 
             return (array) $decoded;
@@ -249,6 +247,24 @@ final class JwtAuthentication implements MiddlewareInterface
 
             throw $exception;
         }
+    }
+
+    /**
+     * @return array<int|string,Key>
+     */
+    private function createKeysFromAlgorithms(): array
+    {
+        $keyObjects = [];
+
+        foreach ($this->options->algorithm as $kid => $algorithm) {
+            $keyId = is_numeric($kid) ? $algorithm : $kid;
+
+            $secret = $this->options->secret[$kid];
+
+            $keyObjects[$keyId] = new Key($secret, $algorithm);
+        }
+
+        return $keyObjects;
     }
 
     /**

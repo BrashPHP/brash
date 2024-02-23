@@ -6,7 +6,7 @@ use Exception;
 
 class ValidationError extends Exception
 {
-    private $field = '';
+    private string $field = '';
 
     public function forField(string $field): self
     {
@@ -15,22 +15,12 @@ class ValidationError extends Exception
         return $this;
     }
 
-    /**
-     * Get the value of field.
-     */
-    public function getField()
+    public function getField(): string
     {
         return $this->field;
     }
 
-    /**
-     * Set the value of field.
-     *
-     * @param mixed $field
-     *
-     * @return self
-     */
-    public function setField($field)
+    public function setField(string $field): self
     {
         $this->field = $field;
 

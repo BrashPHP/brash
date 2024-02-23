@@ -6,7 +6,6 @@ use App\Domain\Models\User;
 use App\Domain\Repositories\UserRepository;
 use App\Presentation\Actions\Protocols\ActionPayload;
 use DI\Container;
-use Prophecy\Prophet;
 use Tests\TestCase;
 
 /**
@@ -15,17 +14,6 @@ use Tests\TestCase;
  */
 class ListUserActionTest extends TestCase
 {
-    private Prophet $prophet;
-
-    function setUp(): void
-    {
-        $this->prophet = new Prophet();
-    }
-
-    function tearDown(): void
-    {
-        $this->prophet->checkPredictions();
-    }
 
     public function testShouldCallActionSuccessfully()
     {
@@ -36,13 +24,11 @@ class ListUserActionTest extends TestCase
 
         $user = new User(1, 'bill.gates', 'Bill', 'Gates');
 
-        $userRepositoryProphecy = $this->prophet->prophesize()->willImplement(UserRepository::class);
-        $userRepositoryProphecy
-            ->findAll()
-            ->willReturn([$user])
-            ->shouldBeCalledOnce();
+        $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
+        $userRepositoryProphecy->method('findAll')->willReturn([$user]);
+        $userRepositoryProphecy->expects($this->once())->method('findAll');
 
-        $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
+        $container->set(UserRepository::class, $userRepositoryProphecy);
 
         $request = $this->createRequest('GET', '/users');
         $response = $app->handle($request);

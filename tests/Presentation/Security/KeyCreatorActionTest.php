@@ -8,7 +8,6 @@ use App\Data\Protocols\AsymCrypto\SignerInterface;
 use App\Presentation\Actions\Protocols\HttpErrors\UnprocessableEntityException;
 use App\Presentation\Actions\ResourcesSecurity\KeyCreatorAction;
 use PHPUnit\Framework\MockObject\MockObject;
-use Prophecy\Prophet;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Psr7\Response;
@@ -20,13 +19,10 @@ use Tests\TestCase;
  */
 class KeyCreatorActionTest extends TestCase
 {
-    private Prophet $prophet;
-
     private KeyCreatorAction $sut;
 
     protected function setUp(): void
     {
-        $this->prophet = new Prophet();
         /** @var SignerInterface */
         $service = $this->createMockService();
         $this->sut = new KeyCreatorAction($service);
@@ -41,11 +37,13 @@ class KeyCreatorActionTest extends TestCase
 
     public function testShouldCallAsymmetricSignerWithCorrectValues()
     {
-        $prophecyService = $this->prophet->prophesize(SignerInterface::class);
-        $prophecyService->sign(Uuid::fromString('914e4c51-a049-4594-ae5c-921bbadf686b'))->willReturn('')
-            ->shouldBeCalledOnce()
-        ;
-        $action = new KeyCreatorAction($prophecyService->reveal());
+        $prophecyService = $this->getMockBuilder(SignerInterface::class)->getMock();
+        $prophecyService
+            ->expects($this->once())
+            ->method('sign')
+            ->with(Uuid::fromString('914e4c51-a049-4594-ae5c-921bbadf686b'))
+            ->willReturn('');
+        $action = new KeyCreatorAction($prophecyService);
         $response = $action($this->createMockRequest(), new Response(), []);
         $payload = (string) $response->getBody();
         $this->assertTrue(is_string($payload));

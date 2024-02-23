@@ -7,7 +7,6 @@ use App\Data\Protocols\Media\MediaHostInterface;
 use App\Data\UseCases\Media\MediaCollectorVisitor;
 use App\Domain\Models\Assets\AbstractAsset;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophet;
 
 function createAbstractAsset(): AbstractAsset
 {
@@ -48,33 +47,31 @@ class MediaHostInterfaceStub implements MediaHostInterface
 
 class VisitorCollectorTest extends TestCase
 {
-  private Prophet $prophet;
   private MediaCollectorInterface $sut;
 
   function setUp(): void
   {
-    $this->prophet = new Prophet();
     $this->sut = new MediaCollectorVisitor();
   }
 
   public function testShouldHaveNoElementsInVisitorArraySetForEmptyAbstractAsset()
   {
-    $mhi = $this->prophet->prophesize(MediaHostInterfaceStub::class);
-    $mhi->assetInformation()->willReturn(null);
-    $this->sut->visit($mhi->reveal());
+    $mhi = $this->getMockBuilder(MediaHostInterfaceStub::class)->getMock();
+    $mhi->method('assetInformation')->willReturn(null);
+    $this->sut->visit($mhi);
 
     $this->assertEmpty($this->sut->collect());
   }
 
   public function testShouldHaveOneElementWhenAssetIsPresent()
   {
-    $mhi = $this->prophet->prophesize(MediaHostInterfaceStub::class);
+    $mhi = $this->getMockBuilder(MediaHostInterfaceStub::class)->getMock();
 
-    $mhi->namedBy()->willReturn("");
+    $mhi->method('namedBy')->willReturn("");
 
-    $mhi->assetInformation()->willReturn(createAbstractAsset());
+    $mhi->method('assetInformation')->willReturn(createAbstractAsset());
 
-    $this->sut->visit($mhi->reveal());
+    $this->sut->visit($mhi);
 
     $this->assertEquals(1, count($this->sut->collect()));
     $this->assertEquals($this->sut->collect()[0]->path, "path");

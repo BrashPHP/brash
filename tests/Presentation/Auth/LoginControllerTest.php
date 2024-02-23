@@ -13,7 +13,6 @@ use App\Presentation\Helpers\Validation\Validators\Interfaces\ValidationInterfac
 use DI\Container;
 use function PHPUnit\Framework\assertEquals;
 use PHPUnit\Framework\MockObject\MockObject;
-use Prophecy\Prophet;
 use Psr\Http\Message\ServerRequestInterface;
 use Tests\TestCase;
 
@@ -23,12 +22,9 @@ use Tests\TestCase;
  */
 class LoginControllerTest extends TestCase
 {
-    private Prophet $prophet;
-
     protected function setUp(): void
     {
         $this->app = $this->getAppInstance();
-        $this->prophet = new Prophet();
         $service = $this->createMockService();
         $this->autowireContainer(LoginServiceInterface::class, $service);
         $validator = $this->createValidatorService();

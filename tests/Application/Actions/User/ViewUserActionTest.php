@@ -11,7 +11,6 @@ use App\Presentation\Actions\Protocols\ActionError;
 use App\Presentation\Actions\Protocols\ActionPayload;
 use App\Presentation\Actions\Protocols\ErrorsEnum;
 use DI\Container;
-use Prophecy\Prophet;
 use Tests\TestCase;
 
 /**
@@ -20,14 +19,6 @@ use Tests\TestCase;
  */
 class ViewUserActionTest extends TestCase
 {
-    private Prophet $prophet;
-
-
-    function setUp(): void
-    {
-        $this->prophet = new Prophet();
-    }
-
     public function testAction()
     {
         $app = $this->createAppInstance();
@@ -37,14 +28,11 @@ class ViewUserActionTest extends TestCase
 
         $user = new User(1, 'bill.gates', 'Bill', 'Gates');
 
-        $userRepositoryProphecy = $this->prophet->prophesize(UserRepository::class);
-        $userRepositoryProphecy
-            ->findUserOfId(1)
-            ->willReturn($user)
-            ->shouldBeCalledOnce()
-        ;
+        $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
+        $userRepositoryProphecy->method('findUserOfId')->willReturn($user)->with(1);
+        $userRepositoryProphecy->expects($this->once())->method('findUserOfId');
 
-        $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
+        $container->set(UserRepository::class, $userRepositoryProphecy);
 
         $request = $this->createRequest('GET', '/users/1');
         $response = $app->handle($request);
@@ -65,14 +53,11 @@ class ViewUserActionTest extends TestCase
         /** @var Container $container */
         $container = $app->getContainer();
 
-        $userRepositoryProphecy = $this->prophet->prophesize(UserRepository::class);
-        $userRepositoryProphecy
-            ->findUserOfId(1)
-            ->willThrow(new UserNotFoundException())
-            ->shouldBeCalledOnce()
-        ;
+        $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
+        $userRepositoryProphecy->method('findUserOfId')->willThrowException(new UserNotFoundException())->with(1);
+        $userRepositoryProphecy->expects($this->once())->method('findUserOfId');
 
-        $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
+        $container->set(UserRepository::class, $userRepositoryProphecy);
 
         $request = $this->createRequest('GET', '/users/1');
         $response = $app->handle($request);

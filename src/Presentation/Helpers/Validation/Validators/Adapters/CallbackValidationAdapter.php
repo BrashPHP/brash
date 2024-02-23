@@ -14,7 +14,7 @@ class CallbackValidationAdapter extends AbstractValidator
     ) {
     }
 
-    protected function makeValidation($subject): bool
+    protected function makeValidation(mixed $subject): bool
     {
         $rule = $this->rule;
 

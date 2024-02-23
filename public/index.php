@@ -2,28 +2,37 @@
 
 declare(strict_types=1);
 
-use Core\Builder\AppBuilderManager;
-use Core\Builder\Factories\ContainerFactory;
-use Core\Http\Factories\RequestFactory;
-use Slim\ResponseEmitter as SlimResponseEmitter;
-
-use function Core\functions\isProd;
+use React\EventLoop\Loop;
+use Revolt\EventLoop\React\Internal\EventLoopAdapter;
 
 require __DIR__ . '/../configs/bootstrap.php';
 
-$containerFactory = new ContainerFactory();
 
-$containerFactory
-    // Set to true in production
-    ->enableCompilation(isProd())
-;
+try {
+    Loop::set(EventLoopAdapter::get());
 
-$appBuilder = new AppBuilderManager($containerFactory->get());
-$requestFactory = new RequestFactory();
-$request = $requestFactory->createRequest();
+    $loop = Loop::get();
 
-$app = $appBuilder->build($request);
-// Run App & Emit Response
-$response = $app->handle($request);
-$responseEmitter = new SlimResponseEmitter();
-$responseEmitter->emit($response);
+    ini_set('memory_limit', '512M');
+    $handler = require __DIR__ . '/react.php';
+
+    $http = new React\Http\HttpServer(
+        // new React\Http\Middleware\StreamingRequestMiddleware(),
+        $handler()
+    );
+    
+    $serverAddress = '0.0.0.0:8080';
+    
+    echo "Server running at $serverAddress" . PHP_EOL;
+    
+    $socket = new React\Socket\SocketServer($serverAddress, loop: $loop);
+    
+    $http->listen($socket);
+    
+    $loop->run();
+    
+    echo 'Listening on ' . str_replace('tcp:', 'http:', $socket->getAddress()) . PHP_EOL;
+    
+} catch (\Throwable $th) {
+    echo $th;
+}

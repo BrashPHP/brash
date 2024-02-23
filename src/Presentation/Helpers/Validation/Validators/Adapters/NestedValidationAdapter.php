@@ -18,12 +18,12 @@ class NestedValidationAdapter extends AbstractValidator
     $this->message = sprintf('%s should be set as a dictionary or object', $this->field);
   }
 
-  public function pushValidation(ValidationInterface $validation)
+  public function pushValidation(ValidationInterface $validation): void
   {
     $this->composite->pushValidation($validation);
   }
 
-  public function validate($input): ?ValidationError
+  public function validate(array $input): ?ValidationError
   {
     $error = parent::validate($input);
     if (is_null($error)) {
@@ -32,7 +32,7 @@ class NestedValidationAdapter extends AbstractValidator
       if ($response instanceof ValidationError) {
 
         $errors = $this->mapErrors(
-          $this->composite->getErrorBag()->getErrors()
+          $this->composite->errorBag->errors
         );
         $errorBag = new ErrorBag();
         foreach ($errors as $value) {

@@ -23,12 +23,10 @@ use Tests\TestCase;
 class MarkerServiceStoreTest extends TestCase
 {
 
-    private \Prophecy\Prophet $prophet;
     private SutTypes $sut;
 
     protected function setUp(): void
     {
-        $this->prophet = new \Prophecy\Prophet;
         /** @var MuseumRepository */
         $museumRepository = $this->mockMuseumRepository();
         /** @var MarkerRepositoryInterface */

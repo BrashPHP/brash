@@ -6,5 +6,5 @@ use App\Presentation\Helpers\Validation\Validators\ValidationExceptions\Validati
 
 interface ValidationInterface
 {
-    public function validate($input): ?ValidationError;
+    public function validate(array $input): ?ValidationError;
 }

@@ -7,8 +7,6 @@ namespace Tests\Presentation\Validation;
 use App\Presentation\Actions\Markers\MarkerValidations\MarkerValidation;
 use App\Presentation\Helpers\Validation\Validators\Facade\ValidationFacade;
 use App\Presentation\Helpers\Validation\Validators\Interfaces\ValidationInterface;
-
-use Prophecy\Prophet;
 use function PHPUnit\Framework\assertNotNull;
 use Tests\TestCase;
 
@@ -19,11 +17,8 @@ use Tests\TestCase;
 class MarkerValidationTest extends TestCase
 {
     private ValidationInterface $sut;
-    private Prophet $prophet;
-
     protected function setUp(): void
     {
-        $this->prophet = new Prophet();
         $facade = new ValidationFacade((new MarkerValidation())->validation());
         $this->sut = $facade->createValidations();
     }

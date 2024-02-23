@@ -16,7 +16,7 @@ class AwesomeValidationAdapter extends AbstractValidator
     ) {
     }
 
-    protected function makeValidation($subject): bool
+    protected function makeValidation(mixed $subject): bool
     {
         try {
             $this->rule->assert($subject);

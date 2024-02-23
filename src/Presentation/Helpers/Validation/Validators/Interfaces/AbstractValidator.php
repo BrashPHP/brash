@@ -7,24 +7,32 @@ use App\Presentation\Helpers\Validation\Validators\ValidationExceptions\Validati
 abstract class AbstractValidator implements ValidationInterface
 {
     protected string $field;
-    
+
     protected ?string $message;
 
-    public function validate($input): ?ValidationError
+    public function validate(array $input): ?ValidationError
     {
-        $message = "";
         if (array_key_exists($this->field, $input)) {
             $subject = $input[$this->field];
+            
             if ($this->makeValidation($subject)) {
                 return null;
             }
 
             $message = $this->message ?? sprintf('%s does not match the defined requirements', $this->field);
-        } else {
-            $message = sprintf('%s is empty', $this->field);
-        }
 
-        return (new ValidationError($message))->forField($this->field);
+            return (
+                new ValidationError(
+                    message: $message
+                )
+            )->forField($this->field);
+        }
+        
+        return (
+            new ValidationError(
+                message: sprintf('%s is empty', $this->field)
+            )
+        )->forField($this->field);
     }
 
     abstract protected function makeValidation(mixed $subject): bool;

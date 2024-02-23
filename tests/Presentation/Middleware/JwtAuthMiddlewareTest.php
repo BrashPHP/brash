@@ -24,7 +24,6 @@ use function PHPUnit\Framework\assertSame;
  */
 class JwtAuthMiddlewareTest extends TestCase
 {
-    private \Prophecy\Prophet $prophet;
     private JWTAuthMiddleware $sut;
 
     public function setUp(): void

@@ -6,6 +6,7 @@ namespace App\Presentation\Actions\ResourcesSecurity;
 
 use App\Data\Protocols\AsymCrypto\SignerInterface;
 use App\Presentation\Actions\Protocols\Action;
+use App\Presentation\Actions\Protocols\HttpErrors\UnprocessableEntityException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Ramsey\Uuid\Uuid;
@@ -22,14 +23,18 @@ class KeyCreatorAction extends Action
     {
         $parsedBody = json_decode((string) $request->getBody());
 
-        $uuid = Uuid::fromString($parsedBody->uuid);
+        if (!$parsedBody?->uuid) {
+            throw new UnprocessableEntityException($request);
+        }
+
+        $uuid = Uuid::fromString($parsedBody->uuid ?? "");
 
         $publicKey = $this->signerService->sign($uuid);
 
         return $this->respondWithData(['token' => $publicKey]);
     }
 
-    public function rules(Request $request)
+    public function rules(Request $request): ?array
     {
         return [
             'uuid' => Validator::uuid(),

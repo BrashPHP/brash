@@ -11,7 +11,6 @@ use App\Domain\Models\Museum;
 use App\Domain\Repositories\MuseumRepository;
 use App\Domain\Repositories\SignatureTokenRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use Prophecy\Prophet;
 use Ramsey\Uuid\Uuid;
 use Tests\Domain\UseCases\AsymCrypto\Signer\AsymmetricEncrypterTestTrait;
 use Tests\Domain\UseCases\AsymCrypto\Signer\RepositoryBatteryTestTrait;
@@ -24,16 +23,13 @@ use Tests\TestCase;
  */
 class SignerTest extends TestCase
 {
-
     use RepositoryBatteryTestTrait;
     use AsymmetricEncrypterTestTrait;
 
     private SutTypes $sut;
-    private Prophet $prophet;
 
     public function setUp(): void
     {
-        $this->prophet = new Prophet();
         /** @var MuseumRepository */
         $repository = $this->createMockRepository();
         /** @var AsymmetricEncrypter */

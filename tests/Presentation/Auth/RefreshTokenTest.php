@@ -13,7 +13,6 @@ use Firebase\JWT\JWT;
 use Prophecy\Argument;
 use Ramsey\Uuid\Uuid;
 use PHPUnit\Framework\MockObject\MockObject;
-use Prophecy\Prophet;
 use Psr\Http\Message\ServerRequestInterface;
 use Tests\TestCase;
 
@@ -23,7 +22,6 @@ use Tests\TestCase;
  */
 class RefreshTokenTest extends TestCase
 {
-    private Prophet $prophet;
 
     protected function setUp(): void
     {
@@ -88,9 +86,10 @@ class RefreshTokenTest extends TestCase
     {
         $app = $this->app;
         $this->setUpErrorHandler($app);
-        $this->prophet = new Prophet();
-        $repository = $this->prophet->prophesize()->willImplement(AccountRepository::class);
-        $repository->findByUUID(Argument::any())
+        $repository = $this->getMockBuilder(AccountRepository::class)->getMock();
+        $repository
+            ->expects($this->once())
+            ->method("findByUUID")
             ->willReturn(
                 new Account(
                     2,
@@ -99,9 +98,8 @@ class RefreshTokenTest extends TestCase
                     'password2',
                     'common',
                 )
-            )
-            ->shouldBeCalledOnce();
-        $this->autowireContainer(AccountRepository::class, $repository->reveal());
+            );
+        $this->autowireContainer(AccountRepository::class, $repository);
         $bodyTokenHandler = new CookieTokenCreator(Uuid::uuid4());
         $token = $bodyTokenHandler->createToken('cookieblabla');
         $request = $this->createMockRequest(['refresh' => $token])->withCookieParams([REFRESH_TOKEN => $token]);

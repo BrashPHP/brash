@@ -12,7 +12,7 @@ class EmailValidation implements ValidationInterface
     {
     }
 
-    public function validate($input): ?ValidationError
+    public function validate(array $input): ?ValidationError
     {
         if ($this->validator->validate($input[$this->field])) {
             return null;

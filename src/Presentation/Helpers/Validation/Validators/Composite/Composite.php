@@ -8,16 +8,13 @@ use App\Presentation\Helpers\Validation\Validators\ValidationExceptions\Validati
 
 class Composite implements ValidationInterface
 {
-    /**
-     * @var ValidationInterface[]
-     */
-    private array $compositions = [];
 
-    private ErrorBag $errorBag;
-
-    public function __construct()
+    public function __construct(
+        /** @var ValidationInterface[] */
+        public array $compositions = [],
+        public readonly ErrorBag $errorBag = new ErrorBag()
+    )
     {
-        $this->errorBag = new ErrorBag();
     }
 
     public function pushValidation(ValidationInterface $validation): self
@@ -27,7 +24,7 @@ class Composite implements ValidationInterface
         return $this;
     }
 
-    public function validate($input): ?ValidationError
+    public function validate(array $input): ?ValidationError
     {
         foreach ($this->compositions as $validation) {
             $error = $validation->validate($input);
@@ -39,16 +36,7 @@ class Composite implements ValidationInterface
         return $this->errorBag->hasErrors() ? $this->errorBag : null;
     }
 
-
-    /**
-     * @return ValidationInterface[]
-     */
-    public function getValidations(): array
-    {
-        return $this->compositions;
-    }
-
-    public function getErrorBag()
+    public function getErrorBag(): ErrorBag
     {
         return $this->errorBag;
     }

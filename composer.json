@@ -38,7 +38,11 @@
     "nyholm/psr7-server": "^1.0",
     "php-di/php-di": "^7.0",
     "ramsey/uuid-doctrine": "^1.6",
+    "react/async": "^4.2",
+    "react/event-loop": "^1.5",
+    "react/http": "^1.9",
     "respect/validation": "^2.2",
+    "revolt/event-loop-adapter-react": "^1.1",
     "slim/psr7": ">=1.0",
     "slim/slim": "^4.11",
     "spiral/roadrunner": "^2023.1",
@@ -48,7 +52,6 @@
     "symfony/yaml": "^6.0"
   },
   "require-dev": {
-    "phpspec/prophecy": "dev-master",
     "phpunit/phpunit": "^10",
     "rector/rector": "^0.17.5",
     "squizlabs/php_codesniffer": "^3.6",

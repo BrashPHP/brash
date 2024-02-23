@@ -22,12 +22,9 @@ use function PHPUnit\Framework\assertSame;
  */
 class AuthMiddlewareTest extends TestCase
 {
-    private \Prophecy\Prophet $prophet;
-
     public function setUp(): void
     {
         $this->app = $this->createAppInstance();
-        $this->prophet = new \Prophecy\Prophet;
         $this->app->group('/api', function ($group) {
             $group->get('/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
                 $response->getBody()->write('Works');

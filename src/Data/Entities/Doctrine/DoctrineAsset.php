@@ -142,7 +142,9 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
         return $this;
     }
 
-    /** @return array */
+    /**
+     * @return array 
+     */
     public function jsonSerialize(): mixed
     {
         return [
@@ -266,7 +268,9 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
     }
 
 
-    /** @param AbstractAsset $model */
+    /**
+     * @param AbstractAsset $model 
+     */
     public function fromModel(object $model): static
     {
         $this

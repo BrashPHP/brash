@@ -30,27 +30,27 @@ class ShutdownHandler
 
             if ($this->displayErrorDetails) {
                 switch ($errorType) {
-                    case E_USER_ERROR:
-                        $message = sprintf('FATAL ERROR: %s. ', $errorMessage);
-                        $message .= sprintf(' on line %d in file %s.', $errorLine, $errorFile);
+                case E_USER_ERROR:
+                    $message = sprintf('FATAL ERROR: %s. ', $errorMessage);
+                    $message .= sprintf(' on line %d in file %s.', $errorLine, $errorFile);
 
-                        break;
+                    break;
 
-                    case E_USER_WARNING:
-                        $message = sprintf('WARNING: %s', $errorMessage);
+                case E_USER_WARNING:
+                    $message = sprintf('WARNING: %s', $errorMessage);
 
-                        break;
+                    break;
 
-                    case E_USER_NOTICE:
-                        $message = sprintf('NOTICE: %s', $errorMessage);
+                case E_USER_NOTICE:
+                    $message = sprintf('NOTICE: %s', $errorMessage);
 
-                        break;
+                    break;
 
-                    default:
-                        $message = sprintf('ERROR: %s', $errorMessage);
-                        $message .= sprintf(' on line %d in file %s.', $errorLine, $errorFile);
+                default:
+                    $message = sprintf('ERROR: %s', $errorMessage);
+                    $message .= sprintf(' on line %d in file %s.', $errorLine, $errorFile);
 
-                        break;
+                    break;
                 }
             }
 
@@ -68,8 +68,7 @@ class ShutdownHandler
                 ->withHeader('Access-Control-Expose-Headers', 'X-Renew-Token')
                 ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
                 ->withAddedHeader('Cache-Control', 'post-check=0, pre-check=0')
-                ->withHeader('Pragma', 'no-cache')
-            ;
+                ->withHeader('Pragma', 'no-cache');
 
             if (ob_get_contents()) {
                 ob_clean();

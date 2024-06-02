@@ -9,31 +9,31 @@ use App\Domain\Models\Assets\AbstractAsset;
 
 class MediaCollectorVisitor implements MediaCollectorInterface
 {
-  /**
-   * Collection of media files
-   *
-   * @var MediaResource[]
-   */
-  private array $collection = [];
+    /**
+     * Collection of media files
+     *
+     * @var MediaResource[]
+     */
+    private array $collection = [];
 
 
-  public function collect(): array
-  {
-    return $this->collection;
-  }
-
-
-  public function visit(MediaHostInterface $mediaAdapter): void
-  {
-    $info = $mediaAdapter->assetInformation();
-
-    if ($info instanceof \App\Domain\Models\Assets\AbstractAsset) {
-      $this->collection[] = $this->makeAssetInfo($info, $mediaAdapter->namedBy());
+    public function collect(): array
+    {
+        return $this->collection;
     }
-  }
 
-  public function makeAssetInfo(AbstractAsset $asset, string $name): MediaResource
-  {
-    return new MediaResource($asset->getPath(), $name);
-  }
+
+    public function visit(MediaHostInterface $mediaAdapter): void
+    {
+        $info = $mediaAdapter->assetInformation();
+
+        if ($info instanceof \App\Domain\Models\Assets\AbstractAsset) {
+            $this->collection[] = $this->makeAssetInfo($info, $mediaAdapter->namedBy());
+        }
+    }
+
+    public function makeAssetInfo(AbstractAsset $asset, string $name): MediaResource
+    {
+        return new MediaResource($asset->getPath(), $name);
+    }
 }

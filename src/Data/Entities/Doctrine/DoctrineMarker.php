@@ -95,7 +95,9 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
         return $this->name;
     }
 
-    /** @return array */
+    /**
+     * @return array 
+     */
     public function jsonSerialize(): mixed
     {
         return [
@@ -109,7 +111,9 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
         ];
     }
 
-    /** @return Collection<DoctrinePlacementObject> */
+    /**
+     * @return Collection<DoctrinePlacementObject> 
+     */
     public function getResources()
     {
         return $this->resources;
@@ -249,11 +253,13 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
         );
     }
 
-    /** @param Marker $model */
+    /**
+     * @param Marker $model 
+     */
     public function fromModel(object $model): static
     {
         $asset = $model->asset;
-        # Basic info
+        // Basic info
         $this->name = $model->name;
         $this->text = $model->text;
         $this->title = $model->title;

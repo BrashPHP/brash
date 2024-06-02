@@ -11,7 +11,7 @@ class ResourceLoader
      */
     public static function getResource(string $file): array
     {
-        $resource = require self::$defaultPath . $file . '.php';
+        $resource = include self::$defaultPath . $file . '.php';
 
         return $resource;
     }

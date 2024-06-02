@@ -32,10 +32,12 @@ class RefreshTokenAction extends Action
             ->refresh($refreshToken, $secretBody, $secretCookie)
             ->map(
                 function (string $token) {
-                    return $this->respondWithData([
+                    return $this->respondWithData(
+                        [
                         "status" => "Success",
                         "message" => "Token successfully created",
-                    ])
+                        ]
+                    )
                         ->withHeader("X-RENEW-TOKEN", $token)
                         ->withStatus(201);
                 }
@@ -45,10 +47,12 @@ class RefreshTokenAction extends Action
                     $this->logger->warning(
                         $exception->getPrevious()->getMessage()
                     );
-                    return $this->respondWithData([
+                    return $this->respondWithData(
+                        [
                         "status" => "error",
                         "message" => $exception->getMessage(),
-                    ], 401)->withStatus(401);
+                        ], 401
+                    )->withStatus(401);
                 }
             );
     }

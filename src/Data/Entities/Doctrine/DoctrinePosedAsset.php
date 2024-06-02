@@ -20,9 +20,9 @@ class DoctrinePosedAsset
     #[
         Id,
         OneToOne(
-        targetEntity: DoctrinePlacementObject::class,
-        mappedBy: "asset"
-    ),
+            targetEntity: DoctrinePlacementObject::class,
+            mappedBy: "asset"
+        ),
         JoinColumn(name: "placement_object_id", referencedColumnName: "id")
     ]
     private DoctrinePlacementObject $posedObject;

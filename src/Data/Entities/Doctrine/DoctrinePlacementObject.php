@@ -42,7 +42,6 @@ class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInt
 
     /**
      * Many resources have one marker. This is the owning side.
-     *
      */
     #[
         ManyToOne(targetEntity: DoctrineMarker::class, inversedBy: "resources"),
@@ -73,7 +72,9 @@ class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInt
         return $this->name;
     }
 
-    /** @return array */
+    /**
+     * @return array 
+     */
     public function jsonSerialize(): mixed
     {
         return [
@@ -165,7 +166,9 @@ class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInt
         );
     }
 
-    /** @param PlacementObject $model */
+    /**
+     * @param PlacementObject $model 
+     */
     public function fromModel(object $model): static
     {
         $this->createdAt = $model->createdAt;

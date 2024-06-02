@@ -31,10 +31,12 @@ class AsymmetricValidator implements Middleware
         $museum = $this->museumRepository->findByUUID($uuid);
 
         if ($museum instanceof \App\Domain\Models\Museum) {
-            $signature = json_encode([
+            $signature = json_encode(
+                [
                 'uuid' => $museum->uuid->toString(),
                 'museum_name' => $museum->name,
-            ]);
+                ]
+            );
 
             $dbToken = $this->tokenRepository->findFromMuseum($museum);
             $raw_signature = base64_decode($dbToken->signature);

@@ -21,7 +21,8 @@ class InMemoryAccountRepository implements AccountRepository
 
     public function __construct()
     {
-        $this->accounts = new ArrayCollection([
+        $this->accounts = new ArrayCollection(
+            [
             new Account(
                 1,
                 'mail@mail.com',
@@ -43,7 +44,8 @@ class InMemoryAccountRepository implements AccountRepository
                 'password3',
                 'common',
             ),
-        ]);
+            ]
+        );
     }
 
     public function findByMail(string $mail): ?Account

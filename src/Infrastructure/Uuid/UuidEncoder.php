@@ -21,21 +21,25 @@ class UuidEncoder
     public static function decode(string $encoded): ?UuidInterface
     {
         try {
-            return Uuid::fromString(array_reduce(
-                [20, 16, 12, 8],
-                static function ($uuid, $offset) {
-                    return substr_replace($uuid, '-', $offset, 0);
-                },
-                str_pad(
-                    gmp_strval(
-                        gmp_init($encoded, 62),
-                        16
-                    ),
-                    32,
-                    '0',
-                    STR_PAD_LEFT
+            return Uuid::fromString(
+                array_reduce(
+                    [20, 16, 12, 8],
+                    static function ($uuid, $offset) {
+
+                        return substr_replace($uuid, '-', $offset, 0);
+                
+                    },
+                    str_pad(
+                        gmp_strval(
+                            gmp_init($encoded, 62),
+                            16
+                        ),
+                        32,
+                        '0',
+                        STR_PAD_LEFT
+                    )
                 )
-            ));
+            );
         } catch (\Throwable $throwable) {
             return null;
         }

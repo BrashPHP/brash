@@ -12,6 +12,7 @@ class EventDispatcher implements EventDispatcherInterface
 
     /**
      * EventDispatcher constructor.
+     *
      * @param ListenerProviderInterface $listenerProvider
      */
     public function __construct(ListenerProviderInterface $listenerProvider)
@@ -20,7 +21,7 @@ class EventDispatcher implements EventDispatcherInterface
     }
 
     /**
-     * @param object $event
+     * @param  object $event
      * @return object
      */
     public function dispatch(object $event): object

@@ -27,10 +27,12 @@ class PresignedUrlCreator
         $object = $asset->getPath();
 
         if ($this->s3Client->doesObjectExist($this->bucket, $object)) {
-            $cmd = $this->s3Client->getCommand('GetObject', [
+            $cmd = $this->s3Client->getCommand(
+                'GetObject', [
                 'Bucket' => $this->bucket,
                 'Key' => $object,
-            ]);
+                ]
+            );
 
             $request = $this->s3Client->createPresignedRequest($cmd, '+20 minutes');
 

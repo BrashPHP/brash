@@ -30,7 +30,11 @@ class ReopeningEntityManagerDecorator extends EntityManagerDecorator
     private function generateNewEm()
     {
         $settings = $this->container->get('settings');
-        /** @var array */
+        /**
+* 
+         *
+ * @var array 
+*/
         $doctrine = $settings['doctrine'];
         return EntityManagerBuilder::produce($doctrine);
     }

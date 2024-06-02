@@ -15,11 +15,13 @@ class RouterCollector extends AbstractRouterTemplate
 {
     public function collect(RouteCollectorInterface $routeCollector): void
     {
-        $routeCollector->get('/', function ($request, Response $response) {
-            $response->getBody()->write('Welcome to ARtchie\'s');
+        $routeCollector->get(
+            '/', function ($request, Response $response) {
+                $response->getBody()->write('Welcome to ARtchie\'s');
 
-            return $response;
-        });
+                return $response;
+            }
+        );
 
         $this->setGroup('/users', 'users/users-routes');
         $this->setGroup('/auth', 'auth-routes');
@@ -29,10 +31,10 @@ class RouterCollector extends AbstractRouterTemplate
             '/asymmetric-downloads',
             'asymmetric-protected/download-routes'
         )->addMiddleware(
-                AsymetricValidatorFactory::createMiddleware(
-                    $routeCollector->getContainer()
-                )
-            );
+            AsymetricValidatorFactory::createMiddleware(
+                $routeCollector->getContainer()
+            )
+        );
 
         $routeCollector->get('/acc', AccountGet::class);
         $routeCollector->post('/acc', AccountInsertion::class);

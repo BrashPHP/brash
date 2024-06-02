@@ -21,7 +21,11 @@ class ConnectorFacade
 
     public function __construct(private array $connection, array $connectionOptions = [])
     {
-        /** @var string */
+        /**
+* 
+         *
+ * @var string 
+*/
         $this->driver = $this->prepareDriverSelection($connection);
         $this->connectionDefinitions = $this->createInput($connection, $connectionOptions);
     }

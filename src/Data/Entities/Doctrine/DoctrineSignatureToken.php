@@ -70,7 +70,9 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
         return $this;
     }
 
-    /** @return array */
+    /**
+     * @return array 
+     */
     public function jsonSerialize(): mixed
     {
         return [
@@ -125,7 +127,9 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
         );
     }
 
-    /** @param SignatureToken $model */
+    /**
+     * @param SignatureToken $model 
+     */
     function fromModel(object $model): static
     {
         $this->id = $model->id;

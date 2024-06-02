@@ -9,14 +9,14 @@ use App\Domain\Models\Assets\VideoAsset;
 
 class VideoAssetFactory implements ConstrainedAssetFactoryInterface
 {
-  public function create(CreateAsset $command): AbstractAsset
-  {
-    $asset = new VideoAsset();
-    return $asset->fromCommand($command);
-  }
+    public function create(CreateAsset $command): AbstractAsset
+    {
+        $asset = new VideoAsset();
+        return $asset->fromCommand($command);
+    }
 
-  public function allowedFormats(): array|string
-  {
-    return 'MP4';
-  }
+    public function allowedFormats(): array|string
+    {
+        return 'MP4';
+    }
 }

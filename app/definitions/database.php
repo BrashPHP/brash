@@ -22,11 +22,11 @@ use Core\Decorators\ReopeningEntityManagerDecorator;
 return [
     ReopeningEntityManagerDecorator::class => static fn(
     ContainerInterface $container
-) => new ReopeningEntityManagerDecorator($container),
+    ) => new ReopeningEntityManagerDecorator($container),
 
     EntityManagerInterface::class => static fn(
     ContainerInterface $container
-) => $container->get(ReopeningEntityManagerDecorator::class),
+    ) => $container->get(ReopeningEntityManagerDecorator::class),
 
     DatabaseManager::class => static function (ContainerInterface $container): DatabaseManager {
         $getProductionConnection = static function (ContainerInterface $container): ?DriverConfig {
@@ -51,7 +51,8 @@ return [
         };
 
         return new DatabaseManager(
-            new DatabaseConfig([
+            new DatabaseConfig(
+                [
                 "default" => "default",
                 "databases" => [
                     "default" => [
@@ -65,7 +66,8 @@ return [
                     ),
                     "production" => $getProductionConnection($container),
                 ],
-            ])
+                ]
+            )
         );
     },
     ORM\ORM::class => function (ContainerInterface $container) {
@@ -73,15 +75,18 @@ return [
 
         $finder = (new Finder())
             ->files()
-            ->in([
+            ->in(
+                [
                 $root . "/src/Data/Entities/Cycle",
                 $root . "/src/Data/Entities/Cycle/Rbac",
-            ]);
+                ]
+            );
         $classLocator = new ClassLocator($finder);
         $database = $container->get(DatabaseManager::class);
         $schemaCompiler = new Schema\Compiler();
 
-        $schema = $schemaCompiler->compile(new Schema\Registry($database), [
+        $schema = $schemaCompiler->compile(
+            new Schema\Registry($database), [
             new Schema\Generator\ResetTables(),
                 // re-declared table schemas (remove columns)
             new Annotated\Embeddings($classLocator),
@@ -109,7 +114,8 @@ return [
             new Schema\Generator\SyncTables(),
                 // sync table changes to database
             new Schema\Generator\GenerateTypecast(), // typecast non string columns
-        ]);
+            ]
+        );
         $schema = new ORM\Schema($schema);
         $commandGenerator = new EventDrivenCommandGenerator(
             $schema,
@@ -119,7 +125,7 @@ return [
         $ormFactory = new ORM\Factory($database);
         $ormFactory = $ormFactory->withCollectionFactory(
             'doctrine',
-                // Alias
+            // Alias
             new ORM\Collection\DoctrineCollectionFactory,
             \Doctrine\Common\Collections\Collection::class // <= Base collection
         );
@@ -135,5 +141,5 @@ return [
 
     CycleEntityManager::class => static fn(
     ContainerInterface $container
-) => new CycleEntityManager($container->get(ORM\ORM::class)),
+    ) => new CycleEntityManager($container->get(ORM\ORM::class)),
 ];

@@ -27,7 +27,11 @@ class MuseumDoctrineRepository extends DoctrineAbstractCrud implements MuseumRep
 
     public function update(int $id, array $values): ?Museum
     {
-        /** @var ?DoctrineMuseum */
+        /**
+* 
+         *
+ * @var ?DoctrineMuseum 
+*/
         $museum = $this->repository()->findByPK($id);
 
         if ($museum) {
@@ -46,7 +50,11 @@ class MuseumDoctrineRepository extends DoctrineAbstractCrud implements MuseumRep
 
     public function findByID(int $id): ?Museum
     {
-        /** @var ?DoctrineMuseum */
+        /**
+* 
+         *
+ * @var ?DoctrineMuseum 
+*/
         $museum = parent::findByID($id);
 
         return $museum?->toModel();
@@ -54,7 +62,11 @@ class MuseumDoctrineRepository extends DoctrineAbstractCrud implements MuseumRep
 
     public function findByMail(string $mail): ?Museum
     {
-        /** @var ?DoctrineMuseum */
+        /**
+* 
+         *
+ * @var ?DoctrineMuseum 
+*/
         $doctrineMuseum = $this->findByKey('email', $mail);
 
         return $doctrineMuseum?->toModel();
@@ -62,7 +74,11 @@ class MuseumDoctrineRepository extends DoctrineAbstractCrud implements MuseumRep
 
     public function findByUUID(string $uuid): ?Museum
     {
-        /** @var ?DoctrineMuseum */
+        /**
+* 
+         *
+ * @var ?DoctrineMuseum 
+*/
         $doctrineMuseum = $this->findByKey('uuid', $uuid);
 
         return $doctrineMuseum?->toModel();
@@ -70,7 +86,11 @@ class MuseumDoctrineRepository extends DoctrineAbstractCrud implements MuseumRep
 
     public function findByName(string $name): ?Museum
     {
-        /** @var ?DoctrineMuseum */
+        /**
+* 
+         *
+ * @var ?DoctrineMuseum 
+*/
         $doctrineMuseum = $this->findByKey('name', $name);
 
         return $doctrineMuseum?->toModel();
@@ -95,7 +115,11 @@ class MuseumDoctrineRepository extends DoctrineAbstractCrud implements MuseumRep
 
     public function remove(int $museum): ?Museum
     {
-        /** @var ?DoctrineMuseum */
+        /**
+* 
+         *
+ * @var ?DoctrineMuseum 
+*/
         $museumdb = parent::delete($museum);
 
         return $museumdb?->toModel();

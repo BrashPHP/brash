@@ -22,169 +22,171 @@ use Doctrine\Common\Collections\Collection;
 
 class DeliveryMan implements ResourcesDownloaderInterface
 {
-  public function __construct(
-    private MuseumRepository $museumRepository,
-    private MarkerRepositoryInterface $repository,
-    private PresignedUrlCreator $presignedUrlCreator
-  ) {
-  }
+    public function __construct(
+        private MuseumRepository $museumRepository,
+        private MarkerRepositoryInterface $repository,
+        private PresignedUrlCreator $presignedUrlCreator
+    ) {
+    }
 
-  /**
-   * Returns all mapped marker instances from a museum
-   *
-   *
-   */
-  public function transport(int $id): array
-  {
-    $museum = $this->museumRepository->findByID($id);
-    try {
-      return $this->doOrThrowIf(
-        isset($museum),
-        doCallback: fn() =>
-        $this->mapCollectionToAssets(
-          $this->filterPlacementObjectsFromMarkers(
-            $this->filterMarkers(
-              $this->gatherMarkersFromMuseum(
-                $museum
-              )
+    /**
+     * Returns all mapped marker instances from a museum
+     */
+    public function transport(int $id): array
+    {
+        $museum = $this->museumRepository->findByID($id);
+        try {
+            return $this->doOrThrowIf(
+                isset($museum),
+                doCallback: fn() =>
+                $this->mapCollectionToAssets(
+                    $this->filterPlacementObjectsFromMarkers(
+                        $this->filterMarkers(
+                            $this->gatherMarkersFromMuseum(
+                                $museum
+                            )
+                        )
+                    )
+                ),
+                orThrow: new MuseumNotFoundException(
+                    "Could not identify a museum by this code"
+                )
+            );
+        } catch (\Throwable $throwable) {
+            echo ($throwable);
+
+            return [];
+        }
+    }
+
+    /**
+     * Maps over Markers Collection and return an array of assets
+     *
+     * @param Collection<Marker> $markers
+     *
+     * @return MarkerResource[]
+     */
+    private function mapCollectionToAssets(Collection $markers): array
+    {
+
+        return $this->preventNotFoundAssets(
+            $markers->map(
+                fn(Marker $el) => (
+                new MarkerResource(
+                    ...$this->convertMediaMapperToAssetBase($el)
+                )
+                )
+                ->withInformation(
+                    new TransferenceAssetInfo($el->title, $el->text)
+                )
+                ->attachPlacementResources(
+                    $this->mapPlacementObjectsToPlacementResources(
+                        $el->resources
+                    )
+                )
             )
-          )
-        ),
-        orThrow: new MuseumNotFoundException(
-          "Could not identify a museum by this code"
-        )
-      );
-    } catch (\Throwable $throwable) {
-      echo ($throwable);
-
-      return [];
+        )->toArray();
     }
-  }
 
-  /**
-   * Maps over Markers Collection and return an array of assets
-   *
-   * @param Collection<Marker> $markers
-   *
-   * @return MarkerResource[]
-   */
-  private function mapCollectionToAssets(Collection $markers): array
-  {
-
-    return $this->preventNotFoundAssets(
-      $markers->map(
-        fn(Marker $el) => (
-          new MarkerResource(
-          ...$this->convertMediaMapperToAssetBase($el)
-          )
-        )
-          ->withInformation(
-            new TransferenceAssetInfo($el->title, $el->text)
-          )
-          ->attachPlacementResources(
-            $this->mapPlacementObjectsToPlacementResources(
-              $el->resources
+    /**
+     *
+     * @param Collection<PlacementObject> $resources
+     *
+     * @return \App\Domain\Dto\Asset\Transference\PlacementResource[]
+     */
+    private function mapPlacementObjectsToPlacementResources(
+        Collection $resources
+    ): array {
+        return $this->preventNotFoundAssets(
+            $resources->map(
+                fn(PlacementObject $po) => new TransferencePlacementResource(
+                    ...$this->convertMediaMapperToAssetBase($po)
+                )
             )
-          )
-      )
-    )->toArray();
-  }
-
-  /**
-   *
-   * @param Collection<PlacementObject> $resources
-   *
-   * @return \App\Domain\Dto\Asset\Transference\PlacementResource[]
-   */
-  private function mapPlacementObjectsToPlacementResources(
-    Collection $resources
-  ): array {
-    return $this->preventNotFoundAssets(
-      $resources->map(
-        fn(PlacementObject $po) => new TransferencePlacementResource(
-          ...$this->convertMediaMapperToAssetBase($po)
-        )
-      )
-    )->toArray();
-  }
-
-  private function convertMediaMapperToAssetBase(
-    MediaHostInterface $host
-  ): array {
-    return [
-      "name" => $host->namedBy(),
-      "path" => $host->assetInformation()->getPath(),
-      "url" => $this->assignUrl($host->assetInformation()),
-    ];
-  }
-
-  private function assignUrl(AbstractAsset $abstractAsset): ?string
-  {
-    return $this->presignedUrlCreator->setPresignedUrl($abstractAsset);
-  }
-
-  private function preventNotFoundAssets(Collection $collection): Collection
-  {
-    return $collection->filter(
-      static fn(TransferenceAsset $asset) => !($asset->url === null && $asset->url === "")
-    );
-  }
-
-  private function doOrThrowIf(
-    bool $condition,
-    callable $doCallback,
-    DomainException $orThrow
-  ) {
-    if ($condition) {
-      return $doCallback();
+        )->toArray();
     }
 
-    throw $orThrow;
-  }
-
-  /**
-   * @param Collection<Marker> $collection
-   *
-   * @return Collection<Marker>
-   */
-  private function filterMarkers(Collection $collection): Collection
-  {
-    return $this->getOnlySetAssets($collection);
-  }
-
-  /**
-   * @return Collection<Marker>
-   */
-  private function gatherMarkersFromMuseum(Museum $museum): Collection
-  {
-    return new ArrayCollection(
-      $this->repository->findAllByMuseum($museum)->getItems()
-    );
-  }
-
-  /**
-   * @param Collection<Marker> $markers
-   *
-   * @return Collection<Marker> $markers
-   */
-  private function filterPlacementObjectsFromMarkers(
-    Collection $markers
-  ): Collection {
-    foreach ($markers as $marker) {
-      $marker->setResources(
-        $this->getOnlySetAssets(
-          $marker->getResources()
-        )
-      );
+    private function convertMediaMapperToAssetBase(
+        MediaHostInterface $host
+    ): array {
+        return [
+        "name" => $host->namedBy(),
+        "path" => $host->assetInformation()->getPath(),
+        "url" => $this->assignUrl($host->assetInformation()),
+        ];
     }
 
-    return $markers;
-  }
+    private function assignUrl(AbstractAsset $abstractAsset): ?string
+    {
+        return $this->presignedUrlCreator->setPresignedUrl($abstractAsset);
+    }
 
-  private function getOnlySetAssets(Collection $collection)
-  {
-    return $collection->filter(static function (MediaHostInterface $el) {
-        return !is_null($el->assetInformation());
-    });
-  }
+    private function preventNotFoundAssets(Collection $collection): Collection
+    {
+        return $collection->filter(
+            static fn(TransferenceAsset $asset) => !($asset->url === null && $asset->url === "")
+        );
+    }
+
+    private function doOrThrowIf(
+        bool $condition,
+        callable $doCallback,
+        DomainException $orThrow
+    ) {
+        if ($condition) {
+            return $doCallback();
+        }
+
+        throw $orThrow;
+    }
+
+    /**
+     * @param Collection<Marker> $collection
+     *
+     * @return Collection<Marker>
+     */
+    private function filterMarkers(Collection $collection): Collection
+    {
+        return $this->getOnlySetAssets($collection);
+    }
+
+    /**
+     * @return Collection<Marker>
+     */
+    private function gatherMarkersFromMuseum(Museum $museum): Collection
+    {
+        return new ArrayCollection(
+            $this->repository->findAllByMuseum($museum)->getItems()
+        );
+    }
+
+    /**
+     * @param Collection<Marker> $markers
+     *
+     * @return Collection<Marker> $markers
+     */
+    private function filterPlacementObjectsFromMarkers(
+        Collection $markers
+    ): Collection {
+        foreach ($markers as $marker) {
+            $marker->setResources(
+                $this->getOnlySetAssets(
+                    $marker->getResources()
+                )
+            );
+        }
+
+        return $markers;
+    }
+
+    private function getOnlySetAssets(Collection $collection)
+    {
+        return $collection->filter(
+            static function (MediaHostInterface $el) {
+
+                return !is_null($el->assetInformation());
+    
+            }
+        );
+    }
 }

@@ -49,17 +49,20 @@ class JWTAuthMiddleware implements Middleware
         return $jwtAuth->process($request, $handler);
     }
 
-    private function onError(): \Closure{
+    private function onError(): \Closure
+    {
         return function (Response $response): Response {
             $response = $response->withHeader('Content-Type', 'application/json');
 
             $response
                 ->getBody()
                 ->write(
-                    json_encode([
+                    json_encode(
+                        [
                         "message" =>
                             "You are not allowed to acess this resource",
-                    ])
+                        ]
+                    )
                 );
 
             return $response;

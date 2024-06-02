@@ -7,5 +7,5 @@ use App\Domain\Models\Assets\AbstractAsset;
 
 interface AssetFactoryInterface
 {
-  public function create(CreateAsset $command): AbstractAsset;
+    public function create(CreateAsset $command): AbstractAsset;
 }

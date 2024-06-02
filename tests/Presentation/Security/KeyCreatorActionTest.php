@@ -27,7 +27,11 @@ class KeyCreatorActionTest extends TestCase
     protected function setUp(): void
     {
         $this->prophet = new Prophet();
-        /** @var SignerInterface */
+        /**
+* 
+         *
+ * @var SignerInterface 
+*/
         $service = $this->createMockService();
         $this->sut = new KeyCreatorAction($service);
     }
@@ -43,8 +47,7 @@ class KeyCreatorActionTest extends TestCase
     {
         $prophecyService = $this->prophet->prophesize(SignerInterface::class);
         $prophecyService->sign(Uuid::fromString('914e4c51-a049-4594-ae5c-921bbadf686b'))->willReturn('')
-            ->shouldBeCalledOnce()
-        ;
+            ->shouldBeCalledOnce();
         $action = new KeyCreatorAction($prophecyService->reveal());
         $response = $action($this->createMockRequest(), new Response(), []);
         $payload = (string) $response->getBody();
@@ -56,7 +59,11 @@ class KeyCreatorActionTest extends TestCase
         $service = $this->createMockService();
         $testString = base64_encode('expectedString');
         $service->expects($this->once())->method('sign')->willReturn($testString);
-        /** @var SignerInterface */
+        /**
+* 
+         *
+ * @var SignerInterface 
+*/
         $serviceMocked = $service;
         $action = new KeyCreatorAction($serviceMocked);
         $response = $action->__invoke($this->createMockRequest(), new Response(), []);
@@ -77,8 +84,7 @@ class KeyCreatorActionTest extends TestCase
                     ],
                     JSON_PRETTY_PRINT
                 )
-            )
-        ;
+            );
 
         $request->getBody()->rewind();
 
@@ -95,7 +101,6 @@ class KeyCreatorActionTest extends TestCase
         return $this->getMockBuilder(SignerInterface::class)
             ->onlyMethods(['sign'])
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
     }
 }

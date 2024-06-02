@@ -28,13 +28,17 @@ class AuthMiddlewareTest extends TestCase
     {
         $this->app = $this->createAppInstance();
         $this->prophet = new \Prophecy\Prophet;
-        $this->app->group('/api', function ($group) {
-            $group->get('/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
-                $response->getBody()->write('Works');
+        $this->app->group(
+            '/api', function ($group) {
+                $group->get(
+                    '/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
+                        $response->getBody()->write('Works');
 
-                return $response;
-            });
-        });
+                        return $response;
+                    }
+                );
+            }
+        );
         $this->setUpErrorHandler($this->app);
     }
 
@@ -78,8 +82,7 @@ class AuthMiddlewareTest extends TestCase
 
         $mockJwtRefreshHandler = $this->getMockBuilder(RefreshTokenHandler::class)
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
 
         /**
          * @var \Psr\Container\ContainerInterface

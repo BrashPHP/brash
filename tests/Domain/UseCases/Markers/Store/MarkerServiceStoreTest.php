@@ -29,11 +29,23 @@ class MarkerServiceStoreTest extends TestCase
     protected function setUp(): void
     {
         $this->prophet = new \Prophecy\Prophet;
-        /** @var MuseumRepository */
+        /**
+* 
+         *
+ * @var MuseumRepository 
+*/
         $museumRepository = $this->mockMuseumRepository();
-        /** @var MarkerRepositoryInterface */
+        /**
+* 
+         *
+ * @var MarkerRepositoryInterface 
+*/
         $markerRepository = $this->mockMarkerRepository();
-        /** @var EntityManager */
+        /**
+* 
+         *
+ * @var EntityManager 
+*/
         $em = $this->mockEntityManager();
 
         $this->sut = new SutTypes($museumRepository, $markerRepository, $em);
@@ -58,7 +70,11 @@ class MarkerServiceStoreTest extends TestCase
         return $em;
     }
 
-    /** @return MockObject */
+    /**
+     * 
+     *
+     * @return MockObject 
+     */
     public function mockMuseumRepository()
     {
         return $this->getMockBuilder(MuseumRepository::class)
@@ -66,7 +82,11 @@ class MarkerServiceStoreTest extends TestCase
             ->getMock();
     }
 
-    /** @return MockObject */
+    /**
+     * 
+     *
+     * @return MockObject 
+     */
     public function mockMarkerRepository()
     {
         return $this->getMockBuilder(MarkerRepositoryInterface::class)

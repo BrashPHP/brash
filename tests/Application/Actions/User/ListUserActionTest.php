@@ -31,7 +31,11 @@ class ListUserActionTest extends TestCase
     {
         $app = $this->createAppInstance();
 
-        /** @var Container $container */
+        /**
+* 
+         *
+ * @var Container $container 
+*/
         $container = $app->getContainer();
 
         $user = new User(1, 'bill.gates', 'Bill', 'Gates');

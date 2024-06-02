@@ -50,7 +50,7 @@ doctrine-test:
 	composer run test --group doctrine
 
 sniffer:
-	./vendor/bin/phpcs -h .
+	./vendor/bin/phpcs .
 
 sniffer-fix:
-	./vendor/bin/phpcbf -h .
+	./vendor/bin/phpcbf src app

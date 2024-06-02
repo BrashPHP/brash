@@ -34,11 +34,23 @@ class SignerTest extends TestCase
     public function setUp(): void
     {
         $this->prophet = new Prophet();
-        /** @var MuseumRepository */
+        /**
+* 
+         *
+ * @var MuseumRepository 
+*/
         $repository = $this->createMockRepository();
-        /** @var AsymmetricEncrypter */
+        /**
+* 
+         *
+ * @var AsymmetricEncrypter 
+*/
         $encrypter = $this->createEncrypterMock();
-        /** @var SignatureTokenRepositoryInterface */
+        /**
+* 
+         *
+ * @var SignatureTokenRepositoryInterface 
+*/
         $signatureTokenRepository = $this->createTokenRepositoryMock();
 
 
@@ -50,11 +62,23 @@ class SignerTest extends TestCase
 
     public function testIfSignatureTokenRepositoryMakesInsertion()
     {
-        /** @var MockObject */
+        /**
+* 
+         *
+ * @var MockObject 
+*/
         $tokenRepository = $this->sut->signatureTokenRepository;
-        /** @var MockObject */
+        /**
+* 
+         *
+ * @var MockObject 
+*/
         $encrypter = $this->sut->encrypter;
-        /** @var MockObject */
+        /**
+* 
+         *
+ * @var MockObject 
+*/
         $museumRepository = $this->sut->repository;
 
         $encrypter->method('encrypt')->willReturn(new Signature('privKey', 'pubKey', 'signature'));

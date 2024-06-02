@@ -18,32 +18,40 @@ use function PHPUnit\Framework\assertIsObject;
 #[Group('doctrine')]
 class DoctrineImplementationTest extends TestCase
 {
-  public function testSetEnvironmentCorrectly()
-  {
-    $dir = getcwd();
-    assertDirectoryExists($dir . "/src/Domain/Models");
-  }
+    public function testSetEnvironmentCorrectly()
+    {
+        $dir = getcwd();
+        assertDirectoryExists($dir . "/src/Domain/Models");
+    }
 
-  public function testIfSetupContainerWorks()
-  {
-    $app = $this->getAppInstance();
+    public function testIfSetupContainerWorks()
+    {
+        $app = $this->getAppInstance();
 
-    /** @var Container $container */
-    $container = $app->getContainer();
-    $settings = $container->get("settings");
-    $doctrine = $settings["doctrine"];
+        /**
+* 
+         *
+   * @var Container $container 
+*/
+        $container = $app->getContainer();
+        $settings = $container->get("settings");
+        $doctrine = $settings["doctrine"];
 
-    assertArrayHasKey("connection", $doctrine);
-  }
+        assertArrayHasKey("connection", $doctrine);
+    }
 
-  public function testIfEntityManagerIsNotNull()
-  {
-    $app = $this->getAppInstance();
+    public function testIfEntityManagerIsNotNull()
+    {
+        $app = $this->getAppInstance();
 
-    /** @var Container $container */
-    $container = $app->getContainer();
-    $em = $container->get(EntityManager::class);
+        /**
+* 
+         *
+   * @var Container $container 
+*/
+        $container = $app->getContainer();
+        $em = $container->get(EntityManager::class);
 
-    assertIsObject($em);
-  }
+        assertIsObject($em);
+    }
 }

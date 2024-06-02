@@ -32,7 +32,11 @@ class ViewUserActionTest extends TestCase
     {
         $app = $this->createAppInstance();
 
-        /** @var Container $container */
+        /**
+* 
+         *
+ * @var Container $container 
+*/
         $container = $app->getContainer();
 
         $user = new User(1, 'bill.gates', 'Bill', 'Gates');
@@ -41,8 +45,7 @@ class ViewUserActionTest extends TestCase
         $userRepositoryProphecy
             ->findUserOfId(1)
             ->willReturn($user)
-            ->shouldBeCalledOnce()
-        ;
+            ->shouldBeCalledOnce();
 
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
 
@@ -62,15 +65,18 @@ class ViewUserActionTest extends TestCase
 
         $this->setUpErrorHandler($app);
 
-        /** @var Container $container */
+        /**
+* 
+         *
+ * @var Container $container 
+*/
         $container = $app->getContainer();
 
         $userRepositoryProphecy = $this->prophet->prophesize(UserRepository::class);
         $userRepositoryProphecy
             ->findUserOfId(1)
             ->willThrow(new UserNotFoundException())
-            ->shouldBeCalledOnce()
-        ;
+            ->shouldBeCalledOnce();
 
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
 

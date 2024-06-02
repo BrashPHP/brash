@@ -37,7 +37,11 @@ class LoginControllerTest extends TestCase
 
     public function testShouldCallAuthenticationWithCorrectValues()
     {
-        /** @var Container $container */
+        /**
+* 
+         *
+ * @var Container $container 
+*/
         $container = $this->getContainer();
         $service = $this->createMockService();
         $service->expects($this->once())
@@ -82,9 +86,11 @@ class LoginControllerTest extends TestCase
         $payload = (string) $response->getBody();
         $payloadDecoded = json_decode($payload);
 
-        $errors = explode("\n", $payloadDecoded
-            ->error
-            ->description);
+        $errors = explode(
+            "\n", $payloadDecoded
+                ->error
+                ->description
+        );
 
         $this->assertEquals(2, count($errors));
     }

@@ -51,8 +51,7 @@ trait InstanceManagerTrait
         $containerFactory = new ContainerFactory();
 
         $containerFactory
-            ->enableCompilation(false)
-        ;
+            ->enableCompilation(false);
 
         return $containerFactory->get();
     }

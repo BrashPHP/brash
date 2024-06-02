@@ -146,7 +146,11 @@ class LoginTest extends TestCase
             ->getMock();
         $mock->expects($this->once())->method('compare')->willReturn(false);
 
-        /** @var AccountRepository */
+        /**
+* 
+         *
+ * @var AccountRepository 
+*/
         $repository = $mockRepository;
 
         $loginService = $this->makeService($repository, $mock);

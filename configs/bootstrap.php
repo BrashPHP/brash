@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Symfony\Component\Dotenv\Dotenv;
 
 try {
-    require __DIR__ . '/../vendor/autoload.php';
+    include __DIR__ . '/../vendor/autoload.php';
 
     // Error reporting for production
     error_reporting(0);

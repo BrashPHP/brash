@@ -23,8 +23,7 @@ if (file_exists($envPath)) {
 $containerFactory = new ContainerFactory();
 $containerFactory
     // Set to true in production
-    ->enableCompilation(isProd())
-;
+    ->enableCompilation(isProd());
 
 $appBuilder = new AppBuilderManager($containerFactory->get());
 $appBuilder->useDefaultShutdownHandler(true);

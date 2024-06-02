@@ -46,7 +46,7 @@ class AppBuilderManager
             $app->addMiddleware($preMiddleware);
         }
 
-        MiddlewareCollector::collect(new SlimMiddlewareIncluder($app));
+        new MiddlewareCollector(new SlimMiddlewareIncluder($app));
 
         $router = new RouterCollector(new SlimRouteCollector($app));
 

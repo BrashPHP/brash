@@ -24,9 +24,9 @@ class ContainerFactory
 
     public function enableCompilation(bool $enable): self
     {
-        // if ($enable) { // Should be set to true in production
-        //     $this->containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
-        // }
+        if ($enable) { // Should be set to true in production
+            $this->containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
+        }
 
         return $this;
     }

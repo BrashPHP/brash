@@ -54,7 +54,7 @@ class HttpErrorHandler extends SlimErrorHandler
                 $exception instanceof HttpNotImplementedException => ErrorsEnum::NOT_IMPLEMENTED,
                 default => ErrorsEnum::SERVER_ERROR,
             };
-        } else if (
+        } elseif (
             !($exception instanceof HttpException)
             && ($exception instanceof Exception || $exception instanceof Throwable)
             && $this->displayErrorDetails

@@ -18,7 +18,7 @@ return [
         'logger' => [
             'name' => 'slim-app',
             'path' => isset($_ENV['docker']) ? 'php://stdout' : $root . '/logs/app.log',
-            'level' => Logger::DEBUG,
+            'level' => Logger::WARNING,
         ],
         'doctrine' => static function (ContainerInterface $c): array {
             return [

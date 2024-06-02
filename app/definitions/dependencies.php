@@ -30,7 +30,6 @@ use League\OAuth2\Client\Provider\Google;
  *
  * @param ContainerBuilder $containerBuilder
  */
-
 $encrypter = new Encrypter($_SERVER['ENCRYPTION_KEY'] ?? '');
 
 return [

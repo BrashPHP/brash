@@ -17,7 +17,7 @@ use Tests\Traits\App\RequestManagerTrait;
  * @internal
  * @coversNothing
  */
-class TestCase extends PHPUnit_TestCase
+abstract class TestCase extends PHPUnit_TestCase
 {
     use AppTestTrait;
     use DoublesTrait;

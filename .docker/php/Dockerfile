@@ -1,77 +1,80 @@
-FROM php:8.2-fpm
+FROM ubuntu:jammy AS cli
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y git
+# Fixes some weird terminal issues such as broken clear / CTRL+L
+ENV TERM=linux
 
-RUN apt-get update && \
-  apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip libxml2-dev libpq-dev libzip-dev&& \
-  pecl install apcu && \
-  docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
-  docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql sockets && \
-  docker-php-ext-enable apcu pdo_pgsql sodium && \
-  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# Ensure apt doesn't ask questions when installing stuff
+ENV DEBIAN_FRONTEND=noninteractive
 
-COPY opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-
-# Common
+# Install Ondrej repos for Ubuntu jammy, PHP, composer and selected extensions - better selection than
+# the distro's packages
 RUN apt-get update \
-  && apt-get install -y \
-  openssl \
-  gnupg2
+    && apt-get install -y --no-install-recommends gnupg \
+    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu jammy main" > /etc/apt/sources.list.d/ondrej-php.list \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C \
+    && apt-get update \
+    && apt-get -y --no-install-recommends install \
+    ca-certificates \
+    curl \
+    unzip \
+    openssl \
+    php8.3-apcu \
+    php8.3-cli \
+    php8.3-curl \
+    php8.3-mbstring \
+    php8.3-opcache \
+    php8.3-readline \
+    php8.3-xml \
+    php8.3-zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* ~/.composer
 
-# strings
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+### FPM ###
+
+FROM cli AS fpm
+
+# Install FPM
 RUN apt-get update \
-  && apt-get install -y libonig-dev \
-  && docker-php-ext-install -j$(nproc) \
-  gettext \
-  mbstring
+    && apt-get -y --no-install-recommends install php8.3-fpm \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
+STOPSIGNAL SIGQUIT
 
-# ssh2
+# PHP-FPM packages need a nudge to make them docker-friendly
+COPY .docker/php/overrides.conf /etc/php/8.3/fpm/pool.d/z-overrides.conf
+
 RUN apt-get update \
-  && apt-get install -y \
-  libssh2-1-dev
+    && apt-get -y --no-install-recommends install \
+    git \ 
+    php8.3-bcmath \ 
+    php8.3-bz2 \ 
+    php8.3-decimal \ 
+    php8.3-ds \ 
+    php8.3-http \ 
+    php8.3-mcrypt \ 
+    php8.3-mysql \ 
+    php8.3-pgsql \ 
+    php-raphf \
+    php8.3-sqlite3 \ 
+    php8.3-xdebug \ 
+    php8.3-yaml \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-# memcached
-RUN apt-get update \
-  && apt-get install -y \
-  libmemcached-dev \
-  libmemcached11
-
-COPY --from=composer /usr/bin/composer /usr/bin/composer
-
-
-# Install PHP Code sniffer
-RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar \
-  && chmod 755 phpcs.phar \
-  && mv phpcs.phar /usr/local/bin/ \
-  && ln -s /usr/local/bin/phpcs.phar /usr/local/bin/phpcs \
-  && curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar \
-  && chmod 755 phpcbf.phar \
-  && mv phpcbf.phar /usr/local/bin/ \
-  && ln -s /usr/local/bin/phpcbf.phar /usr/local/bin/phpcbf
-
-# Install PHPUnit
-RUN curl -OL https://phar.phpunit.de/phpunit.phar \
-  && chmod 755 phpunit.phar \
-  && mv phpunit.phar /usr/local/bin/ \
-  && ln -s /usr/local/bin/phpunit.phar /usr/local/bin/phpunit
-
-RUN ln -s /usr/bin/php8 /usr/bin/php
-
-COPY custom.ini "$PHP_INI_DIR/conf.d/"
-
-# Set working directory
 WORKDIR /app
 
-RUN chown -R root:www-data /app
-RUN chmod u+rwx,g+rx,o+rx /app
-RUN find /app -type d -exec chmod u+rwx,g+rx,o+rx {} +
-RUN find /app -type f -exec chmod u+rw,g+rw,o+r {} +
+COPY . .
 
 ENV X_LISTEN 0.0.0.0:9000
 
-CMD composer i -o ; vendor/bin/doctrine-migrations migrate ;  php-fpm 
+RUN composer i -o 
 
+CMD ["/usr/sbin/php-fpm8.3", "-O" ]
 
+# Open up fcgi port
 EXPOSE 9000
+
+

@@ -70,7 +70,7 @@ COPY . .
 
 ENV X_LISTEN 0.0.0.0:9000
 
-RUN composer i -o 
+RUN composer install
 
 CMD ["/usr/sbin/php-fpm8.3", "-O" ]
 

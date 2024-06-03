@@ -9,32 +9,22 @@ use DI\ContainerBuilder;
 class ContainerFactory
 {
     private ContainerBuilder $containerBuilder;
-
-    public function __construct()
-    {
+    public function __construct(
+        private bool $enableCompilation = false,
+    ) {
         $this->containerBuilder = new ContainerBuilder();
+
+        // if ($this->enableCompilation) { // Should be set to true in production
+        //     $this->containerBuilder->enableCompilation('tmp/var/cache');
+        // }
     }
 
     public function get(): Container
     {
-        $containerBuilder = $this->setContainerValues();
+        $providersCollector = new ProvidersCollector();
 
-        return $containerBuilder->build();
-    }
+        $providersCollector->roll($this->containerBuilder);
 
-    public function enableCompilation(bool $enable): self
-    {
-        if ($enable) { // Should be set to true in production
-            $this->containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
-        }
-
-        return $this;
-    }
-
-    private function setContainerValues(): ContainerBuilder
-    {
-        $providersCollector = new ProvidersCollector($this->containerBuilder);
-
-        return $providersCollector->roll();
+        return $this->containerBuilder->build();
     }
 }

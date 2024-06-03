@@ -8,16 +8,18 @@ use Core\Providers\DatabaseProvider;
 use Core\Providers\DependenciesProvider;
 use Core\Providers\RepositoriesProvider;
 use Core\Providers\ServicesProvider;
+use Core\Providers\StartupProvider;
 use Core\Providers\WorkerProvider;
 use Core\Providers\SettingsProvider;
 use DI\ContainerBuilder;
 
-readonly class ProvidersCollector
+class ProvidersCollector
 {
     /**
      * @var class-string<AppProviderInterface> $providers
      */
     public array $providers = [
+        StartupProvider::class,
         ConnectionProvider::class,
         DatabaseProvider::class,
         DependenciesProvider::class,
@@ -27,16 +29,10 @@ readonly class ProvidersCollector
         WorkerProvider::class,
     ];
 
-    public function __construct(private ContainerBuilder $containerBuilder)
-    {
-    }
-
-    public function roll(): ContainerBuilder
+    public function roll(ContainerBuilder $containerBuilder): void
     {
         foreach ($this->providers as $provider) {
-            (new $provider())->provide($this->containerBuilder);
+            (new $provider())->provide($containerBuilder);
         }
-
-        return $this->containerBuilder;
     }
 }

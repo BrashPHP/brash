@@ -50,9 +50,6 @@ trait InstanceManagerTrait
     {
         $containerFactory = new ContainerFactory();
 
-        $containerFactory
-            ->enableCompilation(false);
-
         return $containerFactory->get();
     }
 

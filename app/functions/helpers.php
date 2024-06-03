@@ -19,6 +19,16 @@ function redirect($path): void
 }
 
 // provides a dump & die helper
+if (!function_exists('fromRootPath')) {
+    function fromRootPath(string $path)
+    {
+        $root = dirname(dirname(__DIR__));
+
+        return $root .'/'. $path;
+    }
+}
+
+// provides a dump & die helper
 if (!function_exists('dd')) {
     function dd()
     {

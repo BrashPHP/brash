@@ -10,7 +10,7 @@ use App\Presentation\Middleware\ResponseAdapterMiddleware;
 use Slim\Middleware\BodyParsingMiddleware;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
 
-readonly class MiddlewareCollector
+class MiddlewareCollector
 {
 
     /**

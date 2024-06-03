@@ -33,17 +33,17 @@ class SettingsProvider implements AppProviderInterface
                     'path' => isset($_ENV['docker']) ? 'php://stdout' : $root . '/logs/app.log',
                     'level' => Logger::WARNING,
                 ],
-                'doctrine' => static function (ContainerInterface $c): array {
+                'doctrine' => static function (ContainerInterface $c) use ($root): array {
                     return [
                         // if true, metadata caching is forcefully disabled
                         'dev_mode' => isDev(),
 
                         // path where the compiled metadata info will be cached
                         // make sure the path exists and it is writable
-                        'cache_dir' => getcwd() . '/var/doctrine',
+                        'cache_dir' => $root . '/var/doctrine',
 
                         // you should add any other path containing annotated entity classes
-                        'metadata_dirs' => [getcwd() . '/src/Data/Entities/Doctrine'],
+                        'metadata_dirs' => [$root . '/src/Data/Entities/Doctrine'],
 
                         'connection' => $c->get('connection'),
                     ];

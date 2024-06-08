@@ -51,8 +51,6 @@ class RefreshTokenHandler
         } catch (ExpiredException | UnexpectedValueException $exception) {
             $message = 'Cannot craft new token for invalid refresh token';
 
-            $this->loggerInterface->alert($exception);
-
             return new Err(
                 new UnauthorizedException(
                     $message,
@@ -62,8 +60,6 @@ class RefreshTokenHandler
             );
         } catch (Throwable $exception) {
             $message = 'You are not logged to access this resource';
-
-            $this->loggerInterface->alert($exception);
 
             return new Err(
                 new UnauthorizedException(

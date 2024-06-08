@@ -10,6 +10,7 @@ use Core\Http\Interfaces\RouteCollectorInterface;
 use Core\Http\Interfaces\RouterInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpNotFoundException;
 
 abstract class AbstractRouterTemplate implements RouterInterface
 {
@@ -21,6 +22,9 @@ abstract class AbstractRouterTemplate implements RouterInterface
     {
         $this->prepareOnTheFlyRequests();
         $this->collect($this->routeCollector);
+        $this->routeCollector->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+            throw new HttpNotFoundException($request);
+        });
     }
 
     protected function setGroup(string $domain, string $handlerPath)

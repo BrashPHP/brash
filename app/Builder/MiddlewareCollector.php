@@ -3,12 +3,16 @@
 namespace Core\Builder;
 
 use Core\Http\Interfaces\MIddlewareIncluderInterface;
-use Middlewares\TrailingSlash;
 use App\Presentation\Middleware\JWTAuthMiddleware;
 use App\Presentation\Middleware\SessionMiddleware;
 use App\Presentation\Middleware\ResponseAdapterMiddleware;
+use Middlewares\TrailingSlash;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Middleware\BodyParsingMiddleware;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
+use Slim\Routing\RouteContext;
 
 class MiddlewareCollector
 {

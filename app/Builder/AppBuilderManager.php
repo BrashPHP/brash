@@ -40,13 +40,13 @@ class AppBuilderManager
     {
         $app = $this->createApp();
 
-        $app->addRoutingMiddleware(); // Add the Slim built-in routing middleware
-
         foreach ($this->preMiddlewares as $preMiddleware) {
             $app->addMiddleware($preMiddleware);
         }
 
         new MiddlewareCollector(new SlimMiddlewareIncluder($app));
+
+        $app->addRoutingMiddleware(); // Add the Slim built-in routing middleware
 
         $router = new RouterCollector(new SlimRouteCollector($app));
 

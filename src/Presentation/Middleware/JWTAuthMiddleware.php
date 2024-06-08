@@ -33,7 +33,6 @@ class JWTAuthMiddleware implements Middleware
     {
         $secret = $_ENV["JWT_SECRET"];
 
-
         $jwtAuth = new JwtAuthentication(
             new JwtAuthOptions(
                 secret: $secret,

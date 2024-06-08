@@ -34,13 +34,8 @@ class HttpErrorHandler extends SlimErrorHandler
         $message = "";
         $errorType = ErrorsEnum::SERVER_ERROR;
 
-        $this->logError($exception->getTraceAsString());
-        $this->logError($exception->getMessage());
-
         if ($exception instanceof HttpException) {
             $statusCode = $exception->getCode();
-
-            $this->logError($exception->getMessage());
 
             $message = $exception->getMessage();
 
@@ -61,6 +56,8 @@ class HttpErrorHandler extends SlimErrorHandler
             $message = $exception->getMessage();
         }
 
+        $this->logErrorMessage($exception, $statusCode, $errorType);
+
         $error = new ActionError($errorType->value, $message);
 
         $payload = new ActionPayload($statusCode, null, $error);
@@ -70,6 +67,18 @@ class HttpErrorHandler extends SlimErrorHandler
         $response->getBody()->write($encodedPayload);
 
         return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    private function logErrorMessage(Throwable $error, int $statusCode, ErrorsEnum $errorType)
+    {
+        $template = [
+            'error_type' => $errorType->value,
+            'status_code' => $statusCode,
+            'error' => $error->getMessage(),
+            'stack_trace' => $statusCode === 500 ? $error->getTrace() : [],
+        ];
+
+        $this->logError(json_encode($template, JSON_PRETTY_PRINT));
     }
 
     protected function logError(string $error): void

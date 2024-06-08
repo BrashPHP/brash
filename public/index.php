@@ -14,7 +14,9 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $containerFactory = new ContainerFactory(enableCompilation: isProd());
 
-$appBuilder = new AppBuilderManager($containerFactory->get());
+$container = $containerFactory->get();
+
+$appBuilder = new AppBuilderManager($container);
 $appBuilder->useDefaultShutdownHandler(true);
 $requestFactory = new RequestFactory();
 $request = $requestFactory->createRequest();

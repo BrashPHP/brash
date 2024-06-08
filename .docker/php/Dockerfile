@@ -70,6 +70,8 @@ COPY . .
 
 ENV X_LISTEN 0.0.0.0:9000
 
+ENV docker=true
+
 RUN composer install
 
 CMD ["/usr/sbin/php-fpm8.3", "-O" ]

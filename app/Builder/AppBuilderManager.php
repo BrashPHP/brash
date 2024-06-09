@@ -44,13 +44,14 @@ class AppBuilderManager
             $app->addMiddleware($preMiddleware);
         }
 
-        new MiddlewareCollector(new SlimMiddlewareIncluder($app));
+        $middlewareCollector = new MiddlewareCollector();
+        $middlewareCollector->collect(new SlimMiddlewareIncluder($app));
 
         $app->addRoutingMiddleware(); // Add the Slim built-in routing middleware
 
-        $router = new RouterCollector(new SlimRouteCollector($app));
+        $router = new RouterCollector();
 
-        $router->run();
+        $router->run(new SlimRouteCollector($app));
 
         if ($this->enableErrorHandler) {
             $this->setErrorHandler($app, $request);

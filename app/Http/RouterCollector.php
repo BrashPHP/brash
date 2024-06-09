@@ -4,39 +4,50 @@ declare(strict_types=1);
 
 namespace Core\Http;
 
-use App\Presentation\Actions\CycleTest\AccountGet;
-use App\Presentation\Actions\CycleTest\AccountInsertion;
+
+use App\Presentation\RoutingColletor;
+use Core\Attributes\Routing\Route as RouteAttribute;
 use Core\Http\Abstractions\AbstractRouterTemplate;
+use Core\Http\Interfaces\ActionInterface;
 use Core\Http\Interfaces\RouteCollectorInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Core\Http\Middlewares\AsymetricValidatorFactory;
 
 class RouterCollector extends AbstractRouterTemplate
 {
+    public function defineRoutes(RouteCollectorInterface $collector, ActionInterface|string $controller): void
+    {
+        $reflector = new \ReflectionClass($controller);
+
+        $routes = $reflector->getAttributes(RouteAttribute::class);
+
+        # Use class_implements to verify rules and messages
+
+        foreach ($routes as $route) {
+            /** @var RouteAttribute */
+            $routeAttribute = $route->newInstance();
+            if ($routeAttribute->skip) {
+                continue;
+            }
+
+            $methods = is_array($routeAttribute->method) ? $routeAttribute->method : [$routeAttribute->method];
+            $path = $routeAttribute->path;
+            $routeInterface = $collector->map($methods, $path, $controller);
+
+            $hasMiddlewares = boolval($routeAttribute->middleware);
+            if ($hasMiddlewares) {
+                $middlewares = is_array($routeAttribute->middleware) ? $routeAttribute->middleware : [$routeAttribute->middleware];
+                foreach ($middlewares as $middleware) {
+                    $routeInterface->add($middleware);
+                }
+            }
+        }
+    }
+
     public function collect(RouteCollectorInterface $routeCollector): void
     {
-        $routeCollector->get(
-            '/', function ($request, Response $response) {
-                $response->getBody()->write('Welcome to ARtchie\'s');
+        $controllerClasses = RoutingColletor::getActions();
 
-                return $response;
-            }
-        );
-
-        $this->setGroup('/users', 'users/users-routes');
-        $this->setGroup('/auth', 'auth-routes');
-        $this->setGroup('/api', 'api/api-routes');
-        $this->setGroup('/social-login/google', 'social-login/google');
-        $this->setGroup(
-            '/asymmetric-downloads',
-            'asymmetric-protected/download-routes'
-        )->addMiddleware(
-            AsymetricValidatorFactory::createMiddleware(
-                $routeCollector->getContainer()
-            )
-        );
-
-        $routeCollector->get('/acc', AccountGet::class);
-        $routeCollector->post('/acc', AccountInsertion::class);
+        foreach ($controllerClasses as $controllerClass) {
+            $this->defineRoutes($routeCollector, $controllerClass);
+        }
     }
 }

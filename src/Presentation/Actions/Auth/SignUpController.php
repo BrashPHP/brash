@@ -9,9 +9,11 @@ use App\Data\Protocols\Cryptography\HasherInterface;
 use App\Domain\Dto\AccountDto;
 use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
 use App\Presentation\Actions\Protocols\Action;
+use Core\Attributes\Routing\RouteAttribute;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Respect\Validation\Validator;
+
 
 class SignUpController extends Action
 {
@@ -69,7 +71,7 @@ class SignUpController extends Action
             'email' => Validator::email(),
             'username' => Validator::alnum()->noWhitespace()->length(6, 20),
             'password' => static function ($value) {
-                return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[\w$@]{6,}$/m', $value);
+                return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value);
             },
             'passwordConfirmation' => static fn($value) => $value === $password,
         ];

@@ -148,13 +148,11 @@ class DatabaseProvider implements AppProviderInterface
                     \Doctrine\Common\Collections\Collection::class // <= Base collection
                 );
 
-                $orm = new ORM\ORM(
+                return new ORM\ORM(
                     $ormFactory,
                     $schema,
                     $commandGenerator
                 );
-
-                return $orm;
             },
 
             CycleEntityManager::class => static fn(

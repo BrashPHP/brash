@@ -10,19 +10,19 @@ class SlimGroupRoute implements GroupRouteInterface
     {
 
     }
-    function add($middleware): self
+    public function add($middleware): self
     {
         $this->group->add($middleware);
 
         return $this;
     }
-    function addMiddleware(\Psr\Http\Server\MiddlewareInterface $middleware): self
+    public function addMiddleware(\Psr\Http\Server\MiddlewareInterface $middleware): self
     {
         $this->group->addMiddleware($middleware);
 
         return $this;
     }
-    function getPattern(): string
+    public function getPattern(): string
     {
         return $this->group->getPattern();
     }

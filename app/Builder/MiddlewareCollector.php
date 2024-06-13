@@ -2,30 +2,33 @@
 
 namespace Core\Builder;
 
-use App\Presentation\Middleware\JWTAuthMiddleware;
-use App\Presentation\Middleware\ResponseAdapterMiddleware;
-use App\Presentation\Middleware\SessionMiddleware;
 use Core\Http\Interfaces\MIddlewareIncluderInterface;
-use Core\ResourceLoader;
 use Middlewares\TrailingSlash;
+use App\Presentation\Middleware\JWTAuthMiddleware;
+use App\Presentation\Middleware\SessionMiddleware;
+use App\Presentation\Middleware\ResponseAdapterMiddleware;
 use Slim\Middleware\BodyParsingMiddleware;
-
+use Psr\Http\Server\MiddlewareInterface as Middleware;
 
 class MiddlewareCollector
 {
-    public static function collect(MIddlewareIncluderInterface $root)
+
+    /**
+     * @var class-string<Middleware> $providers
+     */
+    public array $middlewareClasses = [
+        SessionMiddleware::class,
+        JWTAuthMiddleware::class,
+        BodyParsingMiddleware::class,
+        ResponseAdapterMiddleware::class,
+        //ErrorMiddleware::class
+    ];
+
+    public function __construct(MIddlewareIncluderInterface $root)
     {
         $root->add(new TrailingSlash());
-        
-        $middlewares = [
-            SessionMiddleware::class,
-            JWTAuthMiddleware::class,
-            BodyParsingMiddleware::class,
-            ResponseAdapterMiddleware::class,
-            //ErrorMiddleware::class
-        ];
 
-        foreach ($middlewares as $middlewareClass) {
+        foreach ($this->middlewareClasses as $middlewareClass) {
             $root->add($middlewareClass);
         }
     }

@@ -15,37 +15,37 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class AssetFactoryFacade implements AssetFactoryInterface
 {
-  /**
-   * Proxies to be cloned in create method
-   *
-   * @var AssetFactoryInterface[]
-   */
-  private array $factories = [];
+    /**
+     * Proxies to be cloned in create method
+     *
+     * @var AssetFactoryInterface[]
+     */
+    private array $factories = [];
 
-  public function __construct(private AllowedExtensionChecker $allowedExtensionChecker)
-  {
-    $this->factories[] = new PictureAssetFactory();
-    $this->factories[] = new VideoAssetFactory();
-    $this->factories[] = new ThreeDimensionalAssetFactory();
-    $this->factories[] = new TextureAssetFactory();
-  }
-
-  public function create(CreateAsset $command): AbstractAsset
-  {
-    foreach ($this->factories as $factory) {
-      if ($this->allowedExtensionChecker->isAllowed($command, $factory)) {
-        $childrenAssets = [];
-        foreach ($command->children() as $child) {
-          $childrenAssets[] = $this->create($child);
-        }
-        
-        $asset = $factory->create($command);
-        $asset->setChildren(new ArrayCollection($childrenAssets));
-
-        return $asset;
-      }
+    public function __construct(private AllowedExtensionChecker $allowedExtensionChecker)
+    {
+        $this->factories[] = new PictureAssetFactory();
+        $this->factories[] = new VideoAssetFactory();
+        $this->factories[] = new ThreeDimensionalAssetFactory();
+        $this->factories[] = new TextureAssetFactory();
     }
 
-    throw new NotAllowedAssetType();
-  }
+    public function create(CreateAsset $command): AbstractAsset
+    {
+        foreach ($this->factories as $factory) {
+            if ($this->allowedExtensionChecker->isAllowed($command, $factory)) {
+                $childrenAssets = [];
+                foreach ($command->children() as $child) {
+                    $childrenAssets[] = $this->create($child);
+                }
+        
+                $asset = $factory->create($command);
+                $asset->setChildren(new ArrayCollection($childrenAssets));
+
+                return $asset;
+            }
+        }
+
+        throw new NotAllowedAssetType();
+    }
 }

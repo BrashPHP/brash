@@ -14,12 +14,6 @@ use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
 
-/**
- * Integration test.
- *
- * @internal
- * @coversNothing
- */
 class MarkerServiceStoreTest extends TestCase
 {
 

@@ -27,8 +27,7 @@ final class ResponseAdapterMiddleware implements Middleware
             ->withHeader('Access-Control-Expose-Headers', 'X-Renew-Token')
             ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             ->withAddedHeader('Cache-Control', 'post-check=0, pre-check=0')
-            ->withHeader('Pragma', 'no-cache')
-        ;
+            ->withHeader('Pragma', 'no-cache');
 
         if (ob_get_contents()) {
             ob_clean();

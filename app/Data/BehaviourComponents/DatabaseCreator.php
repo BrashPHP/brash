@@ -27,7 +27,9 @@ class DatabaseCreator
 
     public static function createCycleDatabase(ContainerInterface $containerInterface): void
     {
-        /** @var \Cycle\ORM\ORM */
+        /**
+ * @var \Cycle\ORM\ORM 
+*/
         $orm = $containerInterface->get(ORM\ORM::class);
 
         $orm->prepareServices();

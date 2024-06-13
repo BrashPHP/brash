@@ -17,12 +17,16 @@ readonly class Museum implements ModelInterface
         public string $name,
         public ?string $description = null,
         public ?string $info = null, 
-        /** @var \App\Domain\Models\Marker\Marker[] */
+        /**
+         * 
+         *
+         * @var \App\Domain\Models\Marker\Marker[] 
+         */
         public array $markers = [],
         public ?UuidInterface $uuid = null,
         public ?DateTimeInterface $createdAt = new DateTimeImmutable(), 
-        public ?DateTimeInterface $updated = new DateTimeImmutable()) 
-    {
+        public ?DateTimeInterface $updated = new DateTimeImmutable()
+    ) { 
     }
 
     public function jsonSerialize(): mixed

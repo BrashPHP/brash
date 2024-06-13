@@ -3,40 +3,36 @@
 namespace Core\Builder;
 
 use Core\Providers\AppProviderInterface;
-use Core\ResourceLoader;
+use Core\Providers\ConnectionProvider;
+use Core\Providers\DatabaseProvider;
+use Core\Providers\DependenciesProvider;
+use Core\Providers\RepositoriesProvider;
+use Core\Providers\ServicesProvider;
+use Core\Providers\StartupProvider;
+use Core\Providers\WorkerProvider;
+use Core\Providers\SettingsProvider;
 use DI\ContainerBuilder;
 
 class ProvidersCollector
 {
     /**
-     * @var AppProviderInterface[]
+     * @var class-string<AppProviderInterface> $providers
      */
-    private array $collector = [];
+    public array $providers = [
+        StartupProvider::class,
+        ConnectionProvider::class,
+        DatabaseProvider::class,
+        DependenciesProvider::class,
+        RepositoriesProvider::class,
+        ServicesProvider::class,
+        SettingsProvider::class,
+        WorkerProvider::class,
+    ];
 
-    public function __construct(private ContainerBuilder $containerBuilder)
+    public function roll(ContainerBuilder $containerBuilder): void
     {
-        /**
-         * @var array
-         */
-        $providers = ResourceLoader::getResource('providers');
-        foreach ($providers as $provider) {
-            $entity = new $provider();
-            $this->push($entity);
+        foreach ($this->providers as $provider) {
+            (new $provider())->provide($containerBuilder);
         }
-    }
-
-    public function push(AppProviderInterface $provider)
-    {
-        $this->collector[] = $provider;
-    }
-
-    public function roll(): ContainerBuilder
-    {
-        foreach ($this->collector as $provider) {
-            $resource = ResourceLoader::getResource($provider->getTarget());
-            $provider->provide($this->containerBuilder, $resource);
-        }
-
-        return $this->containerBuilder;
     }
 }

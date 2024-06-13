@@ -4,6 +4,7 @@
  * Ok
  *
  * Documentation and API borrowed from Rust: https://doc.rust-lang.org/std/result/enum.Result.html
+ *
  * @author Oskar Thornblad
  */
 
@@ -31,13 +32,13 @@ use PhpOption\{Option, Some, None};
 class Ok extends Result
 {
     /**
-     * @var mixed
+     * @var       mixed
      * @psalm-var T
      */
     private $value;
 
     /**
-     * @var array
+     * @var       array
      * @psalm-var list<mixed>
      */
     private $pass;
@@ -45,9 +46,9 @@ class Ok extends Result
     /**
      * Ok constructor.
      *
-     * @param mixed $value
+     * @param       mixed $value
      * @psalm-param T $value
-     * @param mixed ...$pass
+     * @param       mixed ...$pass
      */
     public function __construct($value, ...$pass)
     {
@@ -80,9 +81,9 @@ class Ok extends Result
      *
      * @template U
      *
-     * @param callable $mapper
-     * @psalm-param callable(T=,mixed...):U $mapper
-     * @return Result
+     * @param        callable $mapper
+     * @psalm-param  callable(T=,mixed...):U $mapper
+     * @return       Result
      * @psalm-return Result<U,E>
      */
     public function map(callable $mapper): Result
@@ -95,9 +96,9 @@ class Ok extends Result
      *
      * @template F
      *
-     * @param callable $mapper
-     * @psalm-param callable(E=,mixed...):F $mapper
-     * @return Result
+     * @param        callable $mapper
+     * @psalm-param  callable(E=,mixed...):F $mapper
+     * @return       Result
      * @psalm-return Result<T,F>
      */
     public function mapErr(callable $mapper): Result
@@ -109,7 +110,7 @@ class Ok extends Result
      * Returns an iterator over the possibly contained value.
      * The iterator yields one value if the result is Ok, otherwise none.
      *
-     * @return array
+     * @return       array
      * @psalm-return array<int, T>
      */
     public function iter(): array
@@ -122,12 +123,12 @@ class Ok extends Result
      *
      * @template U
      *
-     * @param Result $res
-     * @psalm-param Result<U,E> $res
-     * @return Result
+     * @param        Result $res
+     * @psalm-param  Result<U,E> $res
+     * @return       Result
      * @psalm-return Result<U,E>
      */
-    public function and (Result $res): Result
+    public function and(Result $res): Result
     {
         return $res;
     }
@@ -137,9 +138,9 @@ class Ok extends Result
      *
      * @template U
      *
-     * @param callable $op
-     * @psalm-param callable(T=,mixed...):Result<U,E> $op
-     * @return Result
+     * @param        callable $op
+     * @psalm-param  callable(T=,mixed...):Result<U,E> $op
+     * @return       Result
      * @psalm-return Result<U,E>
      *
      * @psalm-assert !callable(T=):Result $op
@@ -154,12 +155,12 @@ class Ok extends Result
      *
      * @template F
      *
-     * @param Result $res
-     * @psalm-param Result<T,F> $res
-     * @return Result
+     * @param        Result $res
+     * @psalm-param  Result<T,F> $res
+     * @return       Result
      * @psalm-return Result<T,F>
      */
-    public function or (Result $res): Result
+    public function or(Result $res): Result
     {
         return new self($this->value, ...$this->pass);
     }
@@ -169,9 +170,9 @@ class Ok extends Result
      *
      * @template F
      *
-     * @param callable $op
-     * @psalm-param callable(E=,mixed...):Result<T,F> $op
-     * @return Result
+     * @param        callable $op
+     * @psalm-param  callable(E=,mixed...):Result<T,F> $op
+     * @return       Result
      * @psalm-return Result<T,F>
      */
     public function orElse(callable $op): Result
@@ -180,12 +181,11 @@ class Ok extends Result
     }
 
     /**
-     *
      * Unwraps a result, yielding the content of an Ok. Else, it returns optb.
      *
-     * @param mixed $optb
-     * @psalm-param T $optb
-     * @return mixed
+     * @param        mixed $optb
+     * @psalm-param  T $optb
+     * @return       mixed
      * @psalm-return T
      */
     public function unwrapOr($optb)
@@ -196,9 +196,9 @@ class Ok extends Result
     /**
      * Unwraps a result, yielding the content of an Ok. If the value is an Err then it calls op with its value.
      *
-     * @param callable $op
-     * @psalm-param callable(E=,mixed...):T $op
-     * @return mixed
+     * @param        callable $op
+     * @psalm-param  callable(E=,mixed...):T $op
+     * @return       mixed
      * @psalm-return T
      */
     public function unwrapOrElse(callable $op)
@@ -209,7 +209,7 @@ class Ok extends Result
     /**
      * Unwraps a result, yielding the content of an Ok.
      *
-     * @return mixed
+     * @return       mixed
      * @psalm-return T
      */
     public function unwrap()
@@ -220,8 +220,8 @@ class Ok extends Result
     /**
      * Unwraps a result, yielding the content of an Ok.
      *
-     * @param Exception $msg
-     * @return mixed
+     * @param        Exception $msg
+     * @return       mixed
      * @psalm-return T
      */
     public function expect(Exception $msg)
@@ -232,9 +232,9 @@ class Ok extends Result
     /**
      * Unwraps a result, yielding the content of an Err.
      *
-     * @return void
+     * @return       void
      * @psalm-return never-return
-     * @throws ResultException if the value is an Ok.
+     * @throws       ResultException if the value is an Ok.
      */
     public function unwrapErr()
     {
@@ -244,8 +244,8 @@ class Ok extends Result
     /**
      * Applies values inside the given Results to the function in this Result.
      *
-     * @param Result ...$inArgs Results to apply the function to.
-     * @return Result
+     * @param        Result ...$inArgs Results to apply the function to.
+     * @return       Result
      * @psalm-return Result<mixed,E>
      *
      * @throws ResultException
@@ -256,14 +256,20 @@ class Ok extends Result
             throw new ResultException('Tried to apply a non-callable to arguments');
         }
 
-        return array_reduce($inArgs, function (Result $final, Result $argResult): Result {
-            return $final->andThen(function (array $outArgs) use ($argResult): Result {
-                return $argResult->map(function ($unwrappedArg) use ($outArgs): array {
-                    $outArgs[] = $unwrappedArg;
-                    return $outArgs;
-                });
-            });
-        }, new self([]))
+        return array_reduce(
+            $inArgs, function (Result $final, Result $argResult): Result {
+                return $final->andThen(
+                    function (array $outArgs) use ($argResult): Result {
+                        return $argResult->map(
+                            function ($unwrappedArg) use ($outArgs): array {
+                                $outArgs[] = $unwrappedArg;
+                                return $outArgs;
+                            }
+                        );
+                    }
+                );
+            }, new self([])
+        )
             ->map(
                 /**
                  * @return mixed
@@ -277,7 +283,7 @@ class Ok extends Result
     /**
      * Converts from Result<T, E> to Option<T>, and discarding the error, if any
      *
-     * @return Option
+     * @return       Option
      * @psalm-return Option<T>
      */
     public function ok(): Option
@@ -288,7 +294,7 @@ class Ok extends Result
     /**
      * Converts from Result<T, E> to Option<E>, and discarding the value, if any
      *
-     * @return Option
+     * @return       Option
      * @psalm-return Option<E>
      */
     public function err(): Option
@@ -299,8 +305,8 @@ class Ok extends Result
     /**
      * The attached pass-through args will be unpacked into extra args into chained callables
      *
-     * @param mixed ...$args
-     * @return Result
+     * @param        mixed ...$args
+     * @return       Result
      * @psalm-return Result<T,E>
      */
     public function with(...$args): Result

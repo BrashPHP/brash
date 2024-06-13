@@ -8,13 +8,19 @@ namespace App\Infrastructure\Persistence\Contracts;
  */
 interface RepositoryInterface
 {
-    /** @return TEntity|null */
+    /**
+     * @return TEntity|null 
+     */
     public function findByPK(mixed $id): ?object;
 
-    /** @return TEntity|null */
+    /**
+     * @return TEntity|null 
+     */
     public function findOne(array $criteria = []): ?object;
 
-    /** @return iterable<TEntity> */
+    /**
+     * @return iterable<TEntity> 
+     */
     public function findAll(): iterable;
 
     /**
@@ -24,11 +30,11 @@ interface RepositoryInterface
      * an UnexpectedValueException if certain values of the sorting or limiting details are
      * not supported.
      *
-     * @param array<string, mixed>       $criteria
-     * @param array<string, string>|null $orderBy
+     * @param       array<string, mixed>       $criteria
+     * @param       array<string, string>|null $orderBy
      * @psalm-param array<string, 'asc'|'desc'|'ASC'|'DESC'>|null $orderBy
      *
-     * @return array<int, object> The objects.
+     * @return       array<int, object> The objects.
      * @psalm-return TEntity[]
      */
     public function findBy(

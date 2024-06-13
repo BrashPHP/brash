@@ -15,9 +15,11 @@ class GoogleAuthProvider
 
     public function getAuthUser(string $code): AccountDto
     {
-        $token = $this->provider->getAccessToken('authorization_code', [
+        $token = $this->provider->getAccessToken(
+            'authorization_code', [
             'code' => $code
-        ]);
+            ]
+        );
         // Optional: Now you have a token you can look up a users profile data
         try {
             // We got an access token, let's now get the owner details

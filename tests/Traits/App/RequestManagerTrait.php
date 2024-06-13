@@ -75,9 +75,9 @@ trait RequestManagerTrait
     /**
      * Create a JSON request.
      *
-     * @param string              $method The HTTP method
+     * @param string                                $method The HTTP method
      * @param string|\Psr\Http\Message\UriInterface $uri    The URI
-     * @param null|array          $data   The json data
+     * @param null|array                            $data   The json data
      */
     protected function createJsonRequest(
         string $method,

@@ -43,13 +43,15 @@ class UploadAction extends Action
 
         $results = $this->uploader->uploadObjects($bucket, ...$objects);
 
-        $returnValues = array_map(static fn($result, UploadableObjectInterface $object, string $originalName) => [
+        $returnValues = array_map(
+            static fn($result, UploadableObjectInterface $object, string $originalName) => [
             'URL' => $result['ObjectURL'],
             'fileName' => $object->key(),
             'created_at' => new DateTime(),
             'mimeType' => MimeType::fromFilename($object->key()),
             'originalName' => $originalName,
-        ], $results, $objects, array_keys($objects));
+            ], $results, $objects, array_keys($objects)
+        );
 
         return $this->respondWithData($returnValues);
     }

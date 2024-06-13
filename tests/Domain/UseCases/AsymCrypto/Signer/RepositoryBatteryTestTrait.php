@@ -12,13 +12,21 @@ trait RepositoryBatteryTestTrait
 {
     public function testShouldCallRepositoryWithCorrectValues()
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject */
+        /**
+* 
+         *
+ * @var \PHPUnit\Framework\MockObject\MockObject 
+*/
         $repository = $this->sut->repository;
 
         $uuid = Uuid::fromString('5a4bd710-aab8-4ebc-b65d-0c059a960cfb');
         $museum = new Museum(1, email: '', name: '', uuid: $uuid);
         $repository->expects($this->once())->method('findByUUID')->with($uuid)->willReturn($museum);
-        /** @var \PHPUnit\Framework\MockObject\MockObject */
+        /**
+* 
+         *
+ * @var \PHPUnit\Framework\MockObject\MockObject 
+*/
         $encrypter = $this->sut->encrypter;
         $encrypter->method('encrypt')->willReturn(new Signature('privKey', 'pubKey', 'signature'));
 
@@ -30,7 +38,11 @@ trait RepositoryBatteryTestTrait
     public function testShouldThrowNotFoundWhenNoMuseumIsFound()
     {
         $this->expectException(MuseumNotFoundException::class);
-        /** @var \PHPUnit\Framework\MockObject\MockObject */
+        /**
+* 
+         *
+ * @var \PHPUnit\Framework\MockObject\MockObject 
+*/
         $repository = $this->sut->repository;
         $uuid = Uuid::fromString('5a4bd710-aab8-4ebc-b65d-0c059a960cfb');
         $repository->expects($this->once())->method('findByUUID')->with($uuid)->willReturn(null);

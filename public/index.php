@@ -5,7 +5,7 @@ declare(strict_types=1);
 use React\EventLoop\Loop;
 use Revolt\EventLoop\React\Internal\EventLoopAdapter;
 
-require __DIR__ . '/../configs/bootstrap.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 
 try {

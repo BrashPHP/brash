@@ -8,10 +8,6 @@ use App\Presentation\Actions\Protocols\ActionPayload;
 use DI\Container;
 use Tests\TestCase;
 
-/**
- * @internal
- * @coversNothing
- */
 class ListUserActionTest extends TestCase
 {
 

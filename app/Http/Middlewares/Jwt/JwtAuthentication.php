@@ -40,6 +40,7 @@ final class JwtAuthentication implements MiddlewareInterface
 
     /**
      * The rules stack.
+     *
      * @var SplStack<RuleInterface>
      */
     private SplStack $rules;
@@ -59,13 +60,21 @@ final class JwtAuthentication implements MiddlewareInterface
         /* This also means $options->rules overrides $options->path */
         /* and $options->ignore */
         if (!count($options->rules)) {
-            $this->rules->push(new RequestMethodRule([
-                "ignore" => ["OPTIONS"]
-            ]));
-            $this->rules->push(new RequestPathRule([
-                "path" => $this->options->path,
-                "ignore" => $this->options->ignore
-            ]));
+            $this->rules->push(
+                new RequestMethodRule(
+                    [
+                    "ignore" => ["OPTIONS"]
+                    ]
+                )
+            );
+            $this->rules->push(
+                new RequestPathRule(
+                    [
+                    "path" => $this->options->path,
+                    "ignore" => $this->options->ignore
+                    ]
+                )
+            );
         } else {
             $this->rules($options->rules);
         }
@@ -102,10 +111,12 @@ final class JwtAuthentication implements MiddlewareInterface
         } catch (RuntimeException | DomainException $exception) {
             $response = (new Response())->withStatus(401);
 
-            return $this->processError($response, [
+            return $this->processError(
+                $response, [
                 "message" => $exception->getMessage(),
                 "uri" => (string) $request->getUri()
-            ]);
+                ]
+            );
         }
 
         $params = [
@@ -281,6 +292,7 @@ final class JwtAuthentication implements MiddlewareInterface
 
     /**
      * Set the rules.
+     *
      * @param RuleInterface[] $rules
      */
     private function rules(array $rules): void

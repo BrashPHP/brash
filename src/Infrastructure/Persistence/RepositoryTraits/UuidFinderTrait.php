@@ -10,8 +10,10 @@ trait UuidFinderTrait
     {
         $decodedUuid = UuidEncoder::decode($encodedUuid);
 
-        return $this->findOneBy([
+        return $this->findOneBy(
+            [
             'uuid' => $decodedUuid,
-        ]);
+            ]
+        );
     }
 }

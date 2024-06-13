@@ -27,7 +27,11 @@ readonly class Marker implements ModelInterface, MediaHostParentInterface
         public ?string $title,
         public ?AbstractAsset $asset = null,
         public bool $isActive = true,
-        /** @var Collection<PlacementObject> */
+        /**
+         * 
+         *
+         * @var Collection<PlacementObject> 
+         */
         public Collection $resources = new ArrayCollection(),
         public ?DateTimeInterface $createdAt = new DateTimeImmutable(),
         public ?DateTimeInterface $updated = new DateTimeImmutable(),

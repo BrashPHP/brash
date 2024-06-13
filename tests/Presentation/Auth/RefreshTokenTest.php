@@ -38,13 +38,15 @@ class RefreshTokenTest extends TestCase
             ->app
             ->handle($this->createMockRequest());
 
-        $this->assertSame(json_decode($response->getBody()->__toString(), true), [
+        $this->assertSame(
+            json_decode($response->getBody()->__toString(), true), [
             'statusCode' => 401,
             'data' => [
                 'status' => 'error',
                 'message' => 'Cannot craft new token for invalid refresh token'
             ],
-        ]);
+            ]
+        );
         $this->assertSame($response->getStatusCode(), 401);
     }
 
@@ -72,13 +74,15 @@ class RefreshTokenTest extends TestCase
 
         $response = $app->handle($request);
 
-        $this->assertSame(json_decode($response->getBody()->__toString(), true), [
+        $this->assertSame(
+            json_decode($response->getBody()->__toString(), true), [
             'statusCode' => 401,
             'data' => [
                 'status' => 'error',
                 'message' => 'Cannot craft new token for invalid refresh token'
             ],
-        ]);
+            ]
+        );
         $this->assertSame($response->getStatusCode(), 401);
     }
 

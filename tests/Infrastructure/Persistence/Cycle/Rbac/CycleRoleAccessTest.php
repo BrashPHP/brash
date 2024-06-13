@@ -112,7 +112,9 @@ final class CycleRoleAccessTest extends TestCase
         $extender = new CycleRoleExtender($this->orm);
         $extender->extend($roleObject2, $roleObject);
 
-        /** @var ?CycleRole $cycleChildRole */
+        /**
+ * @var ?CycleRole $cycleChildRole 
+*/
         $cycleChildRole = $this->orm
             ->getRepository(CycleRole::class)
             ->select()

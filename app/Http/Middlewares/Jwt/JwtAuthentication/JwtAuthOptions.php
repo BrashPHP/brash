@@ -19,19 +19,27 @@ class JwtAuthOptions
     public array $algorithm;
     public bool $secure;
 
-    /** @var array<string> */
+    /**
+     * @var array<string> 
+     */
     public array $relaxed;
     public string $header;
     public string $regexp;
     public string $cookie;
     public string $attribute;
-    /** @var array<string> */
+    /**
+     * @var array<string> 
+     */
     public array $path;
 
-    /** @var RuleInterface[] $rules */
+    /**
+     * @var RuleInterface[] $rules 
+     */
     public array $rules;
 
-    /** @var array<string> */
+    /**
+     * @var array<string> 
+     */
     public array $ignore;
     public $before;
     public $after;

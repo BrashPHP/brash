@@ -6,8 +6,8 @@ use App\Domain\Models\Assets\AbstractAsset;
 
 class VideoAsset extends AbstractAsset
 {
-  public function __construct()
-  {
-    parent::__construct('video');
-  }
+    public function __construct()
+    {
+        parent::__construct('video');
+    }
 }

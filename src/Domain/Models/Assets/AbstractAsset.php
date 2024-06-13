@@ -89,8 +89,6 @@ abstract class AbstractAsset implements ModelInterface
 
     /**
      * Set the internal primary identity key.
-     *
-     *
      */
     public function setUuid(UuidInterface|string $uuid): self
     {
@@ -213,16 +211,16 @@ abstract class AbstractAsset implements ModelInterface
     public function jsonSerialize(): mixed
     {
         return [
-            'id' => $this->id,
-            'uuid' => $this->uuid,
-            'path' => $this->path,
-            'fileName' => $this->fileName,
-            'url' => $this->url,
-            'mediaType' => $this->mediaType,
-            'created_at' => $this->createdAt,
-            'last_update' => $this->updated,
-            'mimeType' => $this->mimeType,
-            'temporary_location' => $this->temporaryLocation,
+        'id' => $this->id,
+        'uuid' => $this->uuid,
+        'path' => $this->path,
+        'fileName' => $this->fileName,
+        'url' => $this->url,
+        'mediaType' => $this->mediaType,
+        'created_at' => $this->createdAt,
+        'last_update' => $this->updated,
+        'mimeType' => $this->mimeType,
+        'temporary_location' => $this->temporaryLocation,
         ];
     }
 
@@ -301,7 +299,7 @@ abstract class AbstractAsset implements ModelInterface
     /**
      * Set many sub assets have a single parent.
      *
-     * @return  self
+     * @return self
      */
     public function setParent(self $parent)
     {
@@ -321,7 +319,7 @@ abstract class AbstractAsset implements ModelInterface
     /**
      * Set one Asset may have a set of sub assets, e.g., a 3D object can have many textures.
      *
-     * @return  self
+     * @return self
      */
     public function addChild(self $element)
     {

@@ -17,7 +17,11 @@ use Doctrine\Common\Collections\Collection;
 
 class InMemoryMarkerRepository implements MarkerRepositoryInterface
 {
-    /** @var Collection<Marker> */
+    /**
+     * 
+     *
+     * @var Collection<Marker> 
+     */
     private readonly Collection $markers;
 
     public function __construct()

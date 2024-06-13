@@ -7,16 +7,16 @@ use PHPUnit\Framework\TestCase;
 
 class AssetValidationTest extends TestCase
 {
-  private AssetValidation $sut;
+    private AssetValidation $sut;
 
-  function setUp(): void
-  {
-    $this->sut = new AssetValidation();
-  }
+    function setUp(): void
+    {
+        $this->sut = new AssetValidation();
+    }
 
-  public function testShouldFailForEmptyAsset()
-  {
-    $asset = [];
-    $this->assertFalse($this->sut->validation()->validate($asset));
-  }
+    public function testShouldFailForEmptyAsset()
+    {
+        $asset = [];
+        $this->assertFalse($this->sut->validation()->validate($asset));
+    }
 }

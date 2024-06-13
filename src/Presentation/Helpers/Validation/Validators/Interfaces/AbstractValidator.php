@@ -21,19 +21,19 @@ abstract class AbstractValidator implements ValidationInterface
 
             $message = $this->message ?? sprintf('%s does not match the defined requirements', $this->field);
 
-            return (
-                new ValidationError(
-                    message: $message
-                )
-            )->forField($this->field);
+            return $this->returnError(message: $message);
         }
         
+        return $this->returnError(message: sprintf('%s is empty', $this->field));
+    }
+
+    
+    abstract protected function makeValidation(mixed $subject): bool;
+    private function returnError(string $message): ValidationError{
         return (
             new ValidationError(
-                message: sprintf('%s is empty', $this->field)
+                message: $message
             )
         )->forField($this->field);
     }
-
-    abstract protected function makeValidation(mixed $subject): bool;
 }

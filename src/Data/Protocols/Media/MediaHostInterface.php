@@ -7,9 +7,9 @@ use JsonSerializable;
 
 interface MediaHostInterface extends JsonSerializable
 {
-  public function assetInformation(): ?AbstractAsset;
+    public function assetInformation(): ?AbstractAsset;
 
-  public function accept(MediaCollectorInterface $visitor): void;
+    public function accept(MediaCollectorInterface $visitor): void;
 
-  public function namedBy(): string;
+    public function namedBy(): string;
 }

@@ -41,7 +41,11 @@ class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
     #[Column(type: 'string', nullable: true)]
     private ?string $info;
 
-    /** @var Collection<DoctrineMarker> */
+    /**
+* 
+     *
+ * @var Collection<DoctrineMarker> 
+*/
     #[OneToMany(targetEntity: DoctrineMarker::class, mappedBy: "museum", cascade: ["persist", "remove"])]
     private Collection $markers;
 
@@ -103,7 +107,11 @@ class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
         $this->markers->add($marker);
     }
 
-    /** @return array */
+    /**
+     * 
+     *
+     * @return array 
+     */
     public function jsonSerialize(): mixed
     {
         return [
@@ -163,7 +171,11 @@ class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
     }
 
 
-    /** @param Museum $model */
+    /**
+     * 
+     *
+     * @param Museum $model 
+     */
     public function fromModel(object $model): static
     {
         $this->id = $model->id;

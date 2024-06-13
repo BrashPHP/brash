@@ -48,3 +48,9 @@ test:
 
 doctrine-test:
 	composer run test --group doctrine
+
+sniffer:
+	./vendor/bin/phpcs src app
+
+sniffer-fix:
+	./vendor/bin/phpcbf src app

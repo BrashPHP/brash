@@ -18,13 +18,14 @@ use Slim\Exception\HttpException;
 abstract class Action implements ActionInterface
 {
     use ValidationTrait;
+    use ParseInputTrait;
     use ResponderTrait;
 
-    protected ?Request $request = null;
+    protected Request $request;
 
-    protected ?Response $response = null;
+    protected Response $response;
 
-    protected ?array $args = null;
+    protected array $args;
 
     public function __construct(protected LoggerInterface $logger)
     {

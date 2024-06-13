@@ -22,10 +22,10 @@ class UserTest extends TestCase
 
     /**
      * @dataProvider userProvider
-     * @param $id
-     * @param $username
-     * @param $firstName
-     * @param $lastName
+     * @param        $id
+     * @param        $username
+     * @param        $firstName
+     * @param        $lastName
      */
     public function testGetters($id, $username, $firstName, $lastName)
     {
@@ -39,21 +39,23 @@ class UserTest extends TestCase
 
     /**
      * @dataProvider userProvider
-     * @param $id
-     * @param $username
-     * @param $firstName
-     * @param $lastName
+     * @param        $id
+     * @param        $username
+     * @param        $firstName
+     * @param        $lastName
      */
     public function testJsonSerialize($id, $username, $firstName, $lastName)
     {
         $user = new User($id, $username, $firstName, $lastName);
 
-        $expectedPayload = json_encode([
+        $expectedPayload = json_encode(
+            [
             'id' => $id,
             'username' => $username,
             'firstName' => $firstName,
             'lastName' => $lastName,
-        ]);
+            ]
+        );
 
         $this->assertEquals($expectedPayload, json_encode($user));
     }

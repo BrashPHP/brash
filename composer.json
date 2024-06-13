@@ -46,6 +46,7 @@
     "spiral/roadrunner-http": "^3.0",
     "symfony/cache": "^6.0",
     "symfony/dotenv": "^6.0",
+    "symfony/process": "^7.1",
     "symfony/yaml": "^6.0"
   },
   "require-dev": {

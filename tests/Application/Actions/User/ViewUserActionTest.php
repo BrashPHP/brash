@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Application\Actions\User;
-
 use App\Domain\Exceptions\UserNotFoundException;
 use App\Domain\Models\User;
 use App\Domain\Repositories\UserRepository;
@@ -11,62 +8,58 @@ use App\Presentation\Actions\Protocols\ActionError;
 use App\Presentation\Actions\Protocols\ActionPayload;
 use App\Presentation\Actions\Protocols\ErrorsEnum;
 use DI\Container;
-use Tests\TestCase;
+use Tests\Traits\App\InstanceManager;
 
-/**
- * @internal
- * @coversNothing
- */
-class ViewUserActionTest extends TestCase
-{
-    public function testAction()
-    {
-        $app = $this->createAppInstance();
+beforeEach(function () {
+    $instanceApp = new InstanceManager();
+    $this->app = $instanceApp->createAppInstance();
+});
 
-        /** @var Container $container */
-        $container = $app->getContainer();
+test('action', function () {
+    $app = $this->app->createAppInstance();
 
-        $user = new User(1, 'bill.gates', 'Bill', 'Gates');
+    /** @var Container $container */
+    $container = $app->getContainer();
 
-        $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
-        $userRepositoryProphecy->method('findUserOfId')->willReturn($user)->with(1);
-        $userRepositoryProphecy->expects($this->once())->method('findUserOfId');
+    $user = new User(1, 'bill.gates', 'Bill', 'Gates');
 
-        $container->set(UserRepository::class, $userRepositoryProphecy);
+    $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
+    $userRepositoryProphecy->method('findUserOfId')->willReturn($user)->with(1);
+    $userRepositoryProphecy->expects($this->once())->method('findUserOfId');
 
-        $request = $this->createRequest('GET', '/users/1');
-        $response = $app->handle($request);
+    $container->set(UserRepository::class, $userRepositoryProphecy);
 
-        $payload = (string) $response->getBody();
-        $expectedPayload = new ActionPayload(200, $user);
-        $serializedPayload = json_encode($expectedPayload);
+    $request = $this->createRequest('GET', '/users/1');
+    $response = $app->handle($request);
 
-        $this->assertEquals($serializedPayload, $payload);
-    }
+    $payload = (string) $response->getBody();
+    $expectedPayload = new ActionPayload(200, $user);
+    $serializedPayload = json_encode($expectedPayload);
 
-    public function testActionThrowsUserNotFoundException()
-    {
-        $app = $this->createAppInstance();
+    expect($payload)->toEqual($serializedPayload);
+});
 
-        $this->setUpErrorHandler($app);
+test('action throws user not found exception', function () {
+    $app = $this->createAppInstance();
 
-        /** @var Container $container */
-        $container = $app->getContainer();
+    $this->setUpErrorHandler($app);
 
-        $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
-        $userRepositoryProphecy->method('findUserOfId')->willThrowException(new UserNotFoundException())->with(1);
-        $userRepositoryProphecy->expects($this->once())->method('findUserOfId');
+    /** @var Container $container */
+    $container = $app->getContainer();
 
-        $container->set(UserRepository::class, $userRepositoryProphecy);
+    $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
+    $userRepositoryProphecy->method('findUserOfId')->willThrowException(new UserNotFoundException())->with(1);
+    $userRepositoryProphecy->expects($this->once())->method('findUserOfId');
 
-        $request = $this->createRequest('GET', '/users/1');
-        $response = $app->handle($request);
+    $container->set(UserRepository::class, $userRepositoryProphecy);
 
-        $payload = (string) $response->getBody();
-        $expectedError = new ActionError(ErrorsEnum::RESOURCE_NOT_FOUND->value, 'The user you requested does not exist.');
-        $expectedPayload = new ActionPayload(404, null, $expectedError);
-        $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
+    $request = $this->createRequest('GET', '/users/1');
+    $response = $app->handle($request);
 
-        $this->assertEquals($serializedPayload, $payload);
-    }
-}
+    $payload = (string) $response->getBody();
+    $expectedError = new ActionError(ErrorsEnum::RESOURCE_NOT_FOUND->value, 'The user you requested does not exist.');
+    $expectedPayload = new ActionPayload(404, null, $expectedError);
+    $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
+
+    expect($payload)->toEqual($serializedPayload);
+});

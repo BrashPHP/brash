@@ -1,38 +1,35 @@
 <?php
 
-namespace Tests\Application\Actions\User;
-
 use App\Domain\Models\User;
 use App\Domain\Repositories\UserRepository;
 use App\Presentation\Actions\Protocols\ActionPayload;
 use DI\Container;
-use Tests\TestCase;
+use Tests\Traits\App\InstanceManager;
+use Tests\Traits\App\RequestManager;
 
-class ListUserActionTest extends TestCase
-{
+beforeEach(function () {
+    $instanceApp = new InstanceManager();
+    $this->app = $instanceApp->createAppInstance();
+});
 
-    public function testShouldCallActionSuccessfully()
-    {
-        $app = $this->createAppInstance();
+test('should call action successfully', function () {
+    /** @var Container $container */
+    $container = $this->app->getContainer();
 
-        /** @var Container $container */
-        $container = $app->getContainer();
+    $user = new User(1, 'bill.gates', 'Bill', 'Gates');
 
-        $user = new User(1, 'bill.gates', 'Bill', 'Gates');
+    /** @var \Mockery\MockInterface|UserRepository */
+    $userRepositoryProphecy = mock(UserRepository::class);
+    $userRepositoryProphecy->shouldReceive('findAll')->once()->andReturn([$user]);
 
-        $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
-        $userRepositoryProphecy->method('findAll')->willReturn([$user]);
-        $userRepositoryProphecy->expects($this->once())->method('findAll');
+    $container->set(UserRepository::class, $userRepositoryProphecy);
+    $request = new RequestManager();
+    $request = $request->createRequest('GET', '/users');
+    $response = $this->app->handle($request);
 
-        $container->set(UserRepository::class, $userRepositoryProphecy);
+    $payload = (string) $response->getBody();
+    $expectedPayload = new ActionPayload(200, [$user]);
+    $serializedPayload = json_encode($expectedPayload);
 
-        $request = $this->createRequest('GET', '/users');
-        $response = $app->handle($request);
-
-        $payload = (string) $response->getBody();
-        $expectedPayload = new ActionPayload(200, [$user]);
-        $serializedPayload = json_encode($expectedPayload);
-
-        $this->assertEquals($serializedPayload, $payload);
-    }
-}
+    expect($payload)->toEqual($serializedPayload);
+});

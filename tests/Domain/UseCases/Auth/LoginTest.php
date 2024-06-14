@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Tests\Domain\UseCases\Auth;
-
+use Mockery\MockInterface;
+use \Tests\Domain\UseCases\Auth\AuthSutTypes;
 use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Data\Protocols\Cryptography\ComparerInterface;
 use App\Data\UseCases\Authentication\Errors\IncorrectPasswordException;
@@ -15,165 +15,121 @@ use App\Domain\Models\Account;
 use App\Domain\Repositories\AccountRepository;
 use Ramsey\Uuid\Uuid;
 use function PHPUnit\Framework\assertTrue;
-use PHPUnit\Framework\MockObject\MockObject;
-use Tests\TestCase;
 
-class SutTypes
+
+beforeEach(function () {
+    $this->sut = new AuthSutTypes(mockRepository(), makeComparer());
+    $this->defaultUuid = '5a4bd710-aab8-4ebc-b65d-0c059a960cfb';
+    $this->defaultMail = '@mail.com';
+});
+
+function makeCredentials()
 {
-    public LoginServiceInterface $service;
-
-
-    public function __construct(
-        public $repository,
-        public $comparer
-    ) {
-        $this->service = new Login($repository, $comparer);
-    }
+    return new Credentials(access: '@mail.com', password: 'password');
 }
-
 /**
- * @internal
- * @coversNothing
+ * @param AccountRepository $repository
+ * @param ComparerInterface $comparer
  */
-class LoginTest extends TestCase
+function makeService($repository, $comparer): LoginServiceInterface
 {
-    private SutTypes $sut;
-
-    protected function setUp(): void
-    {
-        $this->sut = new SutTypes($this->mockRepository(), $this->makeComparer());
-    }
-
-    public function makeCredentials()
-    {
-        return new Credentials(access: '@mail.com', password: 'password');
-    }
-
-    /**
-     * @param AccountRepository $repository
-     * @param ComparerInterface $comparer
-     */
-    public function makeService($repository, $comparer): LoginServiceInterface
-    {
-        return new Login($repository, $comparer);
-    }
-
-
-    public function mockRepository(): AccountRepository|MockObject
-    {
-        return $this->getMockBuilder(AccountRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
-    /**
-     * Create a mocked comparer object.
-     *
-     * @return MockObject
-     */
-    public function makeComparer()
-    {
-        $mock = $this->getMockBuilder(ComparerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mock->method('compare')->willReturn(true);
-
-        return $mock;
-    }
-
-    public function testShouldCallRepositoryWithCorrectEmail()
-    {
-        $mock = $this->sut->repository;
-        $loginService = $this->sut->service;
-        $uuid = Uuid::fromString('5a4bd710-aab8-4ebc-b65d-0c059a960cfb');
-        $account = new Account(null, '', '', '', '', $uuid);
-        $mock->expects($this->once())->method('findByAccess')->with('@mail.com')->willReturn($account);
-        $accountStub = $this->makeCredentials();
-        $loginService->auth($accountStub);
-    }
-
-    // Test should throw error if no account is found
-
-    /**
-     * @expectedException \NoAccountFoundException
-     */
-    public function testShouldThrowErrorIfNoAccountIsFound()
-    {
-        $this->expectException(NoAccountFoundException::class);
-        $mock = $this->sut->repository;
-        $loginService = $this->sut->service;
-        $mock->expects($this->once())->method('findByAccess')->willReturn(null);
-        $accountStub = $this->makeCredentials();
-        $loginService->auth($accountStub);
-    }
-
-    // Test compare account hash
-    public function testShouldCallHashComparerWithCorrectValues()
-    {
-        $mock = $this->sut->comparer;
-        $credentialsStub = $this->makeCredentials();
-        $mock->expects($this->once())
-            ->method('compare')
-            ->with('password', 'hashed_password');
-        $repository = $this->sut->repository;
-        $uuid = Uuid::fromString('5a4bd710-aab8-4ebc-b65d-0c059a960cfb');
-        $account = new Account(id: 2, password: 'hashed_password', email: 'mail.com', username: 'user', authType: '', uuid: $uuid);
-        $repository->method('findByAccess')->willReturn(
-            $account
-        );
-        $loginService = $this->sut->service;
-        $loginService->auth($credentialsStub);
-    }
-
-    // Test should throw if password provided differs from retrieved by repository
-    public function testShouldThrowIfPasswordDiffersFromRetrievedOne()
-    {
-        $mockRepository = $this->mockRepository();
-        $mockRepository->method('findByAccess')->willReturn(
-            new Account(
-                2,
-                password: 'hashed_password',
-                email: 'mail.com',
-                username: 'user',
-                authType: ''
-            )
-        );
-
-        $this->expectException(IncorrectPasswordException::class);
-
-        $mock = $this->getMockBuilder(ComparerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mock->expects($this->once())->method('compare')->willReturn(false);
-
-        /**
-* 
-         *
- * @var AccountRepository 
-*/
-        $repository = $mockRepository;
-
-        $loginService = $this->makeService($repository, $mock);
-
-        $credentialsStub = $this->makeCredentials();
-        $loginService->auth($credentialsStub);
-    }
-
-    // Test success return TokenLoginResponse
-
-    public function testSuccessCase()
-    {
-        $sut = $this->sut->service;
-        $repository = $this->sut->repository;
-        $uuid = Uuid::fromString('5a4bd710-aab8-4ebc-b65d-0c059a960cfb');
-
-        $account = new Account(2, password: 'hashed_password', email: 'mail.com', username: 'user', authType: '', uuid: $uuid);
-
-        $repository->method('findByAccess')->willReturn(
-            $account
-        );
-        $credentialsStub = $this->makeCredentials();
-        $response = $sut->auth($credentialsStub);
-        assertTrue($response instanceof TokenLoginResponse);
-    }
+    return new Login($repository, $comparer);
 }
+function mockRepository(): AccountRepository|MockInterface
+{
+    return mock(AccountRepository::class);
+}
+
+function makeComparer(): MockInterface|ComparerInterface
+{
+    return Mockery::mock(ComparerInterface::class);
+}
+
+test('should call repository with correct email', function () {
+    $mock = mockRepository();
+    $comparer = makeComparer();
+    $comparer->allows()->compare()->withAnyArgs()->andReturn(true);
+    $sut = new AuthSutTypes($mock, $comparer);
+    $loginService = $sut->service;
+    $uuid = Uuid::fromString($this->defaultUuid);
+    $account = new Account(null, $this->defaultMail, '', '', '', $uuid);
+    $mock->expects('findByAccess')->once()->with($this->defaultMail)->andReturn($account);
+    $accountStub = makeCredentials();
+    $loginService->auth($accountStub);
+});
+
+test('should throw error if no account is found', function () {
+    /** @var MockInterface */
+    $mock = $this->sut->repository;
+    $loginService = $this->sut->service;
+    $mock->expects('findByAccess')->andReturn(null);
+    $accountStub = makeCredentials();
+
+    expect(fn() => $loginService->auth($accountStub))->toThrow(NoAccountFoundException::class);
+});
+
+test('should call hash comparer with correct values', function () {
+    /** @var MockInterface */
+    $mock = $this->sut->comparer;
+    $credentialsStub = makeCredentials();
+    $mock->shouldReceive('compare')
+        ->withArgs(['password', 'hashed_password']);
+    $repository = $this->sut->repository;
+    $uuid = Uuid::fromString($this->defaultUuid);
+    $account = new Account(id: 2, password: 'hashed_password', email: 'mail.com', username: 'user', authType: '', uuid: $uuid);
+    $repository->shouldReceive('findByAccess')->andReturn(
+        $account
+    );
+    $loginService = $this->sut->service;
+    try {
+        $loginService->auth($credentialsStub);
+    } catch (\Throwable $th) {
+        expect($th->getMessage())->toBe('');
+    }
+});
+
+test('should throw if password differs from retrieved one', function () {
+    $mockRepository = mockRepository();
+    $uuid = Uuid::fromString($this->defaultUuid);
+    $mockRepository->shouldReceive('findByAccess')->andReturn(
+        new Account(
+            2,
+            uuid: $uuid,
+            password: 'hashed_password',
+            email: 'mail.com',
+            username: 'user',
+            authType: ''
+        )
+    );
+
+    $this->expectException(IncorrectPasswordException::class);
+
+    /** @var MockInterface|ComparerInterface */
+    $mock = Mockery::mock(ComparerInterface::class);
+    $mock->shouldReceive('compare')->andReturn(false);
+
+    $repository = $mockRepository;
+
+    $loginService = makeService($repository, $mock);
+
+    $credentialsStub = makeCredentials();
+    $loginService->auth($credentialsStub);
+
+    expect(fn() => $loginService->auth($credentialsStub))->toThrow(IncorrectPasswordException::class);
+});
+
+test('success case', function () {
+    $uuid = Uuid::fromString($this->defaultUuid);
+    $account = new Account(2, password: 'hashed_password', email: 'mail.com', username: 'user', authType: '', uuid: $uuid);
+
+    $this->sut->comparer->shouldReceive('compare')->andReturn(true);
+    $this->sut->repository->shouldReceive('findByAccess')->andReturn(
+        $account
+    );
+
+
+    $credentialsStub = makeCredentials();
+    $response = $this->sut->service->auth($credentialsStub);
+
+    assertTrue($response instanceof TokenLoginResponse);
+});

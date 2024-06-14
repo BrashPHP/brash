@@ -1,6 +1,8 @@
 <?php
-
 declare(strict_types=1);
+
+namespace Tests\Infrastructure\Persistence\Orm\Account;
+
 use App\Data\Entities\Doctrine\DoctrineAccount;
 use App\Domain\Dto\AccountDto;
 use App\Domain\Models\Account;

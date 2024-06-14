@@ -14,7 +14,7 @@ try {
     $loop = Loop::get();
 
     ini_set('memory_limit', '512M');
-    $handler = require __DIR__ . '/react.php';
+    $handler = require_once __DIR__ . '/react.php';
 
     $http = new React\Http\HttpServer(
         // new React\Http\Middleware\StreamingRequestMiddleware(),

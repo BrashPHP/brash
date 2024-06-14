@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Tests\Application\Actions\User;
+
 use App\Domain\Exceptions\UserNotFoundException;
 use App\Domain\Models\User;
 use App\Domain\Repositories\UserRepository;
@@ -16,7 +19,7 @@ beforeEach(function () {
 });
 
 test('action', function () {
-    $app = $this->app->createAppInstance();
+    $app = $this->app;
 
     /** @var Container $container */
     $container = $app->getContainer();

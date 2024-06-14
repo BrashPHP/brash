@@ -9,9 +9,7 @@ use App\Domain\Models\Marker\Marker;
 use App\Domain\Models\PlacementObject\PlacementObject;
 use App\Domain\Repositories\MarkerRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
-use PHPUnit\Framework\Attributes\Group;
 use function PHPUnit\Framework\assertInstanceOf;
-use PHPUnit\Framework\Attributes\CoversNothing;
 
 beforeAll(function () {
     putenv('RR=');
@@ -62,7 +60,6 @@ test('should retrieve marker', function () {
 
     $new_marker = $this->entityManager->getRepository(DoctrineMarker::class)->findAll()[0];
 
-    //print_r($account);
     assertInstanceOf(DoctrineMarker::class, $new_marker);
 });
 test('should insert marker with asset', function () {

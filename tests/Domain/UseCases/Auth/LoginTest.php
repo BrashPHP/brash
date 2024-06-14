@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Domain\UseCases\Auth;
 
+use Mockery;
 use Mockery\MockInterface;
 use \Tests\Domain\UseCases\Auth\AuthSutTypes;
 use App\Data\Protocols\Auth\LoginServiceInterface;

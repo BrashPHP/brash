@@ -1,99 +1,74 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Presentation\Security;
-
 use App\Data\Protocols\AsymCrypto\SignerInterface;
 use App\Presentation\Actions\Protocols\HttpErrors\UnprocessableEntityException;
 use App\Presentation\Actions\ResourcesSecurity\KeyCreatorAction;
+use Mockery\MockInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Psr7\Response;
-use Tests\TestCase;
 
-/**
- * @internal
- * @coversNothing
- */
-class KeyCreatorActionTest extends TestCase
+beforeEach(function () {
+    $service = createMockService();
+    $this->sut = new KeyCreatorAction($service);
+});
+
+test('if uuid is valid', function () {
+    $this->expectException(UnprocessableEntityException::class);
+
+    $this->sut->__invoke($this->createRequest('POST', '/'), new Response(), []);
+});
+
+test('should call asymmetric signer with correct values', function () {
+    $prophecyService = createMockService();
+    $prophecyService
+        ->expects('sign')
+        ->once()
+        ->with('914e4c51-a049-4594-ae5c-921bbadf686b')
+        ->andReturn('');
+    $action = new KeyCreatorAction($prophecyService);
+    $response = $action(createMockRequest($this), new Response(), []);
+    $payload = (string) $response->getBody();
+    expect(is_string($payload))->toBeTrue();
+});
+
+test('should return200 with correct input', function () {
+    $service = createMockService();
+    $testString = base64_encode('expectedString');
+    $service->expects('sign')->andReturn($testString);
+
+    /** @var SignerInterface */
+    $serviceMocked = $service;
+    $action = new KeyCreatorAction($serviceMocked);
+    $response = $action->__invoke(createMockRequest($this), new Response(), []);
+    $decoded = json_decode((string) $response->getBody());
+    expect($decoded->statusCode)->toBe(200);
+    expect($decoded->data->token)->toBe($testString);
+});
+
+function createMockRequest(\Tests\TestCase $app): ServerRequestInterface
 {
-    private KeyCreatorAction $sut;
+    $request = $app->createRequest('POST', '/api/forge-credential');
 
-    protected function setUp(): void
-    {
-        /** @var SignerInterface */
-        $service = $this->createMockService();
-        $this->sut = new KeyCreatorAction($service);
-    }
-
-    public function testIfUuidIsValid()
-    {
-        $this->expectException(UnprocessableEntityException::class);
-
-        $this->sut->__invoke($this->createRequest('POST', '/'), new Response(), []);
-    }
-
-    public function testShouldCallAsymmetricSignerWithCorrectValues()
-    {
-        $prophecyService = $this->getMockBuilder(SignerInterface::class)->getMock();
-        $prophecyService
-            ->expects($this->once())
-            ->method('sign')
-            ->with(Uuid::fromString('914e4c51-a049-4594-ae5c-921bbadf686b'))
-            ->willReturn('');
-        $action = new KeyCreatorAction($prophecyService);
-        $response = $action($this->createMockRequest(), new Response(), []);
-        $payload = (string) $response->getBody();
-        $this->assertTrue(is_string($payload));
-    }
-
-    public function testShouldReturn200WithCorrectInput()
-    {
-        $service = $this->createMockService();
-        $testString = base64_encode('expectedString');
-        $service->expects($this->once())->method('sign')->willReturn($testString);
-        /** @var SignerInterface */
-        $serviceMocked = $service;
-        $action = new KeyCreatorAction($serviceMocked);
-        $response = $action->__invoke($this->createMockRequest(), new Response(), []);
-        $decoded = json_decode((string) $response->getBody());
-        $this->assertSame(200, $decoded->statusCode);
-        $this->assertSame($testString, $decoded->data->token);
-    }
-
-    private function createMockRequest(): ServerRequestInterface
-    {
-        $request = $this->createRequest('POST', '/api/forge-credential');
-
-        $request->getBody()
-            ->write(
-                json_encode(
-                    [
-                        'uuid' => '914e4c51-a049-4594-ae5c-921bbadf686b'
-                    ],
-                    JSON_PRETTY_PRINT
-                )
+    $request->getBody()
+        ->write(
+            json_encode(
+                [
+                    'uuid' => '914e4c51-a049-4594-ae5c-921bbadf686b'
+                ],
+                JSON_PRETTY_PRINT
             )
-        ;
+        )
+    ;
 
-        $request->getBody()->rewind();
+    $request->getBody()->rewind();
 
-        return $request;
-    }
+    return $request;
+}
 
-    /**
-     * Create a mocked login service.
-     *
-     * @return MockObject
-     */
-    private function createMockService()
-    {
-        return $this->getMockBuilder(SignerInterface::class)
-            ->onlyMethods(['sign'])
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-    }
+function createMockService(): MockInterface|SignerInterface
+{
+    return mock(SignerInterface::class);
 }

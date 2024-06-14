@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Tests\Presentation\Middleware;
@@ -11,101 +10,74 @@ use App\Infrastructure\Persistence\MemoryRepositories\InMemoryAccountRepository;
 use App\Presentation\Handlers\RefreshTokenHandler;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Tests\TestCase;
-
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertSame;
 
-/**
- * @internal
- * @coversNothing
- */
-class AuthMiddlewareTest extends TestCase
-{
-    public function setUp(): void
-    {
-        $this->app = $this->createAppInstance();
-        $this->app->group('/api', function ($group) {
-            $group->get('/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
-                $response->getBody()->write('Works');
+beforeEach(function () {
+    $this->app = $this->createAppInstance();
+    $this->apiEndpoint = '/api/test-auth';
+    $this->app->group('/api', function ($group) {
+        $group->get('/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
+            echo $request->getUri();
+            
+            $response->getBody()->write('Works');
 
-                return $response;
-            });
+            return $response;
         });
-        $this->setUpErrorHandler($this->app);
-    }
+    });
+    $this->setUpErrorHandler($this->app);
+});
+test('should pass when jwt is provided', function () {
+    self::autowireContainer(AccountRepository::class, new InMemoryAccountRepository());
 
-    public function testShouldPassWhenJwtIsProvided()
-    {
-        self::autowireContainer(AccountRepository::class, new InMemoryAccountRepository());
+    $dto = new AccountDto(email: 'mail.com', username: 'user', password: 'pass');
+    $repository = $this->getContainer()->get(AccountRepository::class);
+    $account = $repository->insert($dto);
 
-        $dto = new AccountDto(email: 'mail.com', username: 'user', password: 'pass');
-        $repository = $this->getContainer()->get(AccountRepository::class);
-        $account = $repository->insert($dto);
+    $tokenCreator = new BodyTokenCreator($account);
+    $token = $tokenCreator->createToken($_ENV['JWT_SECRET']);
 
-        $tokenCreator = new BodyTokenCreator($account);
-        $token = $tokenCreator->createToken($_ENV['JWT_SECRET']);
+    $bearer = 'Bearer ' . $token;
 
-        $request = $this->createRequestWithAuthentication($token);
+    $request = $this->createRequest(
+        'GET',
+        $this->apiEndpoint,
+        [
+            'HTTP_ACCEPT' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => $bearer,
+        ],
+    );
 
-        $response = $this->app->handle($request);
+    $response = $this->app->handle($request);
 
-        assertNotNull($response);
-        assertSame($response->getBody()->__toString(), "Works");
-        assertSame(200, $response->getStatusCode());
-    }
+    assertNotNull($response);
+    assertSame($response->getBody()->__toString(), "Works");
+    assertSame(200, $response->getStatusCode());
+});
 
-    public function testShouldCallErrorOnJWTErrorHandlerWhenNoRefreshTokenIsProvided()
-    {
-        $response = $this->app->handle($this->createMockRequest());
+test('should call error on jwterror handler when no refresh token is provided', function () {
+    $response = $this->app->handle($this->createRequest('GET', $this->apiEndpoint));
 
-        assertNotNull($response);
-        assertSame(401, $response->getStatusCode());
-    }
+    assertNotNull($response);
+    assertSame(401, $response->getStatusCode());
+});
 
-    public function testShouldInterceptHttpCookieRefresh()
-    {
-        $request = $this->createMockRequest();
+test('should intercept http cookie refresh', function () {
+    $request = $this->createRequest('GET', $this->apiEndpoint);
 
-        $tokenValue = 'any_value';
+    $tokenValue = 'any_value';
 
-        $request = $request->withCookieParams([REFRESH_TOKEN => $tokenValue]);
+    $request = $request->withCookieParams([REFRESH_TOKEN => $tokenValue]);
 
-        $mockJwtRefreshHandler = $this->getMockBuilder(RefreshTokenHandler::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+    $mockJwtRefreshHandler = mock(RefreshTokenHandler::class);
 
-        /**
-         * @var \Psr\Container\ContainerInterface
-         */
-        $container = $this->getContainer();
+    $container = $this->getContainer();
 
-        $container->set(RefreshTokenHandler::class, $mockJwtRefreshHandler);
+    $container->set(RefreshTokenHandler::class, $mockJwtRefreshHandler);
 
-        $response = $this->app->handle($request);
+    $response = $this->app->handle($request);
 
-        assertNotNull($response);
-    }
+    assertNotNull($response);
+});
 
-    private function createMockRequest(): ServerRequestInterface
-    {
-        return $this->createRequest('GET', '/api/test-auth');
-    }
-
-    private function createRequestWithAuthentication(string $token)
-    {
-        $bearer = 'Bearer ' . $token;
-
-        return $this->createRequest(
-            'GET',
-            '/api/test-auth',
-            [
-                'HTTP_ACCEPT' => 'application/json',
-                'Content-Type' => 'application/json',
-                'Authorization' => $bearer,
-            ],
-        );
-    }
-}

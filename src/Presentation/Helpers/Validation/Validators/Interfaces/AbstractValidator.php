@@ -29,7 +29,9 @@ abstract class AbstractValidator implements ValidationInterface
 
     
     abstract protected function makeValidation(mixed $subject): bool;
-    private function returnError(string $message): ValidationError{
+    
+    private function returnError(string $message): ValidationError
+    {
         return (
             new ValidationError(
                 message: $message

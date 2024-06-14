@@ -41,7 +41,7 @@ class MarkerServiceStoreTest extends TestCase
         $em = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $em->method('beginTransaction')->willReturn(0);
+        $em->method('beginTransaction');
 
         $conn = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
 

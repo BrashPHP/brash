@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Presentation\Actions\Protocols;
 
 use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
-use App\Presentation\Actions\Protocols\ActionTraits\ParseInputTrait;
 use App\Presentation\Actions\Protocols\ActionTraits\ResponderTrait;
 use App\Presentation\Actions\Protocols\ActionTraits\ValidationTrait;
 use Core\Http\Interfaces\ActionInterface;
@@ -18,7 +17,6 @@ use Slim\Exception\HttpException;
 abstract class Action implements ActionInterface
 {
     use ValidationTrait;
-    use ParseInputTrait;
     use ResponderTrait;
 
     protected Request $request;
@@ -44,9 +42,7 @@ abstract class Action implements ActionInterface
 
             return $this->action($request);
         } catch (HttpSpecializedAdapter $httpSpecializedAdapter) {
-            $adaptedError = $httpSpecializedAdapter->wire($request);
-
-            throw $adaptedError;
+            throw $httpSpecializedAdapter->wire($request);
         }
     }
 
@@ -58,7 +54,7 @@ abstract class Action implements ActionInterface
     protected function resolveArg(string $name)
     {
         if (!isset($this->args[$name])) {
-            $unresolvedArgumentException = new class ($name) extends HttpSpecializedAdapter {
+            throw new class ($name) extends HttpSpecializedAdapter {
                 public function __construct(private string $name)
                 {
                 }
@@ -68,7 +64,6 @@ abstract class Action implements ActionInterface
                     return new HttpBadRequestException($request, sprintf('Could not resolve argument `%s`.', $this->name));
                 }
             };
-            throw $unresolvedArgumentException;
         }
 
         return $this->args[$name];

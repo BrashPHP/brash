@@ -10,7 +10,6 @@ use App\Infrastructure\Cryptography\CookieTokenCreator;
 use DateInterval;
 use DateTime;
 use Firebase\JWT\JWT;
-use Prophecy\Argument;
 use Ramsey\Uuid\Uuid;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ServerRequestInterface;

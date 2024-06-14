@@ -7,6 +7,7 @@ namespace Tests\Presentation\Middleware;
 use App\Domain\Dto\AccountDto;
 use App\Domain\Repositories\AccountRepository;
 use App\Infrastructure\Cryptography\BodyTokenCreator;
+use App\Infrastructure\Persistence\MemoryRepositories\InMemoryAccountRepository;
 use App\Presentation\Handlers\RefreshTokenHandler;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -37,7 +38,7 @@ class AuthMiddlewareTest extends TestCase
 
     public function testShouldPassWhenJwtIsProvided()
     {
-        self::createDatabase();
+        self::autowireContainer(AccountRepository::class, new InMemoryAccountRepository());
 
         $dto = new AccountDto(email: 'mail.com', username: 'user', password: 'pass');
         $repository = $this->getContainer()->get(AccountRepository::class);
@@ -53,8 +54,6 @@ class AuthMiddlewareTest extends TestCase
         assertNotNull($response);
         assertSame($response->getBody()->__toString(), "Works");
         assertSame(200, $response->getStatusCode());
-
-        self::truncateDatabase();
     }
 
     public function testShouldCallErrorOnJWTErrorHandlerWhenNoRefreshTokenIsProvided()

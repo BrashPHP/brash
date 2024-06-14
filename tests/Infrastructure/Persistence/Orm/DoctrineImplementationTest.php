@@ -1,57 +1,27 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Infrastructure\Persistence\Orm;
-
 use DI\Container;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\Group;
-use Tests\TestCase;
-
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertDirectoryExists;
 use function PHPUnit\Framework\assertIsObject;
+test('set environment correctly', function () {
+    $dir = getcwd();
+    assertDirectoryExists($dir . "/src/Domain/Models");
+});
+test('if setup container works', function () {
+    $app = $this->getAppInstance();
+    $container = $app->getContainer();
+    $settings = $container->get("settings");
+    $doctrine = $settings["doctrine"];
 
-#[CoversNothing]
-#[Group('doctrine')]
-class DoctrineImplementationTest extends TestCase
-{
-    public function testSetEnvironmentCorrectly()
-    {
-        $dir = getcwd();
-        assertDirectoryExists($dir . "/src/Domain/Models");
-    }
+    assertArrayHasKey("connection", $doctrine);
+});
+test('if entity manager is not null', function () {
+    $app = $this->getAppInstance();
+    $container = $app->getContainer();
+    $em = $container->get(EntityManager::class);
 
-    public function testIfSetupContainerWorks()
-    {
-        $app = $this->getAppInstance();
-
-        /**
-* 
-         *
-   * @var Container $container 
-*/
-        $container = $app->getContainer();
-        $settings = $container->get("settings");
-        $doctrine = $settings["doctrine"];
-
-        assertArrayHasKey("connection", $doctrine);
-    }
-
-    public function testIfEntityManagerIsNotNull()
-    {
-        $app = $this->getAppInstance();
-
-        /**
-* 
-         *
-   * @var Container $container 
-*/
-        $container = $app->getContainer();
-        $em = $container->get(EntityManager::class);
-
-        assertIsObject($em);
-    }
-}
+    assertIsObject($em);
+});

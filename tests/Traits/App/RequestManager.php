@@ -11,7 +11,7 @@ use Slim\Psr7\Request;
 use Slim\Psr7\Uri;
 use Tests\Builders\Request\RequestBuilder;
 
-trait RequestManagerTrait
+class RequestManager
 {
     public function createRequest(
         string $method,
@@ -69,7 +69,8 @@ trait RequestManagerTrait
         $request->getBody()->write($encodedData);
         $request->getBody()->rewind();
         $requestParsedData = json_decode($encodedData, true);
-        return ($request->withParsedBody($requestParsedData));
+        
+        return $request->withParsedBody($requestParsedData);
     }
 
     /**

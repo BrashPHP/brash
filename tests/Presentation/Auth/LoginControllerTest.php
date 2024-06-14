@@ -1,6 +1,8 @@
 <?php
-
 declare(strict_types=1);
+
+namespace Tests\Presentation\Auth;
+
 use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Domain\Dto\Credentials;
 use App\Presentation\Actions\Protocols\ActionError;
@@ -10,8 +12,6 @@ use App\Presentation\Helpers\Validation\Validators\Interfaces\ValidationInterfac
 use DI\Container;
 use Mockery\MockInterface;
 use function PHPUnit\Framework\assertEquals;
-use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Http\Message\ServerRequestInterface;
 
 beforeEach(function () {
     $this->app = $this->getAppInstance();
@@ -21,6 +21,7 @@ beforeEach(function () {
     $this->autowireContainer(ValidationInterface::class, $validator);
     $this->endpoint = '/auth/login';
 });
+
 test('should call authentication with correct values', function () {
     /** @var Container $container */
     $container = $this->getContainer();

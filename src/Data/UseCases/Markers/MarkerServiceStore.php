@@ -47,9 +47,9 @@ class MarkerServiceStore implements MarkerServiceStoreInterface
         } catch (AbstractUniqueException $exception) {
             throw new NameAlreadyInUse($exception->getResponseMessage(), 400, $exception);
         } catch (Exception $ex) {
+            echo $ex;
             $this->em->getConnection()->rollBack();
 
-            echo $ex;
 
             throw $ex;
         }

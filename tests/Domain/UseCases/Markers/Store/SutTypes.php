@@ -8,7 +8,7 @@ use App\Domain\Repositories\MarkerRepositoryInterface;
 use App\Domain\Repositories\MuseumRepository;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 
-class SutTypes
+readonly class SutTypes
 {
     public MarkerServiceStoreInterface $service;
 

@@ -1,9 +1,9 @@
 <?php
 
 declare(strict_types=1);
-
-namespace Tests\Domain\UseCases\Markers\Store;
-
+use Doctrine\ORM\EntityManagerInterface;
+use Mockery\MockInterface;
+use \Tests\Domain\UseCases\Markers\Store\SutTypes;
 use App\Domain\Dto\Credentials;
 use App\Domain\Models\Marker\Marker;
 use App\Domain\Models\Museum;
@@ -12,81 +12,61 @@ use App\Domain\Repositories\MuseumRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
-use Tests\TestCase;
 
-class MarkerServiceStoreTest extends TestCase
+beforeEach(function () {
+    $this->sut = new SutTypes(
+        mockMuseumRepository(),
+        mockMarkerRepository(),
+        mockEntityManager()
+    );
+});
+
+function makeCredentials()
 {
-
-    private SutTypes $sut;
-
-    protected function setUp(): void
-    {
-        /** @var MuseumRepository */
-        $museumRepository = $this->mockMuseumRepository();
-        /** @var MarkerRepositoryInterface */
-        $markerRepository = $this->mockMarkerRepository();
-        /** @var EntityManager */
-        $em = $this->mockEntityManager();
-
-        $this->sut = new SutTypes($museumRepository, $markerRepository, $em);
-    }
-
-    public function makeCredentials()
-    {
-        return new Credentials(access: '@mail.com', password: 'password');
-    }
-
-    public function mockEntityManager()
-    {
-        $em = $this->getMockBuilder(EntityManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $em->method('beginTransaction');
-
-        $conn = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
-
-        $em->method('getConnection')->willReturn($conn);
-
-        return $em;
-    }
-
-    /** @return MockObject */
-    public function mockMuseumRepository()
-    {
-        return $this->getMockBuilder(MuseumRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
-    /** @return MockObject */
-    public function mockMarkerRepository()
-    {
-        return $this->getMockBuilder(MarkerRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
-    public function testShouldPassWhenServiceIsCalled()
-    {
-        $service = $this->sut->service;
-        /**
-         * @var MockObject
-         */
-        $mock = $this->sut->museumRepository;
-        $mock->expects($this->once())
-            ->method('findByID')
-            ->with(13)
-            ->willReturn(new Museum(1, email: 'email', name: 'name'));
-
-        $service->insert(
-            13,
-            new Marker(
-                null,
-                null,
-                "name",
-                "text",
-                "title",
-            )
-        );
-    }
+    return new Credentials(access: '@mail.com', password: 'password');
 }
+function mockEntityManager(): EntityManagerInterface|MockInterface
+{
+    return mock(EntityManager::class);
+}
+
+function mockMuseumRepository(): MuseumRepository|MockInterface
+{
+    return mock(MuseumRepository::class);
+}
+/** @return MockObject */
+function mockMarkerRepository(): MarkerRepositoryInterface|MockInterface
+{
+    return mock(MarkerRepositoryInterface::class);
+}
+
+test('should pass when service is called', function () {
+    $service = $this->sut->service;
+    $conn = mock(Connection::class);
+    $conn->shouldReceive("beginTransaction")->once()->andReturn(true);
+    $conn->shouldReceive("commit")->once()->andReturn(true);
+    
+    $this->sut->em->expects('getConnection')->twice()->andReturn($conn);
+
+    $this->sut->museumRepository
+        ->expects('findByID')
+        ->once()
+        ->with(13)
+        ->andReturn(new Museum(1, email: 'email', name: 'name'));
+
+    /** @var MockInterface */
+    $mockMarkerRepository = $this->sut->markerRepositoryInterface;
+    $mockMarkerRepository->expects('add')
+        ->once();
+
+    $service->insert(
+        13,
+        new Marker(
+            null,
+            null,
+            "name",
+            "text",
+            "title",
+        )
+    );
+});

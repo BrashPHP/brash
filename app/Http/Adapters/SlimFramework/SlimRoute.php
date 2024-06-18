@@ -9,13 +9,13 @@ class SlimRoute implements RouteInterface
     {
 
     }
-    function add($middleware): RouteInterface
+    public function add($middleware): RouteInterface
     {
         $this->route->add($middleware);
 
         return $this;
     }
-    function addMiddleware(\Psr\Http\Server\MiddlewareInterface $middleware): RouteInterface
+    public function addMiddleware(\Psr\Http\Server\MiddlewareInterface $middleware): RouteInterface
     {
         $this->route->addMiddleware($middleware);
 

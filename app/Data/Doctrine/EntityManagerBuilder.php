@@ -3,6 +3,7 @@
 namespace Core\Data\Doctrine;
 
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\DsnParser;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,8 +24,16 @@ class EntityManagerBuilder
             Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
         }
 
+        $connectionParams = $doctrine['connection'];
+
+        if (isset($doctrine['connection']['url'])) {
+            $dsnParser = new DsnParser();
+            $connectionParams = $dsnParser
+                ->parse($doctrine['connection']['url']);
+        }
+
         $connection = DriverManager::getConnection(
-            $doctrine['connection'],
+            $connectionParams,
             $config
         );
 

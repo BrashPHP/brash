@@ -1,10 +1,10 @@
 <?php
 
-namespace Core\Builder\Factories;
+namespace Core\Http\Factories;
 
 use Core\Builder\ProvidersCollector;
-use DI\Container;
 use DI\ContainerBuilder;
+use Psr\Container\ContainerInterface;
 
 class ContainerFactory
 {
@@ -19,7 +19,7 @@ class ContainerFactory
         // }
     }
 
-    public function get(): Container
+    public function get(): ContainerInterface
     {
         $providersCollector = new ProvidersCollector();
 

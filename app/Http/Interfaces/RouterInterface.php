@@ -5,6 +5,5 @@ namespace Core\Http\Interfaces;
 
 interface RouterInterface
 {
-    public function run(): void;
-    public function collect(RouteCollectorInterface $routeCollector): void;
+    public function run(RouteCollectorInterface $routeCollector): void;
 }

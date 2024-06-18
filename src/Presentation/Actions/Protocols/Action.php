@@ -6,7 +6,6 @@ namespace App\Presentation\Actions\Protocols;
 
 use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
 use App\Presentation\Actions\Protocols\ActionTraits\ResponderTrait;
-use App\Presentation\Actions\Protocols\ActionTraits\ValidationTrait;
 use Core\Http\Interfaces\ActionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -16,7 +15,6 @@ use Slim\Exception\HttpException;
 
 abstract class Action implements ActionInterface
 {
-    use ValidationTrait;
     use ResponderTrait;
 
     protected Request $request;
@@ -38,8 +36,6 @@ abstract class Action implements ActionInterface
         $this->args = $args;
 
         try {
-            $this->validate($request);
-
             return $this->action($request);
         } catch (HttpSpecializedAdapter $httpSpecializedAdapter) {
             throw $httpSpecializedAdapter->wire($request);

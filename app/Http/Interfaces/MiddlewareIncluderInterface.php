@@ -4,7 +4,7 @@ namespace Core\Http\Interfaces;
 
 use Psr\Http\Server\MiddlewareInterface;
 
-interface MIddlewareIncluderInterface
+interface MiddlewareIncluderInterface
 {
     function add(\Closure|MiddlewareInterface|string $middleware): void;
 }

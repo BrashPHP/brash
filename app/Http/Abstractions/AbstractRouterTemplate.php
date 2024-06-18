@@ -10,17 +10,20 @@ use Core\Http\Interfaces\RouteCollectorInterface;
 use Core\Http\Interfaces\RouterInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpNotFoundException;
 
 abstract class AbstractRouterTemplate implements RouterInterface
 {
-    public function __construct(private RouteCollectorInterface $routeCollector)
-    {
-    }
+    private RouteCollectorInterface $routeCollector;
 
-    public function run(): void
+    abstract public function collect(RouteCollectorInterface $routeCollector): void;
+
+    public function run(RouteCollectorInterface $routeCollector): void
     {
-        $this->prepareOnTheFlyRequests();
+        $this->routeCollector = $routeCollector;
+        $this->prepareOnTheFlyRequests($routeCollector);
         $this->collect($this->routeCollector);
+        $this->setNotFound($routeCollector);
     }
 
     protected function setGroup(string $domain, string $handlerPath)
@@ -28,12 +31,19 @@ abstract class AbstractRouterTemplate implements RouterInterface
         return $this->routeCollector->group($domain, $this->getRouteGroup($handlerPath));
     }
 
-    private function prepareOnTheFlyRequests()
+    private function prepareOnTheFlyRequests(RouteCollectorInterface $routeCollector)
     {
-        $this->routeCollector->options(
+        $routeCollector->options(
             '/{routes:.+}',
             fn(Request $request, Response $response, $args) => $response->withStatus(200)
         );
+    }
+
+    private function setNotFound(RouteCollectorInterface $routeCollector)
+    {
+        $routeCollector->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request) {
+            throw new HttpNotFoundException($request);
+        });
     }
 
     private function getRouteGroup(string $path): Closure

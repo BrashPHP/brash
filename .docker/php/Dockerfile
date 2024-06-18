@@ -66,9 +66,19 @@ RUN apt-get update \
 
 WORKDIR /app
 
+
+# FOR REACTPHP
+# RUN apt-get install ${PHPIZE_DEPS} libev \ 
+#     && pecl install ev \
+#     && docker-php-ext-enable ev \
+#     && docker-php-ext-install sockets \
+#     && echo "memory_limit = -1" >> "$PHP_INI_DIR/conf.d/acme.ini"
+
 COPY . .
 
 ENV X_LISTEN 0.0.0.0:9000
+
+ENV docker=true
 
 RUN composer install
 

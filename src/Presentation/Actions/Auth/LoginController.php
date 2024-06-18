@@ -8,12 +8,16 @@ use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Domain\Dto\Credentials;
 use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
 use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Interfaces\ValidationInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Respect\Validation\Validator;
 
-class LoginController extends Action
+use Core\Http\Attributes\Route;
+
+#[Route(path: "login", method: "POST")]
+class LoginController extends Action implements ValidationInterface
 {
 
     public function __construct(
@@ -63,7 +67,7 @@ class LoginController extends Action
                 Validator::alnum()->noWhitespace()->length(6, 20)
             ),
             'password' => static function ($value) {
-                return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[\w$@]{6,}$/m', $value);
+                return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value);
             },
         ];
     }

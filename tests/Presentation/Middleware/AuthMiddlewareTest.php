@@ -19,7 +19,7 @@ beforeEach(function () {
     $this->app->group('/api', function ($group) {
         $group->get('/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
             echo $request->getUri();
-            
+
             $response->getBody()->write('Works');
 
             return $response;

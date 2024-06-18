@@ -2,9 +2,9 @@
 
 namespace Core\Providers;
 
+use Core\Exceptions\ConfigException;
 use Core\Providers\AppProviderInterface;
 use DI\ContainerBuilder;
-use Exception;
 
 use function Core\functions\mode;
 
@@ -34,7 +34,7 @@ class ConnectionProvider implements AppProviderInterface
                             'memory' => 'true',
                         ],
                         'PRODUCTION', 'DEV' => $connectionArray,
-                        default => throw new Exception($exceptionMessage, 500)
+                        default => throw new ConfigException($exceptionMessage, 500)
                     };
                 }
             ]

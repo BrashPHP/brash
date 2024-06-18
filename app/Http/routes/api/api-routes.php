@@ -12,11 +12,13 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 return function (Group $group) {
     $group->get('/', HomeController::class);
     
-    $group->get('/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
-        $response->getBody()->write('Works');
+    $group->get(
+        '/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
+            $response->getBody()->write('Works');
 
-        return $response;
-    });
+            return $response;
+        }
+    );
 
     $group->group('/museum', include __DIR__ . '/museum/museum-routes.php');
 

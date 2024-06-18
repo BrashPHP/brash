@@ -9,10 +9,10 @@ use Psr\Http\Server\MiddlewareInterface;
 readonly class RouteGroup
 {
     /**
-     * @param string $path
-     * @param class-string|self|null $parent
+     * @param string                                                $path
+     * @param class-string|self|null                                $parent
      * @param MiddlewareInterface|string|MiddlewareInterface[]|null $middleware
-     * @param bool $skip
+     * @param bool                                                  $skip
      */
     public function __construct(
         public string $prefix,

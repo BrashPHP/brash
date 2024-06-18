@@ -14,7 +14,8 @@ class GroupCacheResult
 
     }
 
-    private function forgeKey(string|RouteGroup $group): string{
+    private function forgeKey(string|RouteGroup $group): string
+    {
         return is_object($group) ? $group->prefix : $group;
     }
 

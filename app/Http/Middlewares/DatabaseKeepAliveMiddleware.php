@@ -22,7 +22,7 @@ class DatabaseKeepAliveMiddleware implements MiddlewareInterface
     ) {
     }
 
-    function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $em = $this->reopeningEntityManagerDecorator->open();
         $connection = $em->getConnection();

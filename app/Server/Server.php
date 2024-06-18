@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Core\Server;
 
+use Core\Http\Factories\ContainerFactory;
 use React\EventLoop\LoopInterface;
 use Core\Builder\AppBuilderManager;
-use Core\Builder\Factories\ContainerFactory;
 use React\EventLoop\Loop;
 use function Core\functions\isProd;
 use function React\Async\async;
@@ -44,26 +44,21 @@ final class Server
 
     private function createAsyncHandler()
     {
-        return async(function (\Psr\Http\Message\ServerRequestInterface $request) {
-            try {
+        return async(
+            function (\Psr\Http\Message\ServerRequestInterface $request) {
+                try {
 
-                $containerFactory = new ContainerFactory(enableCompilation: isProd());
+                    $containerFactory = new ContainerFactory(enableCompilation: isProd());
 
-                $appBuilder = new AppBuilderManager($containerFactory->get());
-                $appBuilder->useDefaultShutdownHandler(true);
-                // $requestFactory = new RequestFactory();
-                // $request = $requestFactory->createRequest();
-
-                $app = $appBuilder->build($request);
-                // Run App & Emit Response
-                $response = $app->handle($request);
-                // $responseEmitter = new SlimResponseEmitter();
-                // $responseEmitter->emit($response);
-
-                return $response;
-            } catch (\Throwable $th) {
-                echo $th;
+                    $appBuilder = new AppBuilderManager($containerFactory->get());
+                    $appBuilder->useDefaultShutdownHandler(true);
+                    $app = $appBuilder->build($request);
+                
+                    return $app->handle($request);
+                } catch (\Throwable $th) {
+                    echo $th;
+                }
             }
-        });
+        );
     }
 }

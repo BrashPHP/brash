@@ -9,11 +9,11 @@ use Psr\Http\Server\MiddlewareInterface;
 readonly class Route
 {
     /**
-     * @param string|string[] $method
-     * @param string $path
+     * @param string|string[]                                       $method
+     * @param string                                                $path
      * @param MiddlewareInterface|string|MiddlewareInterface[]|null $middleware
-     * @param RouteGroup|class-string<object>|object|null $group
-     * @param bool $skip
+     * @param RouteGroup|class-string<object>|object|null           $group
+     * @param bool                                                  $skip
      */
     public function __construct(
         public string|array $method,

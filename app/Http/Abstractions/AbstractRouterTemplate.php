@@ -26,11 +26,6 @@ abstract class AbstractRouterTemplate implements RouterInterface
         $this->setNotFound($routeCollector);
     }
 
-    protected function setGroup(string $domain, string $handlerPath)
-    {
-        return $this->routeCollector->group($domain, $this->getRouteGroup($handlerPath));
-    }
-
     private function prepareOnTheFlyRequests(RouteCollectorInterface $routeCollector)
     {
         $routeCollector->options(
@@ -41,13 +36,10 @@ abstract class AbstractRouterTemplate implements RouterInterface
 
     private function setNotFound(RouteCollectorInterface $routeCollector)
     {
-        $routeCollector->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request) {
-            throw new HttpNotFoundException($request);
-        });
-    }
-
-    private function getRouteGroup(string $path): Closure
-    {
-        return include __DIR__ . "/../routes/{$path}.php";
+        $routeCollector->map(
+            ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request) {
+                throw new HttpNotFoundException($request);
+            }
+        );
     }
 }

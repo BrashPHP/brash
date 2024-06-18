@@ -4,9 +4,14 @@ namespace Core\Builder;
 
 use App\Presentation\Handlers\ShutdownHandler;
 use Core\Builder\MiddlewareCollector;
+use Core\Exceptions\ConfigException;
 use Core\Http\Adapters\SlimFramework\SlimMiddlewareIncluder;
 use Core\Http\Adapters\SlimFramework\SlimRouteCollector;
-use Core\Http\RouterCollector;
+use Core\Http\Middlewares\Factories\ValidationMiddlewareFactory;
+use Core\Http\Routing\RouterCollector;
+use Core\Http\Routing\Cache\GroupCacheResult;
+use Core\Http\Routing\GroupCollector;
+use Core\Http\Routing\RouteFactory;
 use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -49,7 +54,13 @@ class AppBuilderManager
 
         $app->addRoutingMiddleware(); // Add the Slim built-in routing middleware
 
-        $router = new RouterCollector();
+        $router = new RouterCollector(
+            new RouteFactory(
+                new GroupCollector(),
+                new GroupCacheResult()
+            ),
+            new ValidationMiddlewareFactory($this->container)
+        );
 
         $router->run(new SlimRouteCollector($app));
 
@@ -70,7 +81,7 @@ class AppBuilderManager
     public function useDefaultShutdownHandler(bool $enable)
     {
         if (!$this->enableErrorHandler) {
-            throw new Exception('Unable to use default shutdown handler when error handler is not enabled');
+            throw new ConfigException('Unable to use default shutdown handler when error handler is not enabled');
         }
         $this->enableShutdownHandler = $enable;
     }

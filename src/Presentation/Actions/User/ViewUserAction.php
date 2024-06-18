@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Presentation\Actions\User;
 
-use Core\Attributes\Routing\Route;
+use App\Presentation\Actions\ActionGroups\UsersEntrypoint;
+use Core\Http\Attributes\Route;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 
-#[Route(path: '/users/{id}', method: 'GET')]
+#[Route(path: '/{id}', method: 'GET', group: UsersEntrypoint::class)]
 class ViewUserAction extends UserAction
 {
     /**

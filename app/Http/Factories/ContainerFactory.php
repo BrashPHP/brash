@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Builder\Factories;
+namespace Core\Http\Factories;
 
 use Core\Builder\ProvidersCollector;
 use DI\ContainerBuilder;

@@ -17,7 +17,6 @@ use Slim\Exception\HttpException;
 
 abstract class Action implements ActionInterface
 {
-    use ValidationTrait;
     use ParseInputTrait;
     use ResponderTrait;
 
@@ -40,8 +39,6 @@ abstract class Action implements ActionInterface
         $this->args = $args;
 
         try {
-            $this->validate($request);
-
             return $this->action($request);
         } catch (HttpSpecializedAdapter $httpSpecializedAdapter) {
             throw $httpSpecializedAdapter->wire($request);

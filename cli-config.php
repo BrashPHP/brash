@@ -3,13 +3,14 @@
 // cli-config.php
 declare(strict_types=1);
 
-use Core\Builder\Factories\ContainerFactory;
+
+use Core\Http\Factories\ContainerFactory;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 
-require __DIR__ . '/configs/bootstrap.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $containerFactory = new ContainerFactory();
 
@@ -21,4 +22,4 @@ $em = $container->get(EntityManager::class);
 
 DependencyFactory::fromEntityManager($config, new ExistingEntityManager($em));
 
-return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($em);
+return \Doctrine\ORM\Tools\Console\ConsoleRunner::createApplication($em);

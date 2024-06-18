@@ -19,11 +19,4 @@ class ValidationError extends Exception
     {
         return $this->field;
     }
-
-    public function setField(string $field): self
-    {
-        $this->field = $field;
-
-        return $this;
-    }
 }

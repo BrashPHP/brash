@@ -15,8 +15,8 @@ class ErrorBag extends ValidationError
     public function push(ValidationError $error): void
     {
         $this->errors[] = $error;
-        $this->messages[] = sprintf('[%s]: %s', $error->getField(), $error->getMessage());
-        $this->message = implode(PHP_EOL, $this->messages);
+        $this->messages[] = [$error->getField() => $error->getMessage()];
+        $this->message = json_encode($this->messages);
     }
 
     public function hasErrors(): bool

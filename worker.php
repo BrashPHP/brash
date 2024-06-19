@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Core\Builder\AppBuilderManager;
-use Core\Builder\Factories\ContainerFactory;
+use Core\Http\Factories\ContainerFactory;
 use Core\Http\Factories\RequestFactory;
 
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $containerFactory = new ContainerFactory();
 

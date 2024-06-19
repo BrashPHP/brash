@@ -28,3 +28,5 @@ composer test
 ## TODO
 
 [] Incluir testes para camada HTTP do CORE
+    [] RouteCollector
+    [] RouteGroup

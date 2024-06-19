@@ -7,12 +7,7 @@ use Core\Builder\MiddlewareCollector;
 use Core\Exceptions\ConfigException;
 use Core\Http\Adapters\SlimFramework\SlimMiddlewareIncluder;
 use Core\Http\Adapters\SlimFramework\SlimRouteCollector;
-use Core\Http\Middlewares\Factories\ValidationMiddlewareFactory;
-use Core\Http\Routing\RouterCollector;
-use Core\Http\Routing\Cache\GroupCacheResult;
-use Core\Http\Routing\GroupCollector;
-use Core\Http\Routing\RouteFactory;
-use Exception;
+use Core\Http\Factories\RouteCollectorFactory;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -54,15 +49,9 @@ class AppBuilderManager
 
         $app->addRoutingMiddleware(); // Add the Slim built-in routing middleware
 
-        $router = new RouterCollector(
-            new RouteFactory(
-                new GroupCollector(),
-                new GroupCacheResult()
-            ),
-            new ValidationMiddlewareFactory($this->container)
-        );
+        $routerFactory = new RouteCollectorFactory($this->container);
 
-        $router->run(new SlimRouteCollector($app));
+        $routerFactory->getRouteCollector()->run(new SlimRouteCollector($app));
 
         if ($this->enableErrorHandler) {
             $this->setErrorHandler($app, $request);
@@ -119,7 +108,6 @@ class AppBuilderManager
         register_shutdown_function($shutdownHandler);
     }
 
-    // Instantiate the app
     private function createApp(): App
     {
         AppFactory::setContainer($this->container);

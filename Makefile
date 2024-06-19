@@ -44,7 +44,7 @@ migrate:
 	docker compose exec ${CONTAINER} sh -c "vendor/bin/doctrine-migrations migrate;" 
 
 test:
-	composer run test
+	./vendor/bin/pest
 
 doctrine-test:
 	composer run test --group doctrine

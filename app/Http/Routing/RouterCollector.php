@@ -53,7 +53,9 @@ class RouterCollector extends AbstractRouterTemplate
 
     private function includeMiddlewares(RouteCollectorInterface $routeCollector, RouteModel $route): RouteInterface
     {
-        $routeInterface = $routeCollector->map($route->methods, "/{$route->path}", $route->controller);
+        $path = \str_ends_with($route->path, "/") ? \substr($route->path, 0, -1) : $route->path;
+
+        $routeInterface = $routeCollector->map($route->methods, "/{$path}", $route->controller);
 
         foreach ($route->middlewares as $middleware) {
             $routeInterface->add($middleware);

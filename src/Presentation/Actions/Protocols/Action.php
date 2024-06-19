@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace App\Presentation\Actions\Protocols;
 
 use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
-use App\Presentation\Actions\Protocols\ActionTraits\ResponderTrait;
 use Core\Http\Interfaces\ActionInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
+use React\Promise\PromiseInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpException;
+use function React\Async\await;
 
 abstract class Action implements ActionInterface
 {
-    use ResponderTrait;
-
     protected Request $request;
 
     protected Response $response;
@@ -36,10 +35,33 @@ abstract class Action implements ActionInterface
         $this->args = $args;
 
         try {
-            return $this->action($request);
+            $response = $this->action($request);
+            
+            if ($response instanceof PromiseInterface) {
+                $response = await($response);
+            }
+
+            assert($response instanceof Response);
+
+            return $response;
         } catch (HttpSpecializedAdapter $httpSpecializedAdapter) {
             throw $httpSpecializedAdapter->wire($request);
         }
+    }
+
+    protected function respondWithData(null|array|object $data = null, int $statusCode = 200): Response
+    {
+        $payload = new ActionPayload($statusCode, $data);
+
+        return $this->respond($payload);
+    }
+
+    protected function respond(ActionPayload $payload): Response
+    {
+        $json = json_encode($payload);
+        $this->response->getBody()->write($json);
+
+        return $this->response->withHeader('Content-Type', 'application/json');
     }
 
     /**

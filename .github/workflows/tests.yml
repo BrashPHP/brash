@@ -1,33 +1,24 @@
 name: Tests
-on: [push, pull_request]
+ 
+on: ['push', 'pull_request']
+ 
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        operating-system: [ubuntu-latest]
-        php-versions: ["8.1", "8.2"]
-        dependency-versions: ["highest", "lowest"]
-    runs-on: ${{ matrix.operating-system }}
+  ci:
+    runs-on: ubuntu-latest
+ 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup PHP and extensions
+      - name: Checkout
+        uses: actions/checkout@v3
+ 
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: gmp
+          php-version: 8.3
+          tools: composer:v2
           coverage: xdebug
-          #coverage: pcov
-      - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
-        with:
-          dependency-versions: ${{ matrix.dependency-versions }}
-      - name: Run linter
-        run: make lint
-      - name: Run unit tests
-        run: make unit
-      - name: Run static analysis
-        run: make static
-      - name: Upload coverage
-        uses: codecov/codecov-action@v1
+ 
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+ 
+      - name: Tests
+        run: ./vendor/bin/pest

@@ -30,8 +30,8 @@ class SettingsProvider implements AppProviderInterface
                 // Should be set to false in production
                 'logger' => [
                     'name' => 'slim-app',
-                    'path' => getenv('docker') ? 'php://stdout' : $root . '/logs/app.log',
-                    'level' => Logger::WARNING,
+                    'path' => (getenv('docker') || !getenv('log-file'))? 'php://stdout' : $root . '/logs/app.log',
+                    'level' => Logger::INFO,
                 ],
                 'doctrine' => static function (ContainerInterface $c) use ($root): array {
                     return [

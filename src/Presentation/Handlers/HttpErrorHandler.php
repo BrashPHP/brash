@@ -78,7 +78,7 @@ class HttpErrorHandler extends SlimErrorHandler
             'stack_trace' => $statusCode === 500 ? $error->getTrace() : [],
         ];
 
-        $this->logError(json_encode($template, JSON_PRETTY_PRINT));
+        $this->logError(json_encode($template));
     }
 
     protected function logError(string $error): void

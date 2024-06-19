@@ -58,7 +58,7 @@ class ShutdownHandler
 
             $response = $this->errorHandler->__invoke($this->request, $exception, $this->displayErrorDetails, false, false);
 
-            $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+            $origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
 
             $response = $response
                 ->withHeader('Access-Control-Allow-Credentials', 'true')

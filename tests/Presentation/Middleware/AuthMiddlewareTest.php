@@ -16,14 +16,12 @@ use function PHPUnit\Framework\assertSame;
 beforeEach(function () {
     $this->app = $this->createAppInstance();
     $this->apiEndpoint = '/api/test-auth';
-    $this->app->group('/api', function ($group) {
-        $group->get('/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
-            echo $request->getUri();
+    $this->app->get('/api/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
+        echo $request->getUri();
 
-            $response->getBody()->write('Works');
+        $response->getBody()->write('Works');
 
-            return $response;
-        });
+        return $response;
     });
     $this->setUpErrorHandler($this->app);
 });

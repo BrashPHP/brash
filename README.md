@@ -24,3 +24,7 @@ Run this command in the application directory to run the test suite
 ```bash
 composer test
 ```
+
+## TODO
+
+[] Incluir testes para camada HTTP do CORE

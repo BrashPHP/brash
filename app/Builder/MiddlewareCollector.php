@@ -27,7 +27,7 @@ class MiddlewareCollector
 
     public function collect(MiddlewareIncluderInterface $root)
     {
-        $root->add(new TrailingSlash());
+        $root->add(new TrailingSlash(true));
 
         foreach ($this->middlewareClasses as $middlewareClass) {
             $root->add($middlewareClass);

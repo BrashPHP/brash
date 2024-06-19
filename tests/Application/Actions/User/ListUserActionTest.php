@@ -24,7 +24,7 @@ test('should call action successfully', function () {
 
     $container->set(UserRepository::class, $userRepositoryProphecy);
     $request = new RequestManager();
-    $request = $request->createRequest('GET', '/users');
+    $request = $request->createRequest('GET', '/users/');
     $response = $this->app->handle($request);
 
     $payload = (string) $response->getBody();

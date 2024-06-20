@@ -6,9 +6,10 @@ namespace App\Presentation\Actions\Markers;
 
 use App\Domain\Repositories\MarkerRepositoryInterface;
 use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Exceptions\HttpBadRequestException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpBadRequestException;
+
 
 class GetAllMarkersByMuseumAction extends Action
 {

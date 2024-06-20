@@ -2,14 +2,15 @@
 
 namespace App\Domain\Exceptions\Transaction;
 
-use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
+use App\Domain\Exceptions\Protocols\HttpSpecializedAdapterCustom;
+use Core\Http\Exceptions\BaseHttpException;
+use Core\Http\Exceptions\HttpBadRequestException;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpException;
 
-class NameAlreadyInUse extends HttpSpecializedAdapter
+
+class NameAlreadyInUse extends HttpSpecializedAdapterCustom
 {
-    public function wire(ServerRequestInterface $request): HttpException
+    public function wire(ServerRequestInterface $request): BaseHttpException
     {
         $message = 'An error occured while inserting values in transaction. Unique constraint has been violated. Cause: ';
         $message .= $this->message;

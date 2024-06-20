@@ -8,6 +8,7 @@ use App\Presentation\Actions\ActionGroups\UsersEntrypoint;
 use Core\Http\Attributes\Route;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use React\Promise\Promise;
 
 #[Route(path: '/', method: 'GET', group: UsersEntrypoint::class)]
 class ListUsersAction extends UserAction
@@ -15,12 +16,15 @@ class ListUsersAction extends UserAction
     /**
      * {@inheritdoc}
      */
-    public function action(Request $request): Response
+    public function action(Request $request): Response|Promise
     {
-        $users = $this->userService->findAll();
+        return new Promise(function (\Closure $resolve) {
+            $users = $this->userService->findAll();
 
-        $this->logger->info("Users list was viewed.");
+            $this->logger->info("Users list was viewed.");
 
-        return $this->respondWithData($users);
+            $resolve($this->respondWithData($users));
+        });
+
     }
 }

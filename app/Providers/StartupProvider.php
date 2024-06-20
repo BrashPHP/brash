@@ -33,8 +33,8 @@ class StartupProvider implements AppProviderInterface
     {
         Factory::setDefaultInstance(
             (new Factory())
-                ->withRuleNamespace('App\\Presentation\\Helpers\\Validation\\Rules')
-                ->withExceptionNamespace('App\\Presentation\\Helpers\\Validation\\Exceptions')
+                ->withRuleNamespace('App\\Presentation\\Validation\\Rules')
+                ->withExceptionNamespace('App\\Presentation\\Validation\\Exceptions')
         );
     }
 

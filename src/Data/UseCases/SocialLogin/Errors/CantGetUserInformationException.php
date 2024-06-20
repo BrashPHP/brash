@@ -1,15 +1,17 @@
 <?php
+
 namespace App\Data\UseCases\SocialLogin\Errors;
 
 use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
+use App\Domain\Exceptions\Protocols\HttpSpecializedAdapterCustom;
+use Core\Http\Exceptions\BaseHttpException;
+use Core\Http\Exceptions\HttpInternalServerErrorException;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpException;
-use Slim\Exception\HttpInternalServerErrorException;
 
 
-class CantGetUserInformationException extends HttpSpecializedAdapter
+class CantGetUserInformationException extends HttpSpecializedAdapterCustom
 {
-    public function wire(ServerRequestInterface $request): HttpException
+    public function wire(ServerRequestInterface $request): BaseHttpException
     {
         return new HttpInternalServerErrorException($request, "Could not request user's information");
     }

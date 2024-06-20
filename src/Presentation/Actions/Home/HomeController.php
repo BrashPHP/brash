@@ -13,8 +13,10 @@ use stdClass;
 #[Route('GET', '/')]
 class HomeController extends Action
 {
+    private int $counter = 0;
     public function action(Request $request): Response
     {
+        $this->logger->info('HI, person '. $this->counter . PHP_EOL);
         $data = new stdClass();
         $data->message = file_get_contents(__DIR__.'/welcome.txt');
 

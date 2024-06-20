@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Actions\Protocols;
 
+use Core\Http\Errors\ActionError;
 use JsonSerializable;
 
 class ActionPayload implements JsonSerializable
@@ -44,7 +45,7 @@ class ActionPayload implements JsonSerializable
 
         if ($this->data !== null) {
             $payload['data'] = $this->data;
-        } elseif ($this->error instanceof \App\Presentation\Actions\Protocols\ActionError) {
+        } elseif ($this->error instanceof ActionError) {
             $payload['error'] = $this->error;
         }
 

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core\Http\Middlewares;
 
-use App\Presentation\Actions\Protocols\HttpErrors\BadRequestException;
-use App\Presentation\Actions\Protocols\HttpErrors\UnprocessableEntityException;
-use App\Presentation\Helpers\Validation\Validators\Facade\ValidationFacade;
-use App\Presentation\Helpers\Validation\Validators\ValidationExceptions\ValidationError;
+use Core\Http\Exceptions\HttpBadRequestException;
+use Core\Http\Exceptions\UnprocessableEntityException;
 use Core\Http\Interfaces\ValidationInterface;
+use Core\Validation\Facade\ValidationFacade;
+use Core\Validation\ValidationExceptions\ValidationError;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -23,7 +25,7 @@ class ValidationMiddleware implements MiddlewareInterface
         $rawBody = $request->getBody()->__toString();
         
         if (!(is_null($rawBody) || $rawBody === "" || \json_validate($rawBody))) {
-            throw new BadRequestException($request);
+            throw new HttpBadRequestException($request);
         }
 
         $body = json_decode($rawBody, true);

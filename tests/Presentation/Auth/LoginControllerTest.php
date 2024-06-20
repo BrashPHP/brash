@@ -5,10 +5,9 @@ namespace Tests\Presentation\Auth;
 
 use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Domain\Dto\Credentials;
-use App\Presentation\Actions\Protocols\ActionError;
 use App\Presentation\Actions\Protocols\ActionPayload;
-use App\Presentation\Actions\Protocols\ErrorsEnum;
-use App\Presentation\Helpers\Validation\Validators\Interfaces\ValidationInterface;
+use Core\Http\Errors\{ErrorsEnum, ActionError};
+use Core\Validation\Interfaces\ValidationInterface;
 use DI\Container;
 use Mockery\MockInterface;
 use function PHPUnit\Framework\assertEquals;
@@ -29,7 +28,7 @@ test('should call authentication with correct values', function () {
     $service->expects('auth')
         ->andReturn(makeCredentials());
     $container->set(LoginServiceInterface::class, $service);
-    $credentials = new Credentials(access:'any_mail@gmail.com', password: 'Password04');
+    $credentials = new Credentials(access: 'any_mail@gmail.com', password: 'Password04');
     $request = $this->createRequest('POST', $this->endpoint);
     $request->getBody()
         ->write(json_encode($credentials));

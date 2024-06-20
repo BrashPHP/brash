@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Domain\Exceptions;
 
 use App\Domain\Exceptions\Protocols\DomainRecordNotFoundException;
+use Core\Http\Exceptions\BaseHttpException;
+use Core\Http\Exceptions\HttpNotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpException;
-use Slim\Exception\HttpNotFoundException;
 
 class NoAccountFoundException extends DomainRecordNotFoundException
 {
-    public function wire(ServerRequestInterface $request): HttpException
+    public function wire(ServerRequestInterface $request): BaseHttpException
     {
         $message = 'The account you requested does not exist.';
 

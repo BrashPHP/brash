@@ -6,7 +6,7 @@ namespace App\Presentation\Actions\ResourcesSecurity;
 
 use App\Data\Protocols\AsymCrypto\SignerInterface;
 use App\Presentation\Actions\Protocols\Action;
-use App\Presentation\Actions\Protocols\HttpErrors\UnprocessableEntityException;
+use Core\Http\Exceptions\UnprocessableEntityException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Ramsey\Uuid\Uuid;

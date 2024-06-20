@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Core\Http\Abstractions;
 
 
+use Core\Http\Exceptions\HttpNotFoundException;
 use Core\Http\Interfaces\RouteCollectorInterface;
 use Core\Http\Interfaces\RouterInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpNotFoundException;
 
 abstract class AbstractRouterTemplate implements RouterInterface
 {

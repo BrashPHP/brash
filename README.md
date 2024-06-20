@@ -27,6 +27,12 @@ composer test
 
 ## TODO
 
+### ROADMAP
+
 [] Incluir testes para camada HTTP do CORE
     [] RouteCollector
     [] RouteGroup
+[] Server.php
+    [] Criar hot reload com server.php
+    [] Utilizar entrypoint docker via server.php
+    [] Criar watchmode local via server.php

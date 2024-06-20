@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Data\UseCases\Authentication\Errors;
 
-use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
+use App\Domain\Exceptions\Protocols\HttpSpecializedAdapterCustom;
+use Core\Http\Exceptions\BaseHttpException;
+use Core\Http\Exceptions\HttpBadRequestException;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpException;
 
-class IncorrectPasswordException extends HttpSpecializedAdapter
+
+class IncorrectPasswordException extends HttpSpecializedAdapterCustom
 {
-    public function wire(ServerRequestInterface $request): HttpException
+    public function wire(ServerRequestInterface $request): BaseHttpException
     {
         return new HttpBadRequestException($request, "The passwords don't match");
     }

@@ -2,20 +2,18 @@
 
 namespace Core\Builder;
 
-use App\Presentation\Handlers\ShutdownHandler;
 use Core\Builder\MiddlewareCollector;
 use Core\Exceptions\ConfigException;
 use Core\Http\Adapters\SlimFramework\SlimMiddlewareIncluder;
 use Core\Http\Adapters\SlimFramework\SlimRouteCollector;
+use Core\Http\ErrorHandlers\HttpErrorHandler;
 use Core\Http\Factories\RouteCollectorFactory;
+use Core\Http\Middlewares\ShutdownMiddleware;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
-use Slim\Interfaces\ErrorHandlerInterface;
-use App\Presentation\Handlers\HttpErrorHandler;
 
 
 class AppBuilderManager
@@ -35,7 +33,7 @@ class AppBuilderManager
         $this->preMiddlewares[] = $middlewareInterface;
     }
 
-    public function build(ServerRequestInterface $request): App
+    public function build(): App
     {
         $app = $this->createApp();
 
@@ -55,7 +53,7 @@ class AppBuilderManager
         $routerFactory->getRouteCollector($routeCollector)->run($routeCollector);
 
         if ($this->enableErrorHandler) {
-            $this->setErrorHandler($app, $request);
+            $this->setErrorHandler($app);
         }
 
         return $app;
@@ -74,7 +72,7 @@ class AppBuilderManager
         $this->enableShutdownHandler = $enable;
     }
 
-    private function setErrorHandler(App $app, ServerRequestInterface $request)
+    private function setErrorHandler(App $app)
     {
         $callableResolver = $app->getCallableResolver();
         $responseFactory = $app->getResponseFactory();
@@ -84,18 +82,11 @@ class AppBuilderManager
         $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory, $logger);
 
         if ($this->enableShutdownHandler) {
-            $this->applyShutdownHandler($request, $errorHandler);
+            $app->add(new ShutdownMiddleware($errorHandler, $this->displayErrors));
         }
 
         $errorMiddleware = $app->addErrorMiddleware($this->displayErrors, false, false);
         $errorMiddleware->setDefaultErrorHandler($errorHandler);
-    }
-
-    private function applyShutdownHandler(ServerRequestInterface $request, ErrorHandlerInterface $httpErrorHandler)
-    {
-        $shutdownHandler = new ShutdownHandler($request, $httpErrorHandler, $this->displayErrors);
-
-        register_shutdown_function($shutdownHandler);
     }
 
     private function createApp(): App

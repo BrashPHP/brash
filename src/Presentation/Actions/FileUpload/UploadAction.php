@@ -6,7 +6,7 @@ namespace App\Presentation\Actions\FileUpload;
 
 use App\Infrastructure\DataTransference\Utils\FileNameConverter;
 use App\Presentation\Actions\Protocols\Action;
-use App\Presentation\Errors\UploadError;
+use Core\Http\Exceptions\UploadError;
 use DateTime;
 use GuzzleHttp\Psr7\MimeType;
 use Psr\Http\Message\ResponseInterface as Response;

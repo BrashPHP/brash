@@ -7,9 +7,9 @@ namespace Tests\Application\Actions\User;
 use App\Domain\Exceptions\UserNotFoundException;
 use App\Domain\Models\User;
 use App\Domain\Repositories\UserRepository;
-use App\Presentation\Actions\Protocols\ActionError;
 use App\Presentation\Actions\Protocols\ActionPayload;
-use App\Presentation\Actions\Protocols\ErrorsEnum;
+use Core\Http\Errors\ActionError;
+use Core\Http\Errors\ErrorsEnum;
 use DI\Container;
 use Tests\Traits\App\InstanceManager;
 

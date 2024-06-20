@@ -6,13 +6,13 @@ namespace App\Presentation\Middleware;
 
 use App\Domain\Repositories\MuseumRepository;
 use App\Domain\Repositories\SignatureTokenRetrieverInterface;
+use Core\Http\Exceptions\HttpBadRequestException;
+use Core\Http\Exceptions\HttpForbiddenException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Respect\Validation\Validator as v;
-use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpForbiddenException;
 
 class AsymmetricValidator implements Middleware
 {

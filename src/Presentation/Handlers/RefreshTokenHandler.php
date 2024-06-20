@@ -7,7 +7,7 @@ use App\Domain\OptionalApi\Result\Err;
 use App\Domain\OptionalApi\Result\Ok;
 use App\Domain\Repositories\AccountRepository;
 use App\Infrastructure\Cryptography\BodyTokenCreator;
-use App\Presentation\Errors\UnauthorizedException;
+use Core\Http\Exceptions\UnauthorizedException;
 use Exception;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
@@ -47,7 +47,9 @@ class RefreshTokenHandler
                 return new Ok($tokenCreator->createToken($secretBody));
             }
 
-            throw new Exception('User Not Existent in Database');
+            throw new class ('User Not Existent in Database') extends Exception {
+
+            };
         } catch (ExpiredException | UnexpectedValueException $exception) {
             $message = 'Cannot craft new token for invalid refresh token';
 

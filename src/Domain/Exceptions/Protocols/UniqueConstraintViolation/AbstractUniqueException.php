@@ -3,15 +3,17 @@
 namespace App\Domain\Exceptions\Protocols\UniqueConstraintViolation;
 
 use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
+use App\Domain\Exceptions\Protocols\HttpSpecializedAdapterCustom;
+use Core\Http\Exceptions\BaseHttpException;
+use Core\Http\Exceptions\HttpBadRequestException;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpException;
 
-abstract class AbstractUniqueException extends HttpSpecializedAdapter
+
+abstract class AbstractUniqueException extends HttpSpecializedAdapterCustom
 {
     protected string $responsaMessage;
 
-    public function wire(ServerRequestInterface $request): HttpException
+    public function wire(ServerRequestInterface $request): BaseHttpException
     {
         return new HttpBadRequestException($request, $this->responsaMessage);
     }

@@ -1,7 +1,8 @@
 <?php
 
-namespace Core\Http\Middlewares;
+declare(strict_types=1);
 
+namespace Core\Http\Middlewares;
 
 use Core\Decorators\ReopeningEntityManagerDecorator;
 use Exception;

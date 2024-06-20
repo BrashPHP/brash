@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Actions\Protocols;
+namespace Core\Http;
 
 use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
-use App\Domain\Exceptions\Protocols\HttpSpecializedAdapterCustom;
+use Core\Http\Domain\ActionPayload;
+use Core\Http\Errors\HttpExceptionAdapter;
 use Core\Http\Exceptions\BaseHttpException;
 use Core\Http\Exceptions\HttpBadRequestException;
 use Core\Http\Interfaces\ActionInterface;
@@ -47,7 +48,7 @@ abstract class Action implements ActionInterface
             return $response;
         } catch (HttpSpecializedAdapter $httpSpecializedAdapter) {
             throw $httpSpecializedAdapter->wire($request);
-        } catch (HttpSpecializedAdapterCustom $httpSpecializedAdapter) {
+        } catch (HttpExceptionAdapter $httpSpecializedAdapter) {
             throw $httpSpecializedAdapter->wire($request);
         }
     }
@@ -75,7 +76,7 @@ abstract class Action implements ActionInterface
     protected function resolveArg(string $name)
     {
         if (!isset($this->args[$name])) {
-            throw new class ($name) extends HttpSpecializedAdapterCustom {
+            throw new class ($name) extends HttpExceptionAdapter {
                 public function __construct(private string $name)
                 {
                 }

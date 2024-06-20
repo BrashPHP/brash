@@ -6,7 +6,7 @@ namespace App\Presentation\Actions\Museum;
 
 use App\Domain\Models\Museum;
 use App\Domain\Repositories\MuseumRepository;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Respect\Validation\Validator;

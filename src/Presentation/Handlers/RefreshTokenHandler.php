@@ -47,9 +47,7 @@ class RefreshTokenHandler
                 return new Ok($tokenCreator->createToken($secretBody));
             }
 
-            throw new class ('User Not Existent in Database') extends Exception {
-
-            };
+            throw new UserDoesNotExistException();
         } catch (ExpiredException | UnexpectedValueException $exception) {
             $message = 'Cannot craft new token for invalid refresh token';
 

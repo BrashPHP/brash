@@ -10,7 +10,8 @@ class SlimRoute implements MiddlewareAttachableInterface
     {
 
     }
-    public function add(MiddlewareInterface|string|callable ...$middleware): void{
+    public function add(MiddlewareInterface|string|callable ...$middleware): void
+    {
         foreach ($middleware as $mid) {
             $this->route->add($mid);
         }

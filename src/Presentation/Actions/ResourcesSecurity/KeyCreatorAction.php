@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Actions\ResourcesSecurity;
 
 use App\Data\Protocols\AsymCrypto\SignerInterface;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Core\Http\Exceptions\UnprocessableEntityException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

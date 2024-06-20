@@ -46,10 +46,9 @@ class TrailingSlashMiddleware implements MiddlewareInterface
             return '/';
         }
 
-        if (
-            $this->trailingSlash &&
-            !\str_ends_with($path, '/') &&
-            !pathinfo($path, PATHINFO_EXTENSION)
+        if ($this->trailingSlash 
+            && !\str_ends_with($path, '/') 
+            && !pathinfo($path, PATHINFO_EXTENSION)
         ) {
             return $path . '/';
 

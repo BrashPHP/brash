@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Actions\FileUpload;
 
 use App\Infrastructure\DataTransference\Utils\FileNameConverter;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Core\Http\Exceptions\UploadError;
 use DateTime;
 use GuzzleHttp\Psr7\MimeType;

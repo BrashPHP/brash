@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Actions\Protocols;
+namespace Core\Http\Domain;
 
 use Core\Http\Errors\ActionError;
 use JsonSerializable;

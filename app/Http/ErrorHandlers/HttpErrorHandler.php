@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Core\Http\ErrorHandlers;
 
-use App\Presentation\Actions\Protocols\ActionPayload;
+use Core\Http\Domain\ActionPayload;
 use Core\Http\Errors\{ErrorsEnum, ActionError};
 use Core\Http\Exceptions\{
     HttpNotFoundException,
@@ -18,6 +18,7 @@ use Core\Http\Exceptions\{
 use Core\Http\Exceptions\BaseHttpException;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Exception\HttpException;
 use Slim\Handlers\ErrorHandler as SlimErrorHandler;
 
 
@@ -52,12 +53,16 @@ class HttpErrorHandler extends SlimErrorHandler
                 $exception instanceof HttpNotImplementedException => ErrorsEnum::NOT_IMPLEMENTED,
                 default => ErrorsEnum::SERVER_ERROR,
             };
-        } elseif (
-            !($exception instanceof BaseHttpException)
+        } elseif (!($exception instanceof BaseHttpException)
             && ($exception instanceof Exception || $exception instanceof Throwable)
             && $this->displayErrorDetails
         ) {
             $message = $exception->getMessage();
+        } elseif ($exception instanceof HttpException) {
+            $exception = (new SlimHttpErrorHandler())->respond($exception);
+            $errorType = ErrorsEnum::from($exception->getError()->type);
+            $message = $exception->getError()->description;
+            $statusCode = $exception->getStatusCode();
         }
 
         $this->logErrorMessage($exception, $statusCode, $errorType);

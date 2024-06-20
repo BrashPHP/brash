@@ -12,7 +12,9 @@ namespace Core\Http\Exceptions;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-/** @api */
+/**
+ * @api 
+*/
 final class HttpForbiddenException extends BaseHttpException
 {
 

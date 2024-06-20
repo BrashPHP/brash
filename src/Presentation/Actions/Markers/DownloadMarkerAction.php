@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Actions\Markers;
 
 use App\Data\Protocols\Markers\Downloader\MarkerDownloaderServiceInterface;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Stream;

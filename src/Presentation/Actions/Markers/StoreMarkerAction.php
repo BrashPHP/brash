@@ -9,7 +9,7 @@ use App\Domain\Models\Marker\Marker;
 use App\Presentation\Actions\Markers\MarkerBuilder\MarkerBuilder;
 use App\Presentation\Actions\Markers\MarkerValidations\MarkerValidation;
 use App\Presentation\Actions\Markers\MarkerValidations\PlacementObjectValidation;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

@@ -14,9 +14,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class ShutdownMiddleware  implements MiddlewareInterface
 {
-    public function __construct(private HttpErrorHandler $httpErrorHandler, private bool $displayErrors) {
+    public function __construct(private HttpErrorHandler $httpErrorHandler, private bool $displayErrors)
+    {
     }
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface{
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         $shutdownHandler = new ShutdownHandler($request, $this->httpErrorHandler, $this->displayErrors);
 
         register_shutdown_function($shutdownHandler);

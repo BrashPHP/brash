@@ -8,7 +8,7 @@ namespace App\Presentation\Actions\SocialLogin;
 use App\Data\UseCases\Authentication\SocialLoginAuth;
 use App\Data\UseCases\SocialLogin\GoogleAuthProvider;
 use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 

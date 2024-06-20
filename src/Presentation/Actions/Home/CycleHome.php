@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Actions\Home;
 
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use stdClass;

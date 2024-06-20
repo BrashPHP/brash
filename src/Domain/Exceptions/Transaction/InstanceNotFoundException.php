@@ -3,12 +3,12 @@
 namespace App\Domain\Exceptions\Transaction;
 
 use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
-use App\Domain\Exceptions\Protocols\HttpSpecializedAdapterCustom;
+use Core\Http\Errors\HttpExceptionAdapter;
 use Core\Http\Exceptions\BaseHttpException;
 use Core\Http\Exceptions\HttpBadRequestException;
 use Psr\Http\Message\ServerRequestInterface;
 
-class InstanceNotFoundException extends HttpSpecializedAdapterCustom
+class InstanceNotFoundException extends HttpExceptionAdapter
 {
     public function __construct(private string $object)
     {

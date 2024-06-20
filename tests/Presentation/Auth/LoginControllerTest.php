@@ -5,7 +5,7 @@ namespace Tests\Presentation\Auth;
 
 use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Domain\Dto\Credentials;
-use App\Presentation\Actions\Protocols\ActionPayload;
+use Core\Http\Domain\ActionPayload;
 use Core\Http\Errors\{ErrorsEnum, ActionError};
 use Core\Validation\Interfaces\ValidationInterface;
 use DI\Container;

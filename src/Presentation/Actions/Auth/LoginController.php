@@ -7,7 +7,7 @@ namespace App\Presentation\Actions\Auth;
 use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Domain\Dto\Credentials;
 use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Core\Http\Interfaces\ValidationInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

@@ -3,12 +3,12 @@
 namespace App\Domain\Exceptions\Account;
 
 use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
-use App\Domain\Exceptions\Protocols\HttpSpecializedAdapterCustom;
+use Core\Http\Errors\HttpExceptionAdapter;
 use Core\Http\Exceptions\BaseHttpException;
 use Core\Http\Exceptions\HttpForbiddenException;
 use Psr\Http\Message\ServerRequestInterface;
 
-class UserAlreadyRegisteredException extends HttpSpecializedAdapterCustom
+class UserAlreadyRegisteredException extends HttpExceptionAdapter
 {
     private string $responsaMessage = 'O nome de usuário ou o email escolhido já foi utilizado';
 

@@ -6,7 +6,9 @@ namespace Core\Http\Exceptions;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-/** @api */
+/**
+ * @api 
+ */
 class HttpTooManyRequestsException extends BaseHttpException
 {
 

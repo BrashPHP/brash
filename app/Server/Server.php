@@ -54,7 +54,6 @@ final class Server
     private function createAsyncHandler()
     {
         return async(
-
             function (\Psr\Http\Message\ServerRequestInterface $request) {
                 try {
                     return $this->app->handle($request);

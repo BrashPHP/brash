@@ -8,7 +8,7 @@ use App\Data\Protocols\Auth\SignUpServiceInterface;
 use App\Data\Protocols\Cryptography\HasherInterface;
 use App\Domain\Dto\AccountDto;
 use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Core\Attributes\Routing\RouteAttribute;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

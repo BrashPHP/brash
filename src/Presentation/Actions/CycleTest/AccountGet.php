@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Actions\CycleTest;
 
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use App\Data\Entities\Cycle\CycleAccount;
 use Cycle\ORM\ORM;
 use Psr\Http\Message\ResponseInterface as Response;

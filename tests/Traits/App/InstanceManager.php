@@ -19,17 +19,15 @@ class InstanceManager
     final public function getAppInstance(): App
     {
         $appBuilder = new AppBuilderManager($this->getContainer());
-        $request = new RequestFactory();
 
-        return $appBuilder->build($request->createRequest());
+        return $appBuilder->build();
     }
 
     final public function createAppInstance()
     {
         $appBuilder = new AppBuilderManager($this->getContainer(true));
-        $request = new RequestFactory();
 
-        return $appBuilder->build($request->createRequest());
+        return $appBuilder->build();
     }
 
     protected function getContainer(bool $forceUpdate = false): ContainerInterface

@@ -110,7 +110,7 @@ class XRouteCollector implements RouteCollectorInterface
      */
     public function map(array $methods, string $pattern, $callable): MiddlewareAttachableInterface
     {
-        return new XRoute($this->app,$methods, $pattern, $callable);
+        return new XRoute($this->app, $methods, $pattern, $callable);
     }
 
 

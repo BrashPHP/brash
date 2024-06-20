@@ -6,7 +6,7 @@ namespace App\Presentation\Actions\CycleTest;
 
 use App\Data\Entities\Cycle\CycleAccount;
 use App\Infrastructure\Persistence\Cycle\RbacDb\CycleRoleAccessCreator;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Cycle\ORM\EntityManager;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

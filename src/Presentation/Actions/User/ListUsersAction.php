@@ -18,13 +18,15 @@ class ListUsersAction extends UserAction
      */
     public function action(Request $request): Response|Promise
     {
-        return new Promise(function (\Closure $resolve) {
-            $users = $this->userService->findAll();
+        return new Promise(
+            function (\Closure $resolve) {
+                $users = $this->userService->findAll();
 
-            $this->logger->info("Users list was viewed.");
+                $this->logger->info("Users list was viewed.");
 
-            $resolve($this->respondWithData($users));
-        });
+                $resolve($this->respondWithData($users));
+            }
+        );
 
     }
 }

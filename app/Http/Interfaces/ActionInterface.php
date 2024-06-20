@@ -1,4 +1,6 @@
 <?php
+
+
 namespace Core\Http\Interfaces;
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -10,5 +12,5 @@ interface ActionInterface
     /**
      * @return Response|Promise<Response>
      */
-    function action(Request $request): Response|Promise;
+    public function action(Request $request): Response|Promise;
 }

@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace Core\Http\Exceptions;
 use Psr\Http\Message\ServerRequestInterface;
 
-/** @api */
+/**
+ * @api 
+ */
 class HttpInternalServerErrorException extends BaseHttpException
 {
     public function __construct(

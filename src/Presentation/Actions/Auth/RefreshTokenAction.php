@@ -2,7 +2,7 @@
 
 namespace App\Presentation\Actions\Auth;
 
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use App\Presentation\Handlers\RefreshTokenHandler;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Actions\Markers;
 
 use App\Domain\Repositories\MarkerRepositoryInterface;
-use App\Presentation\Actions\Protocols\Action;
+use Core\Http\Action;
 use Core\Http\Exceptions\HttpBadRequestException;
 use Core\Http\Exceptions\HttpNotFoundException;
 use Psr\Http\Message\ResponseInterface as Response;

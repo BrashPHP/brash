@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Core\Http\Abstractions;
 
 
-use Closure;
 use Core\Http\Interfaces\RouteCollectorInterface;
 use Core\Http\Interfaces\RouterInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -28,7 +27,8 @@ abstract class AbstractRouterTemplate implements RouterInterface
 
     private function prepareOnTheFlyRequests(RouteCollectorInterface $routeCollector)
     {
-        $routeCollector->options(
+        $routeCollector->map(
+            ['OPTIONS'],
             '/{routes:.+}',
             fn(Request $request, Response $response, $args) => $response->withStatus(200)
         );
@@ -37,7 +37,9 @@ abstract class AbstractRouterTemplate implements RouterInterface
     private function setNotFound(RouteCollectorInterface $routeCollector)
     {
         $routeCollector->map(
-            ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request) {
+            ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+            '/{routes:.+}',
+            function ($request) {
                 throw new HttpNotFoundException($request);
             }
         );

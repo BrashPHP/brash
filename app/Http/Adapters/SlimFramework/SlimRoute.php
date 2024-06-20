@@ -1,24 +1,18 @@
 <?php
 namespace Core\Http\Adapters\SlimFramework;
 
-use Core\Http\Interfaces\RouteInterface;
+use Core\Http\Interfaces\MiddlewareAttachableInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
-class SlimRoute implements RouteInterface
+class SlimRoute implements MiddlewareAttachableInterface
 {
     public function __construct(private \Slim\Interfaces\RouteInterface $route)
     {
 
     }
-    public function add($middleware): RouteInterface
-    {
-        $this->route->add($middleware);
-
-        return $this;
-    }
-    public function addMiddleware(\Psr\Http\Server\MiddlewareInterface $middleware): RouteInterface
-    {
-        $this->route->addMiddleware($middleware);
-
-        return $this;
+    public function add(MiddlewareInterface|string|callable ...$middleware): void{
+        foreach ($middleware as $mid) {
+            $this->route->add($mid);
+        }
     }
 }

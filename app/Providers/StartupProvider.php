@@ -6,6 +6,7 @@ use Core\Providers\AppProviderInterface;
 use DI\ContainerBuilder;
 use Symfony\Component\Dotenv\Dotenv;
 use function Core\functions\fromRootPath;
+use Respect\Validation\Factory;
 
 class StartupProvider implements AppProviderInterface
 {
@@ -24,5 +25,18 @@ class StartupProvider implements AppProviderInterface
             $dotenv = new Dotenv();
             $dotenv->load($envPath);
         }
+
+        $this->setCustomValidations();
     }
+
+    private function setCustomValidations()
+    {
+        Factory::setDefaultInstance(
+            (new Factory())
+                ->withRuleNamespace('App\\Presentation\\Helpers\\Validation\\Rules')
+                ->withExceptionNamespace('App\\Presentation\\Helpers\\Validation\\Exceptions')
+        );
+    }
+
+
 }

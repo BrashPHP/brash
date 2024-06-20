@@ -1,11 +1,9 @@
 <?php
 
 namespace Core\Http\Routing;
+
 use Core\Http\Attributes\RouteGroup;
 use Core\Http\Domain\GroupModel;
-
-
-
 
 final class GroupCollector
 {

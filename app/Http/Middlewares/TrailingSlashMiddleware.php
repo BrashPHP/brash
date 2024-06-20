@@ -32,7 +32,7 @@ class TrailingSlashMiddleware implements MiddlewareInterface
         $uri = $request->getUri();
         $path = $this->normalize($uri->getPath());
 
-        if ($this->responseFactory && ($uri->getPath() !== $path)) {
+        if ($uri->getPath() !== "/" && $this->responseFactory && ($uri->getPath() !== $path)) {
             return $this->responseFactory->createResponse(301)
                 ->withHeader('Location', (string) $uri->withPath($path));
         }

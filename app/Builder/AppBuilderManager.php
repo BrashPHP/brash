@@ -12,7 +12,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Log\LoggerInterface;
-use Respect\Validation\Factory;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Interfaces\ErrorHandlerInterface;
@@ -50,14 +49,14 @@ class AppBuilderManager
         $app->addRoutingMiddleware(); // Add the Slim built-in routing middleware
 
         $routerFactory = new RouteCollectorFactory($this->container);
+        $routeCollector = new SlimRouteCollector($app);
 
-        $routerFactory->getRouteCollector()->run(new SlimRouteCollector($app));
+
+        $routerFactory->getRouteCollector($routeCollector)->run($routeCollector);
 
         if ($this->enableErrorHandler) {
             $this->setErrorHandler($app, $request);
         }
-
-        $this->setCustomValidations();
 
         return $app;
     }
@@ -73,15 +72,6 @@ class AppBuilderManager
             throw new ConfigException('Unable to use default shutdown handler when error handler is not enabled');
         }
         $this->enableShutdownHandler = $enable;
-    }
-
-    private function setCustomValidations()
-    {
-        Factory::setDefaultInstance(
-            (new Factory())
-                ->withRuleNamespace('App\\Presentation\\Helpers\\Validation\\Rules')
-                ->withExceptionNamespace('App\\Presentation\\Helpers\\Validation\\Exceptions')
-        );
     }
 
     private function setErrorHandler(App $app, ServerRequestInterface $request)

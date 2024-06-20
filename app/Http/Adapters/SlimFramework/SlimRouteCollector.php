@@ -2,10 +2,11 @@
 
 namespace Core\Http\Adapters\SlimFramework;
 
-use Core\Http\Interfaces\GroupRouteInterface;
+
+use Core\Http\Interfaces\MiddlewareAttachableInterface;
 use Core\Http\Interfaces\RouteCollectorInterface;
-use Core\Http\Interfaces\RouteInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\UriInterface;
 use Slim\Interfaces\RouteCollectorProxyInterface as SlimRouteCollectorInterface;
 
 class SlimRouteCollector implements RouteCollectorInterface
@@ -45,7 +46,7 @@ class SlimRouteCollector implements RouteCollectorInterface
      * @param string          $pattern  The route URI pattern
      * @param callable|string $callable The route callback routine
      */
-    public function get(string $pattern, $callable): RouteInterface
+    public function get(string $pattern, $callable): MiddlewareAttachableInterface
     {
         return $this->map(['GET'], $pattern, $callable);
     }
@@ -56,7 +57,7 @@ class SlimRouteCollector implements RouteCollectorInterface
      * @param string          $pattern  The route URI pattern
      * @param callable|string $callable The route callback routine
      */
-    public function post(string $pattern, $callable): RouteInterface
+    public function post(string $pattern, $callable): MiddlewareAttachableInterface
     {
         return $this->map(['POST'], $pattern, $callable);
 
@@ -68,7 +69,7 @@ class SlimRouteCollector implements RouteCollectorInterface
      * @param string          $pattern  The route URI pattern
      * @param callable|string $callable The route callback routine
      */
-    public function put(string $pattern, $callable): RouteInterface
+    public function put(string $pattern, $callable): MiddlewareAttachableInterface
     {
         return $this->map(['PUT'], $pattern, $callable);
 
@@ -80,7 +81,7 @@ class SlimRouteCollector implements RouteCollectorInterface
      * @param string          $pattern  The route URI pattern
      * @param callable|string $callable The route callback routine
      */
-    public function patch(string $pattern, $callable): RouteInterface
+    public function patch(string $pattern, $callable): MiddlewareAttachableInterface
     {
         return $this->map(['PATCH'], $pattern, $callable);
     }
@@ -91,7 +92,7 @@ class SlimRouteCollector implements RouteCollectorInterface
      * @param string          $pattern  The route URI pattern
      * @param callable|string $callable The route callback routine
      */
-    public function delete(string $pattern, $callable): RouteInterface
+    public function delete(string $pattern, $callable): MiddlewareAttachableInterface
     {
         return $this->map(['DELETE'], $pattern, $callable);
 
@@ -103,7 +104,7 @@ class SlimRouteCollector implements RouteCollectorInterface
      * @param string          $pattern  The route URI pattern
      * @param callable|string $callable The route callback routine
      */
-    public function options(string $pattern, $callable): RouteInterface
+    public function options(string $pattern, $callable): MiddlewareAttachableInterface
     {
         return $this->map(['OPTIONS'], $pattern, $callable);
     }
@@ -114,7 +115,7 @@ class SlimRouteCollector implements RouteCollectorInterface
      * @param string          $pattern  The route URI pattern
      * @param callable|string $callable The route callback routine
      */
-    public function any(string $pattern, $callable): RouteInterface
+    public function any(string $pattern, $callable): MiddlewareAttachableInterface
     {
         return $this->map(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $pattern, $callable);
     }
@@ -126,35 +127,13 @@ class SlimRouteCollector implements RouteCollectorInterface
      * @param string          $pattern  The route URI pattern
      * @param callable|string $callable The route callback routine
      */
-    public function map(array $methods, string $pattern, $callable): RouteInterface
+    public function map(array $methods, string $pattern, $callable): MiddlewareAttachableInterface
     {
         return new SlimRoute($this->slimRouteCollectorInterface->map($methods, $pattern, $callable));
     }
 
-    /**
-     * Route Groups
-     *
-     * This method accepts a route pattern and a callback. All route
-     * declarations in the callback will be prepended by the group(s)
-     * that it is in.
-     *
-     * @param string                                  $pattern
-     * @param callable(RouteCollectorInterface): void $callback
-     */
-    public function group(string $pattern, callable $callable): GroupRouteInterface
+    public function redirect(string|UriInterface $from, $to, int $status = 302): void
     {
-        $group = $this->slimRouteCollectorInterface->group($pattern, $callable);
-
-        return new SlimGroupRoute($group);
-    }
-
-    /**
-     * Add a route that sends an HTTP redirect
-     *
-     * @param string|\Psr\Http\Message\UriInterface $to
-     */
-    public function redirect(string $from, $to, int $status = 302): RouteInterface
-    {
-        return new SlimRoute($this->slimRouteCollectorInterface->redirect($from, $to, $status));
+        $this->slimRouteCollectorInterface->redirect($from, $to, $status);
     }
 }

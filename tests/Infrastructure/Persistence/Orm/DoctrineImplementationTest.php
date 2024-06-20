@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-use DI\Container;
+
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertDirectoryExists;

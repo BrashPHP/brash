@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Core\Server;
 
 use Core\Http\Factories\ContainerFactory;
+use Core\Http\Middlewares\FiberMiddleware;
 use React\EventLoop\LoopInterface;
 use Core\Builder\AppBuilderManager;
 use React\EventLoop\Loop;
@@ -26,8 +27,10 @@ final class Server
     public function run()
     {
         $serverAddress = "{$this->address}:{$this->port}";
+        
         $http = new \React\Http\HttpServer(
-            // new React\Http\Middleware\StreamingRequestMiddleware(),
+            new \React\Http\Middleware\StreamingRequestMiddleware(),
+            new FiberMiddleware(),
             $this->createAsyncHandler(),
         );
 
@@ -46,18 +49,13 @@ final class Server
     {
         return async(
             function (\Psr\Http\Message\ServerRequestInterface $request) {
-                try {
+                $containerFactory = new ContainerFactory(enableCompilation: isProd());
 
-                    $containerFactory = new ContainerFactory(enableCompilation: isProd());
+                $appBuilder = new AppBuilderManager($containerFactory->get());
+                $appBuilder->useDefaultShutdownHandler(true);
+                $app = $appBuilder->build($request);
 
-                    $appBuilder = new AppBuilderManager($containerFactory->get());
-                    $appBuilder->useDefaultShutdownHandler(true);
-                    $app = $appBuilder->build($request);
-                
-                    return $app->handle($request);
-                } catch (\Throwable $th) {
-                    echo $th;
-                }
+                return $app->handle($request);
             }
         );
     }

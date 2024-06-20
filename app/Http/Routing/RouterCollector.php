@@ -21,7 +21,7 @@ class RouterCollector extends AbstractRouterTemplate
 {
     public function __construct(
         private RouteFactory $routeFactory,
-        private ValidationMiddlewareFactory $validationMiddlewareFactory
+        private RouteIncluder $routeIncluder,
     ) {
     }
 
@@ -33,7 +33,7 @@ class RouterCollector extends AbstractRouterTemplate
             ->map(fn(DiscoveredStructure|string $controller) => new ReflectionClass($controller))
             ->map(fn(ReflectionClass $reflectionClass): ?RouteModel => $this->createRouteModel($reflectionClass))
             ->filter(fn(?RouteModel $route) => $route !== null)
-            ->map(fn(RouteModel $route): RouteInterface => $this->includeMiddlewares($routeCollector, $route));
+            ->map(fn(RouteModel $route) => $this->includeMiddlewares($route));
     }
 
     private function createRouteModel(ReflectionClass $reflectionClass): ?RouteModel
@@ -51,20 +51,8 @@ class RouterCollector extends AbstractRouterTemplate
         return null;
     }
 
-    private function includeMiddlewares(RouteCollectorInterface $routeCollector, RouteModel $route): RouteInterface
+    private function includeMiddlewares(RouteModel $route): void
     {
-        $path = \str_ends_with($route->path, "/") ? \substr($route->path, 0, -1) : $route->path;
-
-        $routeInterface = $routeCollector->map($route->methods, "/{$path}", $route->controller);
-
-        foreach ($route->middlewares as $middleware) {
-            $routeInterface->add($middleware);
-        }
-
-        if (in_array(ValidationInterface::class, class_implements($route->controller), true)) {
-            $routeInterface->add($this->validationMiddlewareFactory->make($route->controller));
-        }
-
-        return $routeInterface;
+        $this->routeIncluder->include($route);
     }
 }

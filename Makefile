@@ -41,7 +41,7 @@ exec-rr:
 	docker compose exec roadrunner rr -c /etc/rr.yaml $1
 
 migrate:
-	docker compose exec ${CONTAINER} sh -c "vendor/bin/doctrine-migrations migrate;" 
+	vendor/bin/doctrine-migrations migrate
 
 test:
 	./vendor/bin/pest

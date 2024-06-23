@@ -3,10 +3,12 @@
 namespace Core\Data\Doctrine;
 
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Tools\DsnParser;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\ORMSetup;
 
 class EntityManagerBuilder
@@ -14,28 +16,19 @@ class EntityManagerBuilder
     public static function produce(array $doctrine): EntityManagerInterface
     {
         $devMode = $doctrine['dev_mode'];
+        $metadata_dirs = $doctrine['metadata_dirs'];
 
         $config = ORMSetup::createAttributeMetadataConfiguration(
-            $doctrine['metadata_dirs'],
+            $metadata_dirs,
             $devMode
         );
-
-        if (!Type::hasType('uuid')) {
-            Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
-        }
-
-        $connectionParams = $doctrine['connection'];
-
-        if (isset($doctrine['connection']['url'])) {
-            $dsnParser = new DsnParser();
-            $connectionParams = $dsnParser
-                ->parse($doctrine['connection']['url']);
-        }
-
-        $connection = DriverManager::getConnection(
-            $connectionParams,
-            $config
+        $config->setIdentityGenerationPreferences(
+            [
+            PostgreSQLPlatform::class => ClassMetadata::GENERATOR_TYPE_SEQUENCE,
+            ]
         );
+        $connectionFactory = new DoctrineConnectionFactory();
+        $connection = $connectionFactory->createConnectionFromArray($doctrine, $config);
 
         $entityManager = new EntityManager($connection, $config);
 

@@ -18,7 +18,7 @@ class RouteIncluder
     public function include(RouteModel $route): void
     {
         $path = \str_ends_with($route->path, "/") ? \substr($route->path, 0, -1) : $route->path;
-        echo "Path received from $path" . PHP_EOL;
+
         if (strlen($path) > 1) {
             $path = \str_starts_with($path, "/") ? \substr($path, 1) : $path;
         }

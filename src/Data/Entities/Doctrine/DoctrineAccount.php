@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
-use DateTime;
 
 
 #[Entity, Table(name: 'accounts'), HasLifecycleCallbacks]
@@ -23,8 +22,10 @@ class DoctrineAccount implements ModelCoercionInterface
     use TimestampsTrait;
     use UuidTrait;
 
-    #[Id, Column(type: 'integer'), GeneratedValue(strategy: 'AUTO')]
-    protected $id;
+    #[Id]
+    #[Column(type: 'integer')]
+    #[GeneratedValue]
+    private int|null $id = null;
 
     #[Column(type: 'string', unique: true, nullable: false)]
     private string $email;
@@ -40,24 +41,6 @@ class DoctrineAccount implements ModelCoercionInterface
 
     #[Column(name: 'auth_type', type: 'string')]
     private ?string $authType;
-
-    public function __construct(
-        ?int $id,
-        string $email,
-        string $username,
-        string $password,
-        ?string $authType,
-        ?string $role = 'common',
-    ) {
-        $this->id = $id;
-        $this->email = $email;
-        $this->username = $username;
-        $this->password = $password;
-        $this->role = $role;
-        $this->authType = $authType;
-        $this->createdAt = new DateTime();
-        $this->updated = new DateTime();
-    }
 
     public function getId(): ?int
     {

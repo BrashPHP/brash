@@ -7,10 +7,11 @@ use Core\Data\Cycle\DriverFactories\Factories\MySqlDriverFactory;
 use Core\Data\Cycle\DriverFactories\Factories\PostresDriverFactory;
 use Core\Data\Cycle\DriverFactories\Protocols\AbstractDriverFactory;
 use Core\Data\Cycle\DriverFactories\Protocols\ConfigurableDriverInterface;
+use Core\Exceptions\ConfigException;
 use Cycle\Database\Config\DriverConfig;
 use Core\Data\Cycle\ConnectionFactories\Connections\MySqlConfig;
 use Core\Data\Cycle\ConnectionFactories\Connections\PostgresConfig;
-use Exception;
+
 
 class ConnectorFacade
 {
@@ -21,11 +22,6 @@ class ConnectorFacade
 
     public function __construct(private array $connection, array $connectionOptions = [])
     {
-        /**
-* 
-         *
- * @var string 
-*/
         $this->driver = $this->prepareDriverSelection($connection);
         $this->connectionDefinitions = $this->createInput($connection, $connectionOptions);
     }
@@ -74,7 +70,7 @@ class ConnectorFacade
             "mysqli"
             => new MySqlDriverFactory(new MySqlConfig()),
 
-            default => throw new Exception("Driver selection is not correct"),
+            default => throw new ConfigException("Driver selection is not correct"),
         };
     }
 
@@ -87,7 +83,7 @@ class ConnectorFacade
         $user = $connection["USER"] ?? null;
         $password = $connection["PASSWORD"] ?? null;
         $host = $connection["HOST"] ?? null;
-        $url = $connection["url"] ?? null;
+        $url = $connection["URL"] ?? null;
 
         return new ConnectionDefinitions(
             db: $db,

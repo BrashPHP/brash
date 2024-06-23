@@ -20,6 +20,4 @@ $config = new PhpFile('./doctrine-migrations.php');
 
 $em = $container->get(EntityManager::class);
 
-DependencyFactory::fromEntityManager($config, new ExistingEntityManager($em));
-
-return \Doctrine\ORM\Tools\Console\ConsoleRunner::createApplication($em);
+return DependencyFactory::fromEntityManager($config, new ExistingEntityManager($em));

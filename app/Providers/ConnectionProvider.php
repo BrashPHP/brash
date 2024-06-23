@@ -2,11 +2,10 @@
 
 namespace Core\Providers;
 
-use Core\Exceptions\ConfigException;
+use Core\Data\Domain\ConnectionModel;
 use Core\Providers\AppProviderInterface;
 use DI\ContainerBuilder;
 
-use function Core\functions\mode;
 
 class ConnectionProvider implements AppProviderInterface
 {
@@ -14,28 +13,32 @@ class ConnectionProvider implements AppProviderInterface
     {
         $container->addDefinitions(
             [
-                'connection' => static function (): array {
-                    $exceptionMessage = 'An application mode should be specified at project level .env or _ENV' .
-                        'variable containing one of the following values: PRODUCTION, TEST or DEV';
-                    $connectionArray = [];
-
+                ConnectionModel::class => static function (): ConnectionModel {
                     if (isset($_ENV['DATABASE_URL'])) {
-                        $connectionArray['url'] = $_ENV['DATABASE_URL'];
-                    } else {
-                        $dbParams = ['DRIVER', 'HOST', 'DBNAME', 'PORT', 'USER', 'PASSWORD', 'CHARSET'];
-                        foreach ($dbParams as $param) {
-                            $connectionArray[$param] = $_ENV[$param];
-                        }
+                        return new ConnectionModel(url: $_ENV['DATABASE_URL']);
                     }
+                    // These are essentially mandatory, except for charset
+                    $dbParams = [
+                        'DRIVER',
+                        'HOST',
+                        'DBNAME',
+                        'PORT',
+                        'USER',
+                        'PASSWORD',
+                        'CHARSET'
+                    ];
 
-                    return match (mode()) {
-                        'TEST' => [
-                            'driver' => 'pdo_sqlite',
-                            'memory' => 'true',
-                        ],
-                        'PRODUCTION', 'DEV' => $connectionArray,
-                        default => throw new ConfigException($exceptionMessage, 500)
-                    };
+                    $connParams = array_reduce(
+                        $dbParams,
+                        function (array $carry, string $item) {
+                            $carry[strtolower($item)] = $_ENV[$item] ?? '';
+
+                            return $carry;
+                        },
+                        []
+                    );
+
+                    return new ConnectionModel(...$connParams);
                 }
             ]
         );

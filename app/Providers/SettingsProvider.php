@@ -2,6 +2,7 @@
 
 namespace Core\Providers;
 
+use Core\Data\Domain\ConnectionModel;
 use DI\ContainerBuilder;
 use Core\Providers\AppProviderInterface;
 use Monolog\Logger;
@@ -45,7 +46,7 @@ class SettingsProvider implements AppProviderInterface
                         // you should add any other path containing annotated entity classes
                         'metadata_dirs' => [$root . '/src/Data/Entities/Doctrine'],
 
-                        'connection' => $c->get('connection'),
+                        'connection' => $c->get(ConnectionModel::class),
                     ];
                 },
             ],

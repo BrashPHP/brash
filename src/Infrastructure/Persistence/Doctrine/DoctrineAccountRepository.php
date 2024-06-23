@@ -8,14 +8,28 @@ use App\Domain\Exceptions\Account\UserAlreadyRegisteredException;
 use App\Domain\Models\Account;
 use App\Domain\Models\Enums\AuthTypes;
 use App\Domain\Repositories\AccountRepository;
+use Core\Data\Doctrine\ManagerRegistry;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 
 class DoctrineAccountRepository implements AccountRepository
 {
-    public function __construct(private EntityManager $em)
+    private EntityManager $em;
+
+    public function __construct(private ManagerRegistry $managerRegistry)
     {
     }
+
+    private function getEm()
+    {
+        return $this->managerRegistry->getManager();
+    }
+
+    public function listAll(): array
+    {
+        return $this->getEm()->getRepository(DoctrineAccount::class)->findAll();
+    }
+
 
     public function findByAccess(string $access): ?Account
     {
@@ -55,9 +69,15 @@ class DoctrineAccountRepository implements AccountRepository
     public function insert(AccountDto $accountDto): Account
     {
         try {
-            $doctrineAccount = new DoctrineAccount(null, ...$accountDto->getData());
-            $this->em->persist($doctrineAccount);
-            $this->em->flush();
+            $doctrineAccount = new DoctrineAccount();
+            $doctrineAccount->setAuthType($accountDto->authType->value);
+            $doctrineAccount->setEmail($accountDto->email);
+            $doctrineAccount->setPassword($accountDto->password);
+            $doctrineAccount->setUsername($accountDto->username);
+
+
+            $this->getEm()->persist($doctrineAccount);
+            $this->getEm()->flush();
 
             return $doctrineAccount->toModel();
         } catch (UniqueConstraintViolationException) {

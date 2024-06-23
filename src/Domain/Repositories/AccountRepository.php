@@ -11,6 +11,12 @@ use App\Domain\Models\Enums\AuthTypes;
 
 interface AccountRepository
 {
+
+    /**
+     * @return Account[]
+     */
+    public function listAll(): array;
+    
     public function findByMail(string $mail): ?Account;
 
     public function findByAccess(string $access): ?Account;

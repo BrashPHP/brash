@@ -9,31 +9,36 @@ use App\Data\Protocols\Cryptography\HasherInterface;
 use App\Domain\Dto\AccountDto;
 use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
 use Core\Http\Action;
-use Core\Attributes\Routing\RouteAttribute;
+use Core\Http\Attributes\Route;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
 use Respect\Validation\Validator;
 
-
+#[Route(path: "signup", method: "POST")]
 class SignUpController extends Action
 {
     private CookieTokenManager $cookieManager;
 
     public function __construct(
         private SignUpServiceInterface $service,
-        private HasherInterface $hasherInterface
+        private HasherInterface $hasherInterface,
+        protected LoggerInterface $logger
     ) {
         $this->cookieManager = new CookieTokenManager();
     }
 
     public function action(Request $request): Response
     {
-        $parsedBody = $request->getParsedBody();
+        $parsedBody = $this->getParsedBody($request);
+
         [
             'email' => $email,
             'username' => $username,
             'password' => $password,
         ] = $parsedBody;
+
+        $this->logger->info(print_r($parsedBody, true));
 
         $password = $this->hasherInterface->hash($password);
         $account = new AccountDto(email: $email, username: $username, password: $password);

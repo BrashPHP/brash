@@ -53,6 +53,13 @@ abstract class Action implements ActionInterface
         }
     }
 
+    public function getParsedBody(Request $request): array
+    {
+        $rawInput = (string) $request->getBody();
+
+        return json_decode($rawInput, true);
+    }
+
     protected function respondWithData(null|array|object $data = null, int $statusCode = 200): Response
     {
         $payload = new ActionPayload($statusCode, $data);

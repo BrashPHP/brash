@@ -23,7 +23,6 @@ class SlimHttpErrorHandler
     {
         $statusCode = 500;
         $message = "";
-        $errorType = ErrorsEnum::SERVER_ERROR;
 
         if ($exception instanceof HttpException) {
             $statusCode = $exception->getCode();
@@ -40,8 +39,7 @@ class SlimHttpErrorHandler
                 $exception instanceof HttpNotImplementedException => ErrorsEnum::NOT_IMPLEMENTED,
                 default => ErrorsEnum::SERVER_ERROR,
             };
-        } elseif (
-            !($exception instanceof HttpException)
+        } elseif (!($exception instanceof HttpException)
             && ($exception instanceof Exception || $exception instanceof Throwable)
         ) {
             $message = $exception->getMessage();

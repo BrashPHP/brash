@@ -18,9 +18,15 @@ class ReopeningEntityManagerDecorator extends EntityManagerDecorator
         );
     }
 
+    public function get()
+    {
+        return $this->wrapped;
+    }
+
     public function open(): EntityManagerInterface
     {
-        if (!$this->wrapped->isOpen()) {
+        if (!(            $this->wrapped->isOpen() && $this->wrapped->getConnection()->isConnected())
+        ) {
             $this->wrapped = $this->generateNewEm();
         }
 
@@ -30,10 +36,8 @@ class ReopeningEntityManagerDecorator extends EntityManagerDecorator
     private function generateNewEm()
     {
         $settings = $this->container->get('settings');
-        /**
- * @var array  
-*/
         $doctrine = $settings['doctrine'];
+
         return EntityManagerBuilder::produce($doctrine);
     }
 }

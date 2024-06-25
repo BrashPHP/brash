@@ -11,7 +11,7 @@ use Cycle\Database\Config\DriverConfig;
 
 class MySqlDriverFactory extends AbstractDriverFactory
 {
-    function getDriver(
+    public function getDriver(
         ConnectionDefinitions $connectionDefinitions,
         array $options
     ): DriverConfig {

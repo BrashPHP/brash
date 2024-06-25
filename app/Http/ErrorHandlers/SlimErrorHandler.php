@@ -29,23 +29,12 @@ class SlimHttpErrorHandler
 
             $message = $exception->getMessage();
 
-            $errorType = match (true) {
-                $exception instanceof HttpNotFoundException => ErrorsEnum::RESOURCE_NOT_FOUND,
-                $exception instanceof HttpMethodNotAllowedException => ErrorsEnum::NOT_ALLOWED,
-                $exception instanceof HttpUnauthorizedException => ErrorsEnum::UNAUTHENTICATED,
-                $exception instanceof UnprocessableEntityException => ErrorsEnum::UNPROCESSABLE_ENTITY,
-                $exception instanceof HttpForbiddenException => ErrorsEnum::INSUFFICIENT_PRIVILEGES,
-                $exception instanceof HttpBadRequestException => ErrorsEnum::BAD_REQUEST,
-                $exception instanceof HttpNotImplementedException => ErrorsEnum::NOT_IMPLEMENTED,
-                default => ErrorsEnum::SERVER_ERROR,
-            };
-        } elseif (!($exception instanceof HttpException)
-            && ($exception instanceof Exception || $exception instanceof Throwable)
-        ) {
+            $errorType = ErrorsEnum::tryFrom($statusCode) ?? ErrorsEnum::SERVER_ERROR;
+        } elseif ($exception instanceof Exception || $exception instanceof Throwable) {
             $message = $exception->getMessage();
         }
 
-        $error = new ActionError($errorType->value, $message);
+        $error = new ActionError($errorType, $message);
 
         return new ActionPayload($statusCode, null, $error);
     }

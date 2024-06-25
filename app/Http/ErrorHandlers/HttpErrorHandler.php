@@ -18,7 +18,7 @@ use Core\Http\Exceptions\{
 use Core\Http\Exceptions\BaseHttpException;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
-use Slim\Exception\HttpException;
+use Slim\Exception\HttpException as SlimHttpException;
 use Slim\Handlers\ErrorHandler as SlimErrorHandler;
 
 
@@ -36,39 +36,21 @@ class HttpErrorHandler extends SlimErrorHandler
         $exception = $this->exception;
         $statusCode = 500;
         $message = "";
-        $errorType = ErrorsEnum::SERVER_ERROR;
 
-        if ($exception instanceof BaseHttpException) {
+        if ($exception instanceof SlimHttpException || $exception instanceof BaseHttpException) {
             $statusCode = $exception->getCode();
 
             $message = $exception->getMessage();
-
-            $errorType = match (true) {
-                $exception instanceof HttpNotFoundException => ErrorsEnum::RESOURCE_NOT_FOUND,
-                $exception instanceof HttpMethodNotAllowedException => ErrorsEnum::NOT_ALLOWED,
-                $exception instanceof HttpUnauthorizedException => ErrorsEnum::UNAUTHENTICATED,
-                $exception instanceof UnprocessableEntityException => ErrorsEnum::UNPROCESSABLE_ENTITY,
-                $exception instanceof HttpForbiddenException => ErrorsEnum::INSUFFICIENT_PRIVILEGES,
-                $exception instanceof HttpBadRequestException => ErrorsEnum::BAD_REQUEST,
-                $exception instanceof HttpNotImplementedException => ErrorsEnum::NOT_IMPLEMENTED,
-                default => ErrorsEnum::SERVER_ERROR,
-            };
-        } elseif (!($exception instanceof BaseHttpException)
-            && ($exception instanceof Exception || $exception instanceof Throwable)
-            && $this->displayErrorDetails
-        ) {
+        } elseif ($exception instanceof Exception || $exception instanceof Throwable && $this->displayErrorDetails) {
             $message = $exception->getMessage();
-        } elseif ($exception instanceof HttpException) {
-            $exception = (new SlimHttpErrorHandler())->respond($exception);
-            $errorType = ErrorsEnum::from($exception->getError()->type);
-            $message = $exception->getError()->description;
-            $statusCode = $exception->getStatusCode();
         }
 
+        $errorType = ErrorsEnum::tryFrom($statusCode) ?? ErrorsEnum::SERVER_ERROR;
+
         $this->logErrorMessage($exception, $statusCode, $errorType);
-        
-        $error = new ActionError($errorType->value, $message);
-        
+
+        $error = new ActionError($errorType, $message);
+
         $payload = new ActionPayload($statusCode, null, $error);
         $encodedPayload = json_encode($payload, JSON_PRETTY_PRINT);
 
@@ -80,11 +62,12 @@ class HttpErrorHandler extends SlimErrorHandler
 
     private function logErrorMessage(Throwable $error, int $statusCode, ErrorsEnum $errorType)
     {
+        $isServerError = $statusCode >= 500 && $statusCode < 600;
         $template = [
             'error_type' => $errorType->value,
             'status_code' => $statusCode,
             'error' => $error->getMessage(),
-            'stack_trace' => $statusCode === 500 ? $error->getTrace() : [],
+            'stack_trace' => $isServerError ? $error->getTrace() : [],
         ];
 
         $this->logError(json_encode($template));

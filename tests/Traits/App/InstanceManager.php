@@ -9,7 +9,7 @@ use Slim\App;
 
 class InstanceManager
 {
-    protected static ?ContainerInterface $container = null;
+    public static ?ContainerInterface $container = null;
     protected App $app;
 
     /**
@@ -29,12 +29,12 @@ class InstanceManager
         return $appBuilder->build();
     }
 
-    protected function getContainer(bool $forceUpdate = false): ContainerInterface
+    public function getContainer(bool $forceUpdate = false): ContainerInterface
     {
         return self::requireContainer($forceUpdate);
     }
 
-    protected function autowireContainer($key, $instance)
+    public function autowireContainer($key, $instance)
     {
         /**
          * @var ContainerInterface

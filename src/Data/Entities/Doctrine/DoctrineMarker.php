@@ -56,10 +56,10 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
 
     #[
         OneToOne(
-            targetEntity: DoctrineMarkerAsset::class,
-            mappedBy: "marker",
-            cascade: ["persist", "remove"]
-        )
+        targetEntity: DoctrineMarkerAsset::class,
+        mappedBy: "marker",
+        cascade: ["persist", "remove"]
+    )
     ]
     private ?DoctrineMarkerAsset $asset = null;
 
@@ -73,10 +73,10 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
      */
     #[
         OneToMany(
-            targetEntity: DoctrinePlacementObject::class,
-            mappedBy: "marker",
-            cascade: ["persist", "remove"]
-        )
+        targetEntity: DoctrinePlacementObject::class,
+        mappedBy: "marker",
+        cascade: ["persist", "remove"]
+    )
     ]
     private Collection $resources;
 
@@ -96,7 +96,7 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
     }
 
     /**
-     * @return array 
+     * @return array
      */
     public function jsonSerialize(): mixed
     {
@@ -112,7 +112,7 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
     }
 
     /**
-     * @return Collection<DoctrinePlacementObject> 
+     * @return Collection<DoctrinePlacementObject>
      */
     public function getResources()
     {
@@ -233,14 +233,14 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
     public function toModel(): Marker
     {
         $resources = $this->getResources()->map(
-            static fn (DoctrinePlacementObject $el) => $el->toModel()
+            static fn(DoctrinePlacementObject $el) => $el->toModel()
         );
 
         $asset = $this->getAsset()?->getAsset()?->toModel();
 
         return new Marker(
             id: $this->id,
-            museum: $this->museum,
+            museum: $this->museum->toModel(),
             name: $this->name,
             text: $this->text,
             title: $this->title,
@@ -254,7 +254,7 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
     }
 
     /**
-     * @param Marker $model 
+     * @param Marker $model
      */
     public function fromModel(object $model): static
     {

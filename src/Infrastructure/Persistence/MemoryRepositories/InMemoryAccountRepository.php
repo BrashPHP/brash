@@ -47,6 +47,10 @@ class InMemoryAccountRepository implements AccountRepository
             ]
         );
     }
+    
+    public function listAll(): array{
+        return $this->accounts->toArray();
+    }
 
     public function findByMail(string $mail): ?Account
     {

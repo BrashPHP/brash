@@ -39,7 +39,7 @@ class DoctrineAccount implements ModelCoercionInterface
     #[Column(type: 'string')]
     private ?string $role = 'common';
 
-    #[Column(name: 'auth_type', type: 'string')]
+    #[Column(name: 'auth_type', type: 'string', nullable: true)]
     private ?string $authType;
 
     public function getId(): ?int

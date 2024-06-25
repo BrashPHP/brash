@@ -19,7 +19,6 @@ use Core\Http\Attributes\Route;
 #[Route(path: "login", method: "POST")]
 class LoginController extends Action implements ValidationInterface
 {
-
     public function __construct(
         private LoginServiceInterface $loginService,
         protected LoggerInterface $logger
@@ -28,27 +27,35 @@ class LoginController extends Action implements ValidationInterface
 
     public function action(Request $request): Response
     {
-        $this->logger->info('Start new login');
-        $parsedBody = $request->getParsedBody();
-        [
-            'access' => $access,
-            'password' => $password
-        ] = $parsedBody;
+        try {
+            $this->logger->info('Start new login');
+            $parsedBody = $this->getParsedBody($request);
+            [
+                'access' => $access,
+                'password' => $password
+            ] = $parsedBody;
 
-        $body = print_r($parsedBody, true);
-        $this->logger->info("Received value {$body} for input login");
-        $credentials = new Credentials($access, $password);
-        $tokenize = $this->loginService->auth($credentials);
-        $refreshToken = $tokenize->renewToken;
-        $cookieTokenManager = new CookieTokenManager();
 
-        $this->logger->info("Successfully implanted token {$refreshToken}");
+            $body = print_r($parsedBody, true);
+            $this->logger->info("Received value {$body} for input login");
+            $credentials = new Credentials($access, $password);
 
-        $response = $this
-            ->respondWithData(['token' => $tokenize->token])
-            ->withStatus(201, 'Created token');
+            $tokenize = $this->loginService->auth($credentials);
 
-        return $cookieTokenManager->appendCookieHeader($response, $refreshToken);
+            $refreshToken = $tokenize->renewToken;
+            $cookieTokenManager = new CookieTokenManager();
+
+            $this->logger->info("Successfully implanted token {$refreshToken}");
+
+            $response = $this
+                ->respondWithData(['token' => $tokenize->token])
+                ->withStatus(201, 'Created token');
+
+            return $cookieTokenManager->appendCookieHeader($response, $refreshToken);
+        } catch (\Throwable $th) {
+            dd($th);
+        }
+
     }
 
     public function messages(): ?array
@@ -66,8 +73,8 @@ class LoginController extends Action implements ValidationInterface
                 Validator::email(),
                 Validator::alnum()->noWhitespace()->length(6, 20)
             ),
-            'password' => static function ($value) {
-                return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value);
+            'password' => static function ($value): bool {
+                return boolval(preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value));
             },
         ];
     }

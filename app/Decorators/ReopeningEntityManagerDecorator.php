@@ -25,7 +25,8 @@ class ReopeningEntityManagerDecorator extends EntityManagerDecorator
 
     public function open(): EntityManagerInterface
     {
-        if (!(            $this->wrapped->isOpen() && $this->wrapped->getConnection()->isConnected())
+        if (
+            !($this->wrapped->isOpen() && $this->wrapped->getConnection()->isConnected())
         ) {
             $this->wrapped = $this->generateNewEm();
         }

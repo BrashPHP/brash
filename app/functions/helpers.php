@@ -18,7 +18,7 @@ function redirect($path): void
     header("Location: /{$path}");
 }
 
-// provides a dump & die helper
+
 if (!function_exists('fromRootPath')) {
     function fromRootPath(string $path)
     {
@@ -27,6 +27,15 @@ if (!function_exists('fromRootPath')) {
         return $root .'/'. $path;
     }
 }
+
+if (!function_exists('println')) {
+    function println(string $str): string
+    {
+        return $str . PHP_EOL;
+    }
+}
+
+
 
 // provides a dump & die helper
 if (!function_exists('dd')) {

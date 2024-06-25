@@ -10,6 +10,7 @@ beforeEach(function () {
 });
 
 test('should have no elements in visitor array set for empty abstract asset', function () {
+  /** @var \Mockery\MockInterface */
   $mhi = mock(MediaHostInterfaceStub::class);
   $mhi->expects('assetInformation')->andReturn(null);
   $this->sut->visit($mhi);
@@ -18,6 +19,7 @@ test('should have no elements in visitor array set for empty abstract asset', fu
 });
 
 test('should have one element when asset is present', function () {
+  /** @var \Mockery\MockInterface */
   $mhi = mock(MediaHostInterfaceStub::class);
 
   $mhi->expects('namedBy')->andReturn("");

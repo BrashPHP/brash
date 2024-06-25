@@ -98,7 +98,7 @@ test('should return201 for valid cookie', function () {
 });
 function createMockRequest(\Tests\TestCase $app, array $cookies = []): ServerRequestInterface
 {
-    return $app->createRequest('GET', '/auth/refresh-token', cookies: $cookies)
+    return $app->createRequest('GET', '/refresh-token', cookies: $cookies)
         ->withHeader(
             'Access-Control-Allow-Headers',
             'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-Renew-Token'

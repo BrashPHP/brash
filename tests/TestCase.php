@@ -8,7 +8,6 @@ use Core\Data\BehaviourComponents\DatabaseCleaner;
 use Core\Data\BehaviourComponents\DatabaseCreator;
 use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
 use Tests\Traits\App\AppTestTrait;
-use Tests\Traits\App\DoublesTrait;
 use Tests\Traits\App\ErrorHandlerTrait;
 use Tests\Traits\App\InstanceManagerTrait;
 use Tests\Traits\App\RequestManagerTrait;
@@ -20,7 +19,6 @@ use Tests\Traits\App\RequestManagerTrait;
 abstract class TestCase extends PHPUnit_TestCase
 {
     use AppTestTrait;
-    use DoublesTrait;
     use ErrorHandlerTrait;
     use InstanceManagerTrait;
     use RequestManagerTrait;

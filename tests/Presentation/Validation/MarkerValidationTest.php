@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 use App\Presentation\Actions\Markers\MarkerValidations\MarkerValidation;
-use App\Presentation\Helpers\Validation\Validators\Facade\ValidationFacade;
+use Core\Validation\Facade\ValidationFacade;
 use function PHPUnit\Framework\assertNotNull;
 
 beforeEach(function () {
@@ -30,7 +30,7 @@ test('should invalidate empty asset', function () {
     ];
     $result = $this->sut->validate($body['marker']);
     assertNotNull($result);
-    self::assertEquals($result->getMessage(), '[asset]: asset is empty');
+    self::assertEquals($result->getMessage(), '[{"asset":"asset is empty"}]');
 });
 test('should fail with bad url in assets', function () {
     $body = [
@@ -49,7 +49,7 @@ test('should fail with bad url in assets', function () {
     $result = $this->sut->validate($body['marker']);
 
     assertNotNull($result);
-    $this->assertStringContainsString('[asset]: - These rules must pass for `{ "file_name": "file.png", "media_type": "png", "path": "media/path", "url": "badurl" }`', $result->getMessage());
+    $this->assertStringContainsString('[{"asset":"asset does not match the defined requirements"}]', $result->getMessage());
 });
 test('should pass asset', function () {
     $body = [

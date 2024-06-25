@@ -9,8 +9,9 @@ readonly class RouteModel
     public function __construct(
         public array $methods,
         public string $path,
-        public array $middlewares,
-        public ActionInterface|string $controller
+        public ActionInterface|string $controller,
+        /** @param \SplStack<string|object> $middlewares */
+        public \SplStack $middlewares = new \SplStack(),
     ) {
     }
 }

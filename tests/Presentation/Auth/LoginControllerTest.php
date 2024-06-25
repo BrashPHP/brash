@@ -5,40 +5,51 @@ namespace Tests\Presentation\Auth;
 
 use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Domain\Dto\Credentials;
+use App\Domain\Dto\TokenLoginResponse;
+use App\Presentation\Actions\Auth\LoginController;
 use Core\Http\Domain\ActionPayload;
-use Core\Http\Errors\{ErrorsEnum, ActionError};
+use Core\Http\Errors\ActionError;
+use Core\Http\Errors\ErrorsEnum;
 use Core\Validation\Interfaces\ValidationInterface;
-use DI\Container;
 use Mockery\MockInterface;
-use function PHPUnit\Framework\assertEquals;
+use Psr\Log\LoggerInterface;
 
 beforeEach(function () {
     $this->app = $this->getAppInstance();
-    $service = createMockService();
-    $this->autowireContainer(LoginServiceInterface::class, $service);
-    $validator = createValidatorService();
-    $this->autowireContainer(ValidationInterface::class, $validator);
-    $this->endpoint = '/auth/login';
+    $this->endpoint = '/login';
 });
 
 test('should call authentication with correct values', function () {
-    /** @var Container $container */
-    $container = $this->getContainer();
+    $app = $this->getAppInstance();
+
     $service = createMockService();
-    $service->expects('auth')
-        ->andReturn(makeCredentials());
-    $container->set(LoginServiceInterface::class, $service);
+
+    $service->shouldReceive('auth')
+        ->once()
+        ->andReturn(new TokenLoginResponse('', ''))
+    ;
+    /** @var MockInterface|LoggerInterface */
+    $logger = mock(LoggerInterface::class);
+    $logger->shouldReceive('info')->andReturn(null);
+    $app->getContainer()->set(LoginServiceInterface::class, $service);
+    $app->getContainer()->set(
+        LoginController::class,
+        new LoginController(
+            $service,
+            $logger
+        )
+    );
+
     $credentials = new Credentials(access: 'any_mail@gmail.com', password: 'Password04');
-    $request = $this->createRequest('POST', $this->endpoint);
+    $request = $this->createRequest('POST', '/login');
     $request->getBody()
         ->write(json_encode($credentials));
     $request->getBody()
         ->rewind();
-    $this
-        ->app
-        ->handle($request);
+    $app->handle($request);
 });
-test('should return422 if validation returns error', function () {
+
+test('should return 422 if validation returns error', function () {
     $app = $this->app;
     $this->setUpErrorHandler($app);
     $body = new Credentials('mike@gmail.com', 'pass');
@@ -47,14 +58,15 @@ test('should return422 if validation returns error', function () {
     $response = $app->handle($request);
 
     $payload = (string) $response->getBody();
-    $expectedError = new ActionError(ErrorsEnum::UNPROCESSABLE_ENTITY->value, '[password]: Password wrong my dude');
+    $expectedError = new ActionError(ErrorsEnum::UNPROCESSABLE_ENTITY, "[{\"password\":\"Password wrong my dude\"}]");
     $expectedPayload = new ActionPayload(statusCode: 422, error: $expectedError);
     $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
 
     expect($payload)->toEqual($serializedPayload);
 
-    assertEquals($response->getStatusCode(), 422);
+    expect($response->getStatusCode())->toEqual(422);
 });
+
 test('expects two errors', function () {
     $app = $this->app;
     $this->setUpErrorHandler($app);
@@ -65,9 +77,11 @@ test('expects two errors', function () {
     $payload = (string) $response->getBody();
     $payloadDecoded = json_decode($payload);
 
-    $errors = explode("\n", $payloadDecoded
-        ->error
-        ->description);
+    $errors = json_decode(
+        $payloadDecoded
+            ->error
+            ->description
+    );
 
     expect(count($errors))->toEqual(2);
 })->group('ignore');

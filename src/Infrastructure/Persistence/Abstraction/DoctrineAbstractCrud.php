@@ -9,7 +9,6 @@ use App\Infrastructure\Persistence\Contracts\RepositoryInterface;
 
 /**
  * @template T
- * 
  * @extends AbstractRepository<T>
  */
 abstract class DoctrineAbstractCrud extends AbstractRepository
@@ -27,7 +26,6 @@ abstract class DoctrineAbstractCrud extends AbstractRepository
 
     /**
      * @param T|int $subject
-     * 
      * @return ?T
      */
     public function delete(ModelInterface|int $subject): ?object

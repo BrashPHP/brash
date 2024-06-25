@@ -2,7 +2,7 @@
 
 namespace App\Presentation\Actions\Markers\MarkerValidations;
 
-use App\Presentation\Helpers\Validation\Rules\FileRule;
+use App\Presentation\Validation\Rules\FileRule;
 use Respect\Validation\Validatable;
 use Respect\Validation\Validator as v;
 

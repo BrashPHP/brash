@@ -4,7 +4,7 @@ declare(strict_types=1);
 use App\Infrastructure\Cryptography\DataEncryption\Encrypter;
 use function PHPUnit\Framework\assertNotSame;
 use function PHPUnit\Framework\assertSame;
-use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
+
 beforeEach(function () {
     $this->sut = new Encrypter('hashkey');
 });

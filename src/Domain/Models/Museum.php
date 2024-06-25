@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\Models;
 
 use App\Domain\Contracts\ModelInterface;
-use DateTimeImmutable;
 use DateTimeInterface;
 use Ramsey\Uuid\UuidInterface;
 
@@ -16,17 +15,15 @@ readonly class Museum implements ModelInterface
         public string $email,
         public string $name,
         public ?string $description = null,
-        public ?string $info = null, 
+        public ?string $info = null,
         /**
-         * 
-         *
-         * @var \App\Domain\Models\Marker\Marker[] 
+         * @var \App\Domain\Models\Marker\Marker[]
          */
         public array $markers = [],
         public ?UuidInterface $uuid = null,
-        public ?DateTimeInterface $createdAt = new DateTimeImmutable(), 
-        public ?DateTimeInterface $updated = new DateTimeImmutable()
-    ) { 
+        public ?DateTimeInterface $createdAt = new \DateTime(),
+        public ?DateTimeInterface $updated = new \DateTime()
+    ) {
     }
 
     public function jsonSerialize(): mixed

@@ -42,6 +42,7 @@ function mockMarkerRepository(): MarkerRepositoryInterface|MockInterface
 
 test('should pass when service is called', function () {
     $service = $this->sut->service;
+    /** @var Connection|MockInterface */
     $conn = mock(Connection::class);
     $conn->shouldReceive("beginTransaction")->once()->andReturn(true);
     $conn->shouldReceive("commit")->once()->andReturn(true);

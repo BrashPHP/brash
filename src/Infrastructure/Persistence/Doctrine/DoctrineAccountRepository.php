@@ -18,6 +18,7 @@ class DoctrineAccountRepository implements AccountRepository
 
     public function __construct(private ManagerRegistry $managerRegistry)
     {
+        $this->em = $managerRegistry->getManager();
     }
 
     private function getEm()

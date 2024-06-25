@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 use App\Data\Protocols\AsymCrypto\SignerInterface;
-use App\Presentation\Actions\Protocols\HttpErrors\UnprocessableEntityException;
 use App\Presentation\Actions\ResourcesSecurity\KeyCreatorAction;
+use Core\Http\Exceptions\UnprocessableEntityException;
 use Mockery\MockInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Psr7\Response;

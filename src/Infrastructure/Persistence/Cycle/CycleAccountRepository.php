@@ -21,6 +21,10 @@ class CycleAccountRepository implements AccountRepository
         $this->em = new EntityManager($this->orm);
     }
 
+    public function listAll(): array{
+        return $this->repository()->findAll();
+    }
+
     public function findByAccess(string $access): ?Account
     {
         $findBy = filter_var($access, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';

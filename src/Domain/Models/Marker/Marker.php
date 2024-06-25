@@ -11,7 +11,6 @@ use App\Domain\Contracts\ModelInterface;
 use App\Domain\Models\Assets\AbstractAsset;
 use App\Domain\Models\Museum;
 use App\Domain\Models\PlacementObject\PlacementObject;
-use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -28,13 +27,12 @@ readonly class Marker implements ModelInterface, MediaHostParentInterface
         public ?AbstractAsset $asset = null,
         public bool $isActive = true,
         /**
-         * 
          *
-         * @var Collection<PlacementObject> 
+         * @var Collection<PlacementObject> $resouces
          */
         public Collection $resources = new ArrayCollection(),
-        public ?DateTimeInterface $createdAt = new DateTimeImmutable(),
-        public ?DateTimeInterface $updated = new DateTimeImmutable(),
+        public ?DateTimeInterface $createdAt = new \DateTime(),
+        public ?DateTimeInterface $updated = new \DateTime(),
         public ?UuidInterface $uuid = null
     ) {
     }

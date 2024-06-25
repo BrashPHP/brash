@@ -8,7 +8,6 @@ use App\Data\Entities\Contracts\ModelCoercionInterface;
 use App\Data\Entities\Contracts\ModelParsingInterface;
 use App\Data\Entities\Doctrine\Traits\TimestampsTrait;
 use App\Domain\Models\Security\SignatureToken;
-use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Entity;
@@ -43,7 +42,7 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
 
     public function __construct()
     {
-        $currentDate = new DateTimeImmutable();
+        $currentDate = new \DateTime();
         $this->createdAt = $currentDate;
         $this->updated = $currentDate;
         $this->ttl = $currentDate->add(new DateInterval('P6M'));
@@ -71,7 +70,7 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
     }
 
     /**
-     * @return array 
+     * @return array
      */
     public function jsonSerialize(): mixed
     {
@@ -114,7 +113,7 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
 
     public function toModel(): SignatureToken
     {
-        $createdAt = DateTimeImmutable::createFromInterface($this->getCreatedAt());
+        $createdAt = \DateTime::createFromInterface($this->getCreatedAt());
 
         return new SignatureToken(
             id: $this->getId(),
@@ -128,9 +127,9 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
     }
 
     /**
-     * @param SignatureToken $model 
+     * @param SignatureToken $model
      */
-    function fromModel(object $model): static
+    public function fromModel(object $model): static
     {
         $this->id = $model->id;
         $this->signature = $model->signature;

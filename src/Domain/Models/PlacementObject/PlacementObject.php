@@ -21,8 +21,8 @@ class PlacementObject implements ModelInterface, MediaHostInterface
         public ?Marker $marker,
         public bool $isActive = true,
         public ?AbstractAsset $asset = null,
-        public ?DateTimeInterface $createdAt = new DateTimeImmutable(),
-        public ?DateTimeInterface $updated = new DateTimeImmutable(),
+        public ?DateTimeInterface $createdAt = new \DateTime(),
+        public ?DateTimeInterface $updated = new \DateTime(),
         public ?UuidInterface $uuid = null
     ) {
     }

@@ -46,19 +46,19 @@ class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInt
     #[
         ManyToOne(targetEntity: DoctrineMarker::class, inversedBy: "resources"),
         JoinColumn(
-            name: "marker_id",
-            referencedColumnName: "id",
-            onDelete: "CASCADE"
-        )
+        name: "marker_id",
+        referencedColumnName: "id",
+        onDelete: "CASCADE"
+    )
     ]
     private ?DoctrineMarker $marker;
 
     #[
         OneToOne(
-            targetEntity: DoctrinePosedAsset::class,
-            mappedBy: "posedObject",
-            cascade: ["persist", "remove"]
-        )
+        targetEntity: DoctrinePosedAsset::class,
+        mappedBy: "posedObject",
+        cascade: ["persist", "remove"]
+    )
     ]
     private ?DoctrinePosedAsset $asset = null;
 
@@ -73,7 +73,7 @@ class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInt
     }
 
     /**
-     * @return array 
+     * @return array
      */
     public function jsonSerialize(): mixed
     {
@@ -167,7 +167,7 @@ class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInt
     }
 
     /**
-     * @param PlacementObject $model 
+     * @param PlacementObject $model
      */
     public function fromModel(object $model): static
     {

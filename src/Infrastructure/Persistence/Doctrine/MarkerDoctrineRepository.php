@@ -63,7 +63,7 @@ class MarkerDoctrineRepository extends DoctrineAbstractCrud implements MarkerRep
 
             throw $exception;
         } catch (Exception $ex) {
-            echo $ex;
+            dd($ex);
 
             $this->em->getConnection()->rollBack();
 

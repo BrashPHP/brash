@@ -60,7 +60,7 @@ test('action throws user not found exception', function () {
     $response = $app->handle($request);
 
     $payload = (string) $response->getBody();
-    $expectedError = new ActionError(ErrorsEnum::RESOURCE_NOT_FOUND->value, 'The user you requested does not exist.');
+    $expectedError = new ActionError(ErrorsEnum::RESOURCE_NOT_FOUND, 'The user you requested does not exist.');
     $expectedPayload = new ActionPayload(404, null, $expectedError);
     $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
 

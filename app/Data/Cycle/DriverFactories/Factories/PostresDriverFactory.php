@@ -10,7 +10,7 @@ use Cycle\Database\Config\PostgresDriverConfig;
 
 class PostresDriverFactory extends AbstractDriverFactory
 {
-    function getDriver(
+    public function getDriver(
         ConnectionDefinitions $connectionDefinitions,
         array $options
     ): DriverConfig {

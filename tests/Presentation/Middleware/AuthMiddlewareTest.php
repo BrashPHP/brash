@@ -8,21 +8,12 @@ use App\Domain\Repositories\AccountRepository;
 use App\Infrastructure\Cryptography\BodyTokenCreator;
 use App\Infrastructure\Persistence\MemoryRepositories\InMemoryAccountRepository;
 use App\Presentation\Handlers\RefreshTokenHandler;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertSame;
 
 beforeEach(function () {
     $this->app = $this->createAppInstance();
     $this->apiEndpoint = '/api/test-auth';
-    $this->app->get('/api/test-auth', function (RequestInterface $request, ResponseInterface $response): ResponseInterface {
-        echo $request->getUri();
-
-        $response->getBody()->write('Works');
-
-        return $response;
-    });
     $this->setUpErrorHandler($this->app);
 });
 test('should pass when jwt is provided', function () {

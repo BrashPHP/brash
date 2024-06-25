@@ -43,7 +43,7 @@ test('should insert account', function () {
     $total = getTotalCount($this->entityManager);
 
     expect(1)->toEqual($total);
-})->group('roadrunner');
+})->group('doctrine');
 
 test('should retrieve account', function () {
     $account = new AccountDto(email: 'mail.com', username: 'user', password: 'pass');
@@ -52,7 +52,7 @@ test('should retrieve account', function () {
     $account = $this->repository->findByMail('mail.com');
 
     assertInstanceOf(Account::class, $account);
-})->group('roadrunner');
+})->group('doctrine');
 
 function getTotalCount(EntityManager $entityManager): int
 {

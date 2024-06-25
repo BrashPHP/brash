@@ -2,7 +2,6 @@
 
 namespace App\Presentation\Actions\Markers\MarkerValidations;
 
-use Respect\Validation\Rules\AbstractRule;
 use Respect\Validation\Validator as v;
 
 class MarkerValidation

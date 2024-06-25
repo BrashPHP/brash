@@ -10,12 +10,12 @@ trait TimestampsTrait
 {
 
     #[Column(type: 'datetime')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTime $createdAt = null;
 
     #[Column(type: 'datetime', nullable: true, name: 'updated_at')]
-    private ?\DateTimeImmutable $updated = null;
+    private ?\DateTime $updated = null;
 
-    public function setUpdated(?\DateTimeImmutable $dateTime): self
+    public function setUpdated(?\DateTime $dateTime): self
     {
         // WILL be saved in the database
         $this->updated = $dateTime;
@@ -23,19 +23,19 @@ trait TimestampsTrait
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(?\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdated(): ?\DateTimeImmutable
+    public function getUpdated(): ?\DateTime
     {
         return $this->updated;
     }

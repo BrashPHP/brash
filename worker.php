@@ -18,7 +18,7 @@ $requestFactory = new RequestFactory();
 
 $request = $requestFactory->createRequest();
 
-$app = $appBuilder->build($request);
+$app = $appBuilder->build();
 
 /** @var Spiral\RoadRunner\Http\PSR7WorkerInterface $psr7Worker */
 $psr7Worker = $app->getContainer()->get(Spiral\RoadRunner\Http\PSR7WorkerInterface::class);

@@ -5,13 +5,26 @@ use App\Domain\Dto\AccountDto;
 use App\Infrastructure\Cryptography\BodyTokenCreator;
 use App\Infrastructure\Persistence\MemoryRepositories\InMemoryAccountRepository;
 use App\Presentation\Middleware\JWTAuthMiddleware;
-use Middlewares\Utils\RequestHandler;
+
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertSame;
+use Slim\Routing\Dispatcher;
+
+class RequestHandler implements RequestHandlerInterface
+{
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        $response = new Response();
+        $response->getBody()->write(json_encode($request->getAttribute('token')));
+
+        return $response;
+    }
+}
 
 beforeEach(function () {
     $container = $this->getContainer(true);
@@ -30,14 +43,7 @@ test('should pass when jwt is provided and return token in attributes', function
     $request = createRequestWithAuthentication($this, $token);
     $response = $this->sut->process(
         $request,
-        new RequestHandler(
-            function (ServerRequestInterface $request): ResponseInterface {
-                $response = new Response();
-                $response->getBody()->write(json_encode($request->getAttribute('token')));
-
-                return $response;
-            }
-        )
+        new RequestHandler()
     );
 
     assertNotNull($response);

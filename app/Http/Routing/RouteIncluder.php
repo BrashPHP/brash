@@ -26,12 +26,10 @@ class RouteIncluder
         $routeInterface = $this->routeCollectorInterface->map($route->methods, "/{$path}", $route->controller);
 
         foreach ($route->middlewares as $middleware) {
-            var_dump($middleware);
             $routeInterface->add($middleware);
         }
 
         if (in_array(ValidationInterface::class, class_implements($route->controller), true)) {
-            
             $routeInterface->add($this->validationMiddlewareFactory->make($route->controller));
         }
     }

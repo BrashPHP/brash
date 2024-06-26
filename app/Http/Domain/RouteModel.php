@@ -10,8 +10,8 @@ readonly class RouteModel
         public array $methods,
         public string $path,
         public ActionInterface|string $controller,
-        /** @param \SplStack<string|object> $middlewares */
-        public \SplStack $middlewares = new \SplStack(),
+        /** @param array<string|object> $middlewares */
+        public array $middlewares = [],
     ) {
     }
 }

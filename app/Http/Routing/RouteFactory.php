@@ -33,31 +33,31 @@ final class RouteFactory
                 return null;
             }
             $path = implode("/", [trim($groupResult->prefix, "/"), trim(trim($path), "/")]);
-            foreach ($middlewares as $middleware) {
-                $groupResult->middlewares->push($middleware);
-            }
             
-            $middlewares =  $groupResult->middlewares;
+            $result = [];
+
+            foreach ($groupResult->middlewares as $m) {
+                $result[] = $m;
+            }
+
+            $middlewares = [...$result, ...$middlewares];
         }
 
         return new RouteModel($methods, $path, $controller, $middlewares);
     }
 
-    private function extractMiddlewares(RouteAttribute $routeAttribute): \SplStack
+    private function extractMiddlewares(RouteAttribute $routeAttribute): array
     {
         $middlewares = $routeAttribute->middleware;
-        $stack = new \SplStack();
 
         if ($middlewares) {
             if (is_array($routeAttribute->middleware)) {
-                foreach ($routeAttribute->middleware as $middleware) {
-                    $stack->push($middleware);
-                }
+                return $middlewares;
             }
-            $stack->push($routeAttribute->middleware);
+            return [$middlewares];
         }
 
-        return $stack;
+        return [];
     }
 
     private function getGroupResult(object|string $group): GroupModel

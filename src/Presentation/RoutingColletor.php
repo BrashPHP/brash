@@ -2,7 +2,6 @@
 namespace App\Presentation;
 
 use Core\Http\Action;
-use Core\Http\Interfaces\ActionInterface;
 use Spatie\StructureDiscoverer\Discover;
 
 final class RoutingColletor

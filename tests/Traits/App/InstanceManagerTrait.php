@@ -4,7 +4,6 @@ namespace Tests\Traits\App;
 
 use Core\Builder\AppBuilderManager;
 use Core\Http\Factories\ContainerFactory;
-use Core\Http\Factories\RequestFactory;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 
@@ -19,17 +18,15 @@ trait InstanceManagerTrait
     final protected function getAppInstance(): App
     {
         $appBuilder = new AppBuilderManager($this->getContainer());
-        $request = new RequestFactory();
 
-        return $appBuilder->build($request->createRequest());
+        return $appBuilder->build();
     }
 
     final protected function createAppInstance()
     {
         $appBuilder = new AppBuilderManager($this->getContainer(true));
-        $request = new RequestFactory();
 
-        return $appBuilder->build($request->createRequest());
+        return $appBuilder->build();
     }
 
     protected function getContainer(bool $forceUpdate = false): ContainerInterface

@@ -2,6 +2,7 @@
 
 namespace Core\Data\OrmFactories;
 
+use Core\Data\Doctrine\EntityManagerBuilder;
 use Psr\Container\ContainerInterface;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,7 +25,7 @@ final class DoctrineOrmFactory
 
             EntityManagerInterface::class => static fn(
                 ContainerInterface $container
-            ) => $container->get(ReopeningEntityManagerDecorator::class)
+            ) => EntityManagerBuilder::produce($container->get('settings')['doctrine'])
         ];
     }
 }

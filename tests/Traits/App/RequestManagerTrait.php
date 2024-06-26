@@ -11,6 +11,8 @@ use Slim\Psr7\Request;
 use Slim\Psr7\Uri;
 use Tests\Builders\Request\RequestBuilder;
 
+class BadRequestConfig extends Exception{}
+
 trait RequestManagerTrait
 {
     public const FORMAT = 'application/json';
@@ -45,7 +47,7 @@ trait RequestManagerTrait
         array $cookies = null
     ): ServerRequestInterface {
         if (!($method && $path)) {
-            throw new Exception('Unable to create request');
+            throw new BadRequestConfig('Unable to create request');
         }
         $requestBuilder = new RequestBuilder($method, $path);
         if ($headers) {

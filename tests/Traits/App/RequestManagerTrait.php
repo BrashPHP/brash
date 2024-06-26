@@ -13,12 +13,13 @@ use Tests\Builders\Request\RequestBuilder;
 
 trait RequestManagerTrait
 {
+    public const FORMAT = 'application/json';
     public function createRequest(
         string $method,
         string $path,
         array $headers = [
-            'HTTP_ACCEPT' => 'application/json',
-            'Content-Type' => 'application/json',
+            'HTTP_ACCEPT' => self::FORMAT,
+            'Content-Type' => self::FORMAT,
         ],
         array $serverParams = [],
         array $cookies = []
@@ -43,7 +44,7 @@ trait RequestManagerTrait
         array $serverParams = null,
         array $cookies = null
     ): ServerRequestInterface {
-        if ((!$method) || !$path) {
+        if (!($method && $path)) {
             throw new Exception('Unable to create request');
         }
         $requestBuilder = new RequestBuilder($method, $path);
@@ -69,7 +70,8 @@ trait RequestManagerTrait
         $request->getBody()->write($encodedData);
         $request->getBody()->rewind();
         $requestParsedData = json_decode($encodedData, true);
-        return ($request->withParsedBody($requestParsedData));
+        
+        return $request->withParsedBody($requestParsedData);
     }
 
     /**
@@ -93,6 +95,6 @@ trait RequestManagerTrait
             $request = $this->setRequestParsedBody($request, $data);
         }
 
-        return $request->withHeader('Content-Type', 'application/json');
+        return $request->withHeader('Content-Type', self::FORMAT);
     }
 }

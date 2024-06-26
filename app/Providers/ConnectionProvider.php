@@ -5,6 +5,7 @@ namespace Core\Providers;
 use Core\Data\Domain\ConnectionModel;
 use Core\Providers\AppProviderInterface;
 use DI\ContainerBuilder;
+use function Core\functions\inTesting;
 
 
 class ConnectionProvider implements AppProviderInterface
@@ -14,6 +15,9 @@ class ConnectionProvider implements AppProviderInterface
         $container->addDefinitions(
             [
                 ConnectionModel::class => static function (): ConnectionModel {
+                    if (inTesting()) {
+                        return new ConnectionModel(url: "pdo-sqlite:///:memory:");
+                    }
                     if (isset($_ENV['DATABASE_URL'])) {
                         return new ConnectionModel(url: $_ENV['DATABASE_URL']);
                     }

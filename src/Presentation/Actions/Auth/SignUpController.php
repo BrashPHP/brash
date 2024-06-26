@@ -10,13 +10,14 @@ use App\Domain\Dto\AccountDto;
 use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
 use Core\Http\Action;
 use Core\Http\Attributes\Route;
+use Core\Http\Interfaces\ValidationInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Respect\Validation\Validator;
 
 #[Route(path: "signup", method: "POST")]
-class SignUpController extends Action
+class SignUpController extends Action implements ValidationInterface
 {
     private CookieTokenManager $cookieManager;
 
@@ -75,8 +76,8 @@ class SignUpController extends Action
         return [
             'email' => Validator::email(),
             'username' => Validator::alnum()->noWhitespace()->length(6, 20),
-            'password' => static function ($value) {
-                return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value);
+            'password' => static function ($value): bool {
+                return boolval(preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value));
             },
             'passwordConfirmation' => static fn($value) => $value === $password,
         ];

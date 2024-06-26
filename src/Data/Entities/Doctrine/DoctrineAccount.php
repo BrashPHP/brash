@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 
 
-#[Entity, Table(name: 'accounts'), HasLifecycleCallbacks]
+#[Entity,Table(name: 'accounts'),HasLifecycleCallbacks]
 class DoctrineAccount implements ModelCoercionInterface
 {
     use TimestampsTrait;

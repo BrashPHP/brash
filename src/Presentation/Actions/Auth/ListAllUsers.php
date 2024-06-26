@@ -12,7 +12,6 @@ use Core\Http\Attributes\Route;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
-use Respect\Validation\Validator;
 
 #[Route(path: "list-all", method: "GET")]
 class ListAllUsers extends Action

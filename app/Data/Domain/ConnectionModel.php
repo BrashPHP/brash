@@ -3,7 +3,6 @@
 namespace Core\Data\Domain;
 
 use Core\Exceptions\ConfigException;
-use function Core\functions\mode;
 
 readonly class ConnectionModel
 {
@@ -16,8 +15,20 @@ readonly class ConnectionModel
         public string $user = '',
         public string $password = '',
         public string $charset = 'utf8mb4',
+        public ?string $memory = null
     ) {
-        if ($url === '' && count(array_filter([], fn($el) => $el !== '')) === 0) {
+        if (
+            is_null($memory) &&
+            $url === '' && count(array_filter([
+                $driver,
+                $host,
+                $dbname,
+                $port,
+                $user,
+                $password,
+                $charset
+            ], fn($el) => $el === ''))
+        ) {
             throw new ConfigException(
                 "'DATABASE_URL' must be used if fields" .
                 "'DRIVER', 'HOST', 'DBNAME', 'PORT', 'USER', 'PASSWORD' are not present",
@@ -26,35 +37,18 @@ readonly class ConnectionModel
         }
     }
 
-    public function createConfigArray(): array
-    {
-        $exceptionMessage = <<<'EOF'
-            An application mode should be specified at project level.
-            The .env file or $_ENV global must contain one of the following values:
-            PRODUCTION, TEST or DEV.
-            EOF;
-
-        return match (mode()) {
-            'TEST' => [
-                'driver' => 'pdo_sqlite',
-                'memory' => 'true',
-            ],
-            'PRODUCTION', 'DEV' => $this->getAsArray(),
-            default => throw new ConfigException($exceptionMessage, 500)
-        };
-    }
-
     public function getAsArray()
     {
-        return [
-            'URL' => $this->url,
-            'DRIVER' => $this->driver,
-            'HOST' => $this->host,
-            'DBNAME' => $this->dbname,
-            'PORT' => $this->port,
-            'USER' => $this->user,
-            'PASSWORD' => $this->password,
-            'CHARSET' => $this->charset,
-        ];
+        return array_filter([
+            "url" => $this->url,
+            "driver" => $this->driver,
+            "host" => $this->host,
+            "dbname" => $this->dbname,
+            "port" => $this->port,
+            "user" => $this->user,
+            "password" => $this->password,
+            "charset" => $this->charset,
+            "memory" => $this->memory
+        ], fn($value) => !is_null($value) && $value !== '');
     }
 }

@@ -24,7 +24,7 @@ beforeAll(function () {
 });
 
 afterAll(function () {
-    self::createDatabaseDoctrine();
+    self::truncateDatabase();
 });
 
 beforeEach(function () {

@@ -11,7 +11,6 @@ use App\Domain\Models\Enums\AuthTypes;
 
 interface AccountRepository
 {
-
     /**
      * @return Account[]
      */

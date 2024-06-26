@@ -82,7 +82,6 @@ class DoctrineAccountRepository implements AccountRepository
 
             return $doctrineAccount->toModel();
         } catch (UniqueConstraintViolationException) {
-
             throw new UserAlreadyRegisteredException();
         }
     }

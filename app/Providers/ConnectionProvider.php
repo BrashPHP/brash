@@ -16,7 +16,10 @@ class ConnectionProvider implements AppProviderInterface
             [
                 ConnectionModel::class => static function (): ConnectionModel {
                     if (inTesting()) {
-                        return new ConnectionModel(url: "pdo-sqlite:///:memory:");
+                        return new ConnectionModel(
+                            driver: 'pdo_sqlite',
+                            memory: 'true'
+                        );
                     }
                     if (isset($_ENV['DATABASE_URL'])) {
                         return new ConnectionModel(url: $_ENV['DATABASE_URL']);

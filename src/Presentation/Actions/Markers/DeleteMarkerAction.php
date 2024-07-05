@@ -28,7 +28,7 @@ class DeleteMarkerAction extends Action
 
         $marker = $this->repo->delete($id);
 
-        if ($marker) {
+        if ($marker instanceof \App\Domain\Models\Marker\Marker) {
             return $this->respondWithData($marker);
         }
 

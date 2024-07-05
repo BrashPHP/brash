@@ -28,7 +28,7 @@ class RefreshTokenAction extends Action
 
         $refreshToken = $cookies[$cookieName] ?? "";
 
-        $this->logger->info("Attempt to renew token {$refreshToken}");
+        $this->logger->info(sprintf('Attempt to renew token %s', $refreshToken));
 
         return $this->refreshTokenHandler
             ->refresh($refreshToken, $secretBody, $secretCookie)

@@ -38,7 +38,6 @@ test('should return200 with correct input', function () {
     $testString = base64_encode('expectedString');
     $service->expects('sign')->andReturn($testString);
 
-    /** @var SignerInterface */
     $serviceMocked = $service;
     $action = new KeyCreatorAction($serviceMocked);
     $response = $action->__invoke(createMockRequest($this), new Response(), []);

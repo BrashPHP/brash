@@ -50,9 +50,8 @@ class JWTAuthMiddleware implements Middleware
 
     private function onError(): \Closure
     {
-        return function (Response $response): Response {
+        return static function (Response $response) : Response {
             $response = $response->withHeader('Content-Type', 'application/json');
-
             $response
                 ->getBody()
                 ->write(
@@ -63,7 +62,6 @@ class JWTAuthMiddleware implements Middleware
                         ]
                     )
                 );
-
             return $response;
         };
     }

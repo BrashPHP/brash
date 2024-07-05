@@ -149,7 +149,7 @@ class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
         return $this;
     }
 
-    function toModel(): Museum
+    public function toModel(): Museum
     {
         $markers = $this
             ->getMarkers()

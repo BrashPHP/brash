@@ -28,8 +28,8 @@ use Cycle\ORM\Entity\Behavior\Uuid\Uuid4;
 #[Index(columns: ['email'], unique: true)]
 class CycleAccount implements ModelCoercionInterface
 {
-    use UuidTrait, TimestampsTrait;
-
+    use UuidTrait;
+    use TimestampsTrait;
     #[Column(type: "primary")]
     protected $id;
 

@@ -10,9 +10,7 @@ class ListenerProvider implements ListenerProviderInterface
 
     private array $listeners = [];
 
-    /**
-     * @param  object $event
-     *   An event for which to return the relevant listeners.
+    /**  An event for which to return the relevant listeners.
      * @return iterable[callable]
      *   An iterable (array, iterator, or generator) of callables.  Each
      *   callable MUST be type-compatible with $event.
@@ -33,9 +31,6 @@ class ListenerProvider implements ListenerProviderInterface
         return $this;
     }
 
-    /**
-     * @param string $eventType
-     */
     public function clearListeners(string $eventType): void
     {
         if (array_key_exists($eventType, $this->listeners)) {

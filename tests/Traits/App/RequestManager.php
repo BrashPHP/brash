@@ -46,13 +46,16 @@ class RequestManager
         if ((!$method) || !$path) {
             throw new Exception('Unable to create request');
         }
+
         $requestBuilder = new RequestBuilder($method, $path);
         if ($headers) {
             $requestBuilder->withHeaders($headers);
         }
+
         if ($serverParams) {
             $requestBuilder->withServerParam($serverParams);
         }
+
         if ($cookies) {
             $requestBuilder->withCookies($cookies);
         }
@@ -85,9 +88,6 @@ class RequestManager
         $uri,
         array|object $data = null
     ): ServerRequestInterface {
-        /**
-         * @var RequestInterface
-         */
         $request = $this->createRequest($method, $uri);
 
         if ($data !== null) {

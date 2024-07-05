@@ -39,7 +39,7 @@ class FileRule extends AbstractRule
             $groupAllowedFormats .
             '$/m';
 
-        return boolval(preg_match($fullRegex, $input, $output_array));
+        return (bool) preg_match($fullRegex, $input, $output_array);
     }
 
     public function addFormat(string $fileFormat)

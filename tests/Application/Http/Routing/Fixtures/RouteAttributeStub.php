@@ -10,6 +10,7 @@ class BasePath
 {
 
 }
+
 #[RouteGroup("/middle", middleware: 'middle-middleware', parent: BasePath::class)]
 class MiddlePathGroup
 {

@@ -28,7 +28,7 @@ class DeativateMarkerAction extends Action
 
         $marker = $this->repo->update($id, ['isActive' => false]);
 
-        if ($marker) {
+        if ($marker instanceof \App\Domain\Models\Marker\Marker) {
             return $this->respondWithData($marker);
         }
 

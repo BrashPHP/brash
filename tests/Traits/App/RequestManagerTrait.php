@@ -16,6 +16,7 @@ class BadRequestConfig extends Exception{}
 trait RequestManagerTrait
 {
     public const FORMAT = 'application/json';
+
     public function createRequest(
         string $method,
         string $path,
@@ -49,13 +50,16 @@ trait RequestManagerTrait
         if (!($method && $path)) {
             throw new BadRequestConfig('Unable to create request');
         }
+
         $requestBuilder = new RequestBuilder($method, $path);
         if ($headers) {
             $requestBuilder->withHeaders($headers);
         }
+
         if ($serverParams) {
             $requestBuilder->withServerParam($serverParams);
         }
+
         if ($cookies) {
             $requestBuilder->withCookies($cookies);
         }
@@ -72,7 +76,7 @@ trait RequestManagerTrait
         $request->getBody()->write($encodedData);
         $request->getBody()->rewind();
         $requestParsedData = json_decode($encodedData, true);
-        
+
         return $request->withParsedBody($requestParsedData);
     }
 
@@ -88,9 +92,6 @@ trait RequestManagerTrait
         $uri,
         array|object $data = null
     ): ServerRequestInterface {
-        /**
-         * @var RequestInterface
-         */
         $request = $this->createRequest($method, $uri);
 
         if ($data !== null) {

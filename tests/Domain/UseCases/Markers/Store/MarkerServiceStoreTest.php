@@ -25,6 +25,7 @@ function makeCredentials()
 {
     return new Credentials(access: '@mail.com', password: 'password');
 }
+
 function mockEntityManager(): EntityManagerInterface|MockInterface
 {
     return mock(EntityManager::class);
@@ -34,6 +35,7 @@ function mockMuseumRepository(): MuseumRepository|MockInterface
 {
     return mock(MuseumRepository::class);
 }
+
 /** @return MockObject */
 function mockMarkerRepository(): MarkerRepositoryInterface|MockInterface
 {
@@ -42,11 +44,10 @@ function mockMarkerRepository(): MarkerRepositoryInterface|MockInterface
 
 test('should pass when service is called', function () {
     $service = $this->sut->service;
-    /** @var Connection|MockInterface */
     $conn = mock(Connection::class);
     $conn->shouldReceive("beginTransaction")->once()->andReturn(true);
     $conn->shouldReceive("commit")->once()->andReturn(true);
-    
+
     $this->sut->em->expects('getConnection')->twice()->andReturn($conn);
 
     $this->sut->museumRepository
@@ -55,7 +56,6 @@ test('should pass when service is called', function () {
         ->with(13)
         ->andReturn(new Museum(1, email: 'email', name: 'name'));
 
-    /** @var MockInterface */
     $mockMarkerRepository = $this->sut->markerRepositoryInterface;
     $mockMarkerRepository->expects('add')
         ->once();

@@ -41,7 +41,7 @@ it('returns valid 64-based string', function () {
     $subject = json_encode(['uuid' => $this->defaultUuid, 'museum_name' => 'test_museum']);
     $encodedUuid = base64_encode($this->defaultUuid);
     $encodedPrivateKey = base64_encode('pubKey');
-    $payload = "{$encodedUuid}.{$encodedPrivateKey}";
+    $payload = sprintf('%s.%s', $encodedUuid, $encodedPrivateKey);
 
     $this->repository->shouldReceive('findByUUID')->andReturn($museum);
     $this->signatureTokenRepository->shouldReceive('save')->once()->andReturn(true);

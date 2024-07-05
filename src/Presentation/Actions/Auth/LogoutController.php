@@ -21,10 +21,10 @@ class LogoutController extends Action
                 ->withStatus(200, 'Unlogged');
 
             return $cookieManager->delete($response);
-        } catch (\Throwable $th) {
-            $this->logger->critical($th);
+        } catch (\Throwable $throwable) {
+            $this->logger->critical($throwable);
 
-            throw $th;
+            throw $throwable;
         }
 
     }

@@ -16,6 +16,7 @@ use Cycle\Database\Exception\StatementException\ConstrainException;
 class CycleAccountRepository implements AccountRepository
 {
     private EntityManager $em;
+
     public function __construct(private ORM $orm)
     {
         $this->em = new EntityManager($this->orm);

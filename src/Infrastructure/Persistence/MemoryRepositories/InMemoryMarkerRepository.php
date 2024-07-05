@@ -18,9 +18,9 @@ use Doctrine\Common\Collections\Collection;
 class InMemoryMarkerRepository implements MarkerRepositoryInterface
 {
     /**
-     * 
      *
-     * @var Collection<Marker> 
+     *
+     * @var Collection<Marker>
      */
     private readonly Collection $markers;
 
@@ -63,10 +63,10 @@ class InMemoryMarkerRepository implements MarkerRepositoryInterface
         if ($paginate) {
             $count = $this->markers->count();
             $offset = $page * $limit;
-            // $items = array_slice($this->markers, (int) $offset, $limit, true);
+
             $items = $this->markers->slice((int) $offset, $limit);
 
-            return new PaginationResponse($count, (int) ceil($count / $limit), !!count($items), $items);
+            return new PaginationResponse($count, (int) ceil($count / $limit), (bool) count($items), $items);
         }
 
         return new SearchResult($this->markers->toArray());
@@ -76,7 +76,7 @@ class InMemoryMarkerRepository implements MarkerRepositoryInterface
     public function update(int $id, array $values): ?Marker
     {
         $updatable = $this->findByID($id);
-        if ($updatable) {
+        if ($updatable instanceof Marker) {
             $fields = [
                 "text",
                 "name",
@@ -112,7 +112,7 @@ class InMemoryMarkerRepository implements MarkerRepositoryInterface
 
             $items = $this->markers->slice((int) $offset, $limit);
 
-            return new PaginationResponse($count, (int) ceil($count / $limit), !!count($items), $items);
+            return new PaginationResponse($count, (int) ceil($count / $limit), (bool) count($items), $items);
         }
 
         return new SearchResult($this->markers->toArray());

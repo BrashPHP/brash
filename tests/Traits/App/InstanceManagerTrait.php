@@ -10,6 +10,7 @@ use Slim\App;
 trait InstanceManagerTrait
 {
     protected static ?ContainerInterface $container = null;
+
     protected App $app;
 
     /**
@@ -36,23 +37,20 @@ trait InstanceManagerTrait
 
     protected function autowireContainer($key, $instance)
     {
-        /**
-         * @var ContainerInterface
-         */
         $container = $this->getContainer();
         $container->set($key, $instance);
     }
 
-    static function setUpContainer(): ContainerInterface
+    public static function setUpContainer(): ContainerInterface
     {
         $containerFactory = new ContainerFactory();
 
         return $containerFactory->get();
     }
 
-    static function requireContainer(bool $forceUpdate = false): ContainerInterface
+    public static function requireContainer(bool $forceUpdate = false): ContainerInterface
     {
-        if (null === self::$container || $forceUpdate) {
+        if (!self::$container instanceof ContainerInterface || $forceUpdate) {
             self::$container = self::setUpContainer();
         }
 

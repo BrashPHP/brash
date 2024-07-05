@@ -77,7 +77,7 @@ class SignUpController extends Action implements ValidationInterface
             'email' => Validator::email(),
             'username' => Validator::alnum()->noWhitespace()->length(6, 20),
             'password' => static function ($value): bool {
-                return boolval(preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value));
+                return (bool) preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value);
             },
             'passwordConfirmation' => static fn($value) => $value === $password,
         ];

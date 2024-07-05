@@ -39,8 +39,7 @@ class CookieTokenManager
 
     private function arrayValues(): array
     {
-        $sameSite = isProd() ? 'Strict' : '';
-
+        // $sameSite = isProd() ? 'Strict' : '';
         return [
             'expires' => time() + 31536000,
             'httponly' => 'true',

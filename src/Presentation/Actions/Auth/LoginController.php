@@ -36,7 +36,7 @@ class LoginController extends Action implements ValidationInterface
 
 
         $body = print_r($parsedBody, true);
-        $this->logger->info("Received value {$body} for input login");
+        $this->logger->info(sprintf('Received value %s for input login', $body));
         $credentials = new Credentials($access, $password);
 
         $tokenize = $this->loginService->auth($credentials);
@@ -44,7 +44,7 @@ class LoginController extends Action implements ValidationInterface
         $refreshToken = $tokenize->renewToken;
         $cookieTokenManager = new CookieTokenManager();
 
-        $this->logger->info("Successfully implanted token {$refreshToken}");
+        $this->logger->info(sprintf('Successfully implanted token %s', $refreshToken));
 
         $response = $this
             ->respondWithData(['token' => $tokenize->token])
@@ -69,7 +69,7 @@ class LoginController extends Action implements ValidationInterface
                 Validator::alnum()->noWhitespace()->length(6, 20)
             ),
             'password' => static function ($value): bool {
-                return boolval(preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value));
+                return (bool) preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value);
             },
         ];
     }

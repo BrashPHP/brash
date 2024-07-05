@@ -248,7 +248,7 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
 
     public function toModel(): AbstractAsset
     {
-        $children = $this->getChildren()->map(fn (DoctrineAsset $el) => $el->toModel())->toArray();
+        $children = $this->getChildren()->map(static fn(DoctrineAsset $el) => $el->toModel())->toArray();
         $createAsset = new CreateAsset(
             path: $this->getPath(),
             fileName: $this->getFileName(),

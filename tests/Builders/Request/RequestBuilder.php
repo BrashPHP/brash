@@ -11,13 +11,18 @@ use Slim\Psr7\Uri;
 class RequestBuilder
 {
     private Request $request;
+
     private Uri $uri;
+
     private array $headers = [
         'HTTP_ACCEPT' => 'application/json',
         'Content-Type' => 'application/json',
     ];
+
     private array $serverParams = [];
+
     private array $cookies = [];
+
     private StreamInterface $stream;
 
     public function __construct(private string $method, private string $path)

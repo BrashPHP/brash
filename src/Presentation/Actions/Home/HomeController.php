@@ -15,6 +15,7 @@ use stdClass;
 class HomeController extends Action
 {
     private int $counter = 0;
+
     public function action(Request $request): Response|Promise
     {
         $this->logger->info('HI, person '. $this->counter . PHP_EOL);

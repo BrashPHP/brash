@@ -1,6 +1,6 @@
 {
-  "name": "berfi/rbac",
-  "description": "A Template for starting a PHP Backend",
+  "name": "berfi/kitsune",
+  "description": "A Microframework for APIs",
   "keywords": [
     "microframework",
     "rest",

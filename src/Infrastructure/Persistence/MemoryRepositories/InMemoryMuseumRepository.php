@@ -26,29 +26,29 @@ class InMemoryMuseumRepository implements MuseumRepository
                     id: 2,
                     email: 'steve.jobs@mail.com',
                     name: 'steve.jobs',
-                    description: 'Description about ' . 'steve.jobs',
-                    info: 'Info about ' . 'steve.jobs'
+                    description: 'Description about steve.jobs',
+                    info: 'Info about steve.jobs'
                 ),
                 new Museum(
                     id: 3,
                     email: 'mark.zuckerberg@mail.com',
                     name: 'mark.zuckerberg',
-                    description: 'Description about ' . 'mark.zuckerberg',
-                    info: 'Info about ' . 'mark.zuckerberg'
+                    description: 'Description about mark.zuckerberg',
+                    info: 'Info about mark.zuckerberg'
                 ),
                 new Museum(
                     id: 4,
                     email: 'evan.spiegel@mail.com',
                     name: 'evan.spiegel',
-                    description: 'Description about ' . 'evan.spiegel',
-                    info: 'Info about ' . 'evan.spiegel'
+                    description: 'Description about evan.spiegel',
+                    info: 'Info about evan.spiegel'
                 ),
                 new Museum(
                     id: 5,
                     email: 'jack.dorsey@mail.com',
                     name: 'jack.dorsey',
-                    description: 'Description about ' . 'jack.dorsey',
-                    info: 'Info about ' . 'jack.dorsey'
+                    description: 'Description about jack.dorsey',
+                    info: 'Info about jack.dorsey'
                 ),
             ]
         );
@@ -61,12 +61,12 @@ class InMemoryMuseumRepository implements MuseumRepository
 
     public function findByName(string $name): ?Museum
     {
-        return $this->museums->findFirst(fn(Museum $el) => $el->name === $name);
+        return $this->museums->findFirst(static fn(Museum $el) => $el->name === $name);
     }
 
     public function findByUUID(string $uuid): ?Museum
     {
-        return $this->museums->findFirst(fn(Museum $el) => $el->uuid->equals(Uuid::fromString($uuid)));
+        return $this->museums->findFirst(static fn(Museum $el) => $el->uuid->equals(Uuid::fromString($uuid)));
     }
 
     /**
@@ -95,16 +95,16 @@ class InMemoryMuseumRepository implements MuseumRepository
 
             $items = $this->museums->slice((int) $offset, $limit);
 
-            return new PaginationResponse($count, (int) ceil($count / $limit), !!count($items), $items);
+            return new PaginationResponse($count, (int) ceil($count / $limit), (bool) count($items), $items);
         }
 
         return new SearchResult($this->museums->toArray());
     }
 
-    function update(int $id, array $values): ?Museum
+    public function update(int $id, array $values): ?Museum
     {
         $updatable = $this->findByID($id);
-        if ($updatable) {
+        if ($updatable instanceof Museum) {
             $fields = [
                 "email",
                 "name",

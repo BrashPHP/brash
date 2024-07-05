@@ -18,10 +18,9 @@ class InMemorySignatureTokenRepository implements
      * @var SignatureToken[]
      */
     private readonly array $tokens;
-
-    public function __construct()
-    {
-        $tokens = [];
+    
+    public function __construct() {
+        $this->tokens = [];
     }
 
     /**

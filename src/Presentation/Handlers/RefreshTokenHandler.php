@@ -8,11 +8,9 @@ use App\Domain\OptionalApi\Result\Ok;
 use App\Domain\Repositories\AccountRepository;
 use App\Infrastructure\Cryptography\BodyTokenCreator;
 use Core\Http\Exceptions\UnauthorizedException;
-use Exception;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Psr\Log\LoggerInterface;
 use Throwable;
 use UnexpectedValueException;
 
@@ -24,8 +22,7 @@ use UnexpectedValueException;
 class RefreshTokenHandler
 {
     public function __construct(
-        private AccountRepository $repository,
-        private LoggerInterface $loggerInterface
+        private AccountRepository $repository
     ) {
     }
 
@@ -42,7 +39,7 @@ class RefreshTokenHandler
             $payload = JWT::decode($refreshToken, $key);
             $uuid = $payload->sub;
             $user = $this->repository->findByUUID($uuid);
-            if ($user) {
+            if ($user instanceof \App\Domain\Models\Account) {
                 $tokenCreator = new BodyTokenCreator($user);
                 return new Ok($tokenCreator->createToken($secretBody));
             }

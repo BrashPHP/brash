@@ -28,13 +28,7 @@ class UploadAction extends Action
         $bucket = 'artchier-markers';
         $params = $request->getQueryParams();
         $prefix = $params['prefix'] . '-' ?? '';
-        /**
-         * @var UploadedFileInterface[]
-         */
         $files = $request->getUploadedFiles();
-        /**
-         * @var UploadableObjectInterface[]
-         */
         $objects = [];
 
         foreach ($files as $file) {

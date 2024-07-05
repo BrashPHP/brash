@@ -16,17 +16,17 @@ use Psr\Log\LoggerInterface;
 #[Route(path: "list-all", method: "GET")]
 class ListAllUsers extends Action
 {
+    
     public function __construct(
         private AccountRepository $accountRepository,
         protected LoggerInterface $logger
     ) {
-        $this->cookieManager = new CookieTokenManager();
     }
 
     public function action(Request $request): Response
     {
         $accounts = $this->accountRepository->listAll();
-        $mappedAccounts = array_map(fn(DoctrineAccount $docctrineAccount) => $docctrineAccount->toModel(), $accounts);
+        $mappedAccounts = array_map(static fn(DoctrineAccount $docctrineAccount) => $docctrineAccount->toModel(), $accounts);
         
         return $this->respondWithData($mappedAccounts);
     }

@@ -10,6 +10,7 @@ use Slim\App;
 class InstanceManager
 {
     public static ?ContainerInterface $container = null;
+
     protected App $app;
 
     /**
@@ -36,9 +37,6 @@ class InstanceManager
 
     public function autowireContainer($key, $instance)
     {
-        /**
-         * @var ContainerInterface
-         */
         $container = $this->getContainer();
         $container->set($key, $instance);
     }
@@ -52,7 +50,7 @@ class InstanceManager
 
     public static function requireContainer(bool $forceUpdate = false): ContainerInterface
     {
-        if (null === self::$container || $forceUpdate) {
+        if (!self::$container instanceof ContainerInterface || $forceUpdate) {
             self::$container = self::setUpContainer();
         }
 

@@ -34,11 +34,6 @@ final class JwtAuthentication implements MiddlewareInterface
     private ?LoggerInterface $logger;
 
     /**
-     * Last error message.
-     */
-    private string $message;
-
-    /**
      * The rules stack.
      *
      * @var SplStack<RuleInterface>
@@ -63,15 +58,15 @@ final class JwtAuthentication implements MiddlewareInterface
             $this->rules->push(
                 new RequestMethodRule(
                     [
-                    "ignore" => ["OPTIONS"]
+                        "ignore" => ["OPTIONS"]
                     ]
                 )
             );
             $this->rules->push(
                 new RequestPathRule(
                     [
-                    "path" => $this->options->path,
-                    "ignore" => $this->options->ignore
+                        "path" => $this->options->path,
+                        "ignore" => $this->options->ignore
                     ]
                 )
             );
@@ -94,14 +89,12 @@ final class JwtAuthentication implements MiddlewareInterface
         }
 
         /* HTTP allowed only if secure is false or server is in relaxed array. */
-        if ("https" !== $scheme && $this->options->secure) {
-            if (!in_array($host, $this->options->relaxed)) {
-                $message = sprintf(
-                    "Insecure use of middleware over %s denied by configuration.",
-                    strtoupper($scheme)
-                );
-                throw new RuntimeException($message);
-            }
+        if ("https" !== $scheme && $this->options->secure && !in_array($host, $this->options->relaxed)) {
+            $message = sprintf(
+                "Insecure use of middleware over %s denied by configuration.",
+                strtoupper($scheme)
+            );
+            throw new RuntimeException($message);
         }
 
         /* If token cannot be found or decoded return with 401 Unauthorized. */
@@ -112,9 +105,10 @@ final class JwtAuthentication implements MiddlewareInterface
             $response = (new Response())->withStatus(401);
 
             return $this->processError(
-                $response, [
-                "message" => $exception->getMessage(),
-                "uri" => (string) $request->getUri()
+                $response,
+                [
+                    "message" => $exception->getMessage(),
+                    "uri" => (string) $request->getUri()
                 ]
             );
         }
@@ -142,12 +136,7 @@ final class JwtAuthentication implements MiddlewareInterface
         /* Modify $response before returning. */
         $afterResponse = $this->options->onAfterCallable($response, $params);
 
-        if ($afterResponse) {
-            return $afterResponse;
-        }
-
-
-        return $response;
+        return $afterResponse ?? $response;
     }
 
     /**
@@ -214,11 +203,9 @@ final class JwtAuthentication implements MiddlewareInterface
         /* Check for token in header. */
         $header = $request->getHeaderLine($this->options->header);
 
-        if (!empty($header)) {
-            if (preg_match($this->options->regexp, $header, $matches)) {
-                $this->log(LogLevel::DEBUG, "Using token from request header");
-                return $matches[1];
-            }
+        if (!empty($header) && preg_match($this->options->regexp, $header, $matches)) {
+            $this->log(LogLevel::DEBUG, "Using token from request header");
+            return $matches[1];
         }
 
         /* Token not found in header try a cookie. */

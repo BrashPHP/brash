@@ -20,11 +20,6 @@ use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use S3DataTransfer\Interfaces\Download\StreamCollectorInterface;
-use S3DataTransfer\Interfaces\Upload\UploadCollectorInterface;
-use S3DataTransfer\S3\Factories\S3AsyncDownloaderFactory;
-use S3DataTransfer\S3\Factories\S3AsyncUploadingFactory;
-use S3DataTransfer\S3\Zip\S3StreamObjectsZipDownloader;
 use League\OAuth2\Client\Provider\Google;
 
 use Core\Providers\AppProviderInterface;
@@ -68,33 +63,8 @@ class DependenciesProvider implements AppProviderInterface
             DataEncrypter::class => $encrypter,
             AsymmetricEncrypter::class => new OpenSSLAsymmetricEncrypter(),
             AsymmetricVerifier::class => new AsymmetricOpenSSLVerifier(),
-            StreamCollectorInterface::class => static function (ContainerInterface $c): StreamCollectorInterface {
-                $factory = new S3AsyncDownloaderFactory();
-                $key = $_ENV['S3KEY'];
-                $secret = $_ENV['S3SECRET'];
-                $region = $_ENV['S3REGION'];
-                $version = $_ENV['S3VERSION'];
-
-                return $factory->create($key, $secret, $region, $version);
-            },
-            S3StreamObjectsZipDownloader::class => static function (ContainerInterface $container): S3StreamObjectsZipDownloader {
-                /**
-                 * @var StreamCollectorInterface
-                 */
-                $streamCollector = $container->get(StreamCollectorInterface::class);
-
-                return new S3StreamObjectsZipDownloader($streamCollector);
-            },
-            UploadCollectorInterface::class => static function (ContainerInterface $c): UploadCollectorInterface {
-                $factory = new S3AsyncUploadingFactory();
-                $key = $_ENV['S3KEY'];
-                $secret = $_ENV['S3SECRET'];
-                $region = $_ENV['S3REGION'];
-                $version = $_ENV['S3VERSION'];
-
-                return $factory->create($key, $secret, $region, $version);
-            },
-            Google::class => static function (ContainerInterface $c): Google {
+            
+            Google::class => static function (): Google {
                 $clientId = $_ENV['GOOGLE_CLIENT_ID'];
                 $clientSecret = $_ENV['GOOGLE_CLIENT_SECRET'];
                 $redirectUri = $_ENV['GOOGLE_REDIRECT_URI'];

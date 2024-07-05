@@ -9,8 +9,8 @@ class UuidEncoder
 {
     public static function encode(UuidInterface $uuid): string
     {
-        return gmp_strval(
-            gmp_init(
+        return \gmp_strval(
+            \gmp_init(
                 str_replace('-', '', $uuid->toString()),
                 16
             ),

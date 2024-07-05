@@ -2,7 +2,6 @@
 
 namespace App\Domain\Exceptions\Protocols\UniqueConstraintViolation;
 
-use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
 use Core\Http\Errors\HttpExceptionAdapter;
 use Core\Http\Exceptions\BaseHttpException;
 use Core\Http\Exceptions\HttpBadRequestException;

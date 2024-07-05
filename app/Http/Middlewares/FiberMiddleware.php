@@ -37,8 +37,8 @@ class FiberMiddleware
                 // if the next request handler returns immediately, the fiber can terminate immediately without using a Deferred
                 // if the next request handler suspends the fiber, we only reach this point after resuming the fiber, so the code below will have assigned a Deferred
                 /**
-            * @var ?Deferred<ResponseInterface> $deferred 
-            */
+                 * @var ?Deferred<ResponseInterface> $deferred
+                 */
                 if ($deferred !== null) {
                     assert($response instanceof ResponseInterface);
                     $deferred->resolve($response);
@@ -49,16 +49,16 @@ class FiberMiddleware
         );
 
         /**
- * @throws void because the next handler will always be an `ErrorHandler` 
-*/
+         * @throws void because the next handler will always be an `ErrorHandler`
+         */
         $fiber->start();
         if ($fiber->isTerminated()) {
             /**
- * @throws void because fiber is known to have terminated successfully 
-*/
+             * @throws void because fiber is known to have terminated successfully
+             */
             /**
- * @var ResponseInterface|PromiseInterface<ResponseInterface>|\Generator 
-*/
+             * @var ResponseInterface|PromiseInterface<ResponseInterface>|\Generator
+             */
             return $fiber->getReturn();
         }
 

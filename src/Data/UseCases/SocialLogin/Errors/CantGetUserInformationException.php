@@ -2,7 +2,6 @@
 
 namespace App\Data\UseCases\SocialLogin\Errors;
 
-use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
 use Core\Http\Errors\HttpExceptionAdapter;
 use Core\Http\Exceptions\BaseHttpException;
 use Core\Http\Exceptions\HttpInternalServerErrorException;

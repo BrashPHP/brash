@@ -13,7 +13,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertSame;
-use Slim\Routing\Dispatcher;
 
 class RequestHandler implements RequestHandlerInterface
 {

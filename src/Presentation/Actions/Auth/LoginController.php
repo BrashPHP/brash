@@ -28,7 +28,7 @@ class LoginController extends Action implements ValidationInterface
     public function action(Request $request): Response
     {
         $this->logger->info('Start new login');
-        $parsedBody = $this->getParsedBody($request);
+        $parsedBody = $request->getParsedBody();
         [
             'access' => $access,
             'password' => $password

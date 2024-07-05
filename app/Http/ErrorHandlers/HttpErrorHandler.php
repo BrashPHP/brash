@@ -6,15 +6,6 @@ namespace Core\Http\ErrorHandlers;
 
 use Core\Http\Domain\ActionPayload;
 use Core\Http\Errors\{ErrorsEnum, ActionError};
-use Core\Http\Exceptions\{
-    HttpNotFoundException,
-    HttpMethodNotAllowedException,
-    HttpUnauthorizedException,
-    UnprocessableEntityException,
-    HttpForbiddenException,
-    HttpBadRequestException,
-    HttpNotImplementedException,
-};
 use Core\Http\Exceptions\BaseHttpException;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;

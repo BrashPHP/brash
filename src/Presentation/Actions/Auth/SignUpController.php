@@ -31,7 +31,7 @@ class SignUpController extends Action implements ValidationInterface
 
     public function action(Request $request): Response
     {
-        $parsedBody = $this->getParsedBody($request);
+        $parsedBody = $request->getParsedBody();
 
         [
             'email' => $email,

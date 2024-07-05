@@ -22,22 +22,18 @@ class ValidationMiddleware implements MiddlewareInterface
 
     public function process(Request $request, RequestHandler $handler): Response
     {
-        $rawBody = $request->getBody()->__toString();
+        $parsedBody = $request->getParsedBody();
         
-        if (!(is_null($rawBody) || $rawBody === "" || \json_validate($rawBody))) {
+        if (is_null($parsedBody)) {
             throw new HttpBadRequestException($request);
         }
-
-        $body = json_decode($rawBody, true);
 
         $rules = $this->validationInterface->rules($request) ?? [];
         $messages = $this->validationInterface->messages() ?? [];
 
-        $body = $body ?? [];
-
         $validationFacade = new ValidationFacade($rules, $messages);
         $validator = $validationFacade->createValidations();
-        $result = $validator->validate($body);
+        $result = $validator->validate($parsedBody);
 
         if ($result instanceof ValidationError) {
             throw new UnprocessableEntityException($request, $result->getMessage(), $result);

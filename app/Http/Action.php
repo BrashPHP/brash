@@ -43,21 +43,15 @@ abstract class Action implements ActionInterface
                 $response = await($response);
             }
 
-            assert($response instanceof Response);
+            assert(
+                $response instanceof Response,
+                new \RuntimeException("Response must be an instance of ResponseInterface")
+            );
 
             return $response;
-        } catch (HttpSpecializedAdapter $httpSpecializedAdapter) {
-            throw $httpSpecializedAdapter->wire($request);
-        } catch (HttpExceptionAdapter $httpSpecializedAdapter) {
+        } catch (HttpSpecializedAdapter | HttpExceptionAdapter $httpSpecializedAdapter) {
             throw $httpSpecializedAdapter->wire($request);
         }
-    }
-
-    public function getParsedBody(Request $request): array
-    {
-        $rawInput = (string) $request->getBody();
-
-        return json_decode($rawInput, true);
     }
 
     protected function respondWithData(null|array|object $data = null, int $statusCode = 200): Response

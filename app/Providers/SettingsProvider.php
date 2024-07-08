@@ -30,9 +30,9 @@ class SettingsProvider implements AppProviderInterface
                 'displayErrorDetails' => true,
                 // Should be set to false in production
                 'logger' => [
-                    'name' => 'slim-app',
+                    'name' => 'kitsune',
                     'path' => (getenv('docker') || !getenv('log-file'))? 'php://stdout' : $root . '/logs/app.log',
-                    'level' => Logger::INFO,
+                    'level' => Logger::DEBUG,
                 ],
                 'doctrine' => static function (ContainerInterface $c) use ($root): array {
                     return [

@@ -6,12 +6,15 @@ namespace App\Presentation\Actions\Auth;
 
 use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Domain\Dto\Credentials;
+use App\Domain\Dto\TokenLoginResponse;
 use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
 use Core\Http\Action;
 use Core\Http\Interfaces\ValidationInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
+use React\Promise\Promise;
+use React\Promise\PromiseInterface;
 use Respect\Validation\Validator;
 
 use Core\Http\Attributes\Route;
@@ -25,7 +28,7 @@ class LoginController extends Action implements ValidationInterface
     ) {
     }
 
-    public function action(Request $request): Response
+    public function action(Request $request): PromiseInterface|Response
     {
         $this->logger->info('Start new login');
         $parsedBody = $request->getParsedBody();
@@ -34,23 +37,33 @@ class LoginController extends Action implements ValidationInterface
             'password' => $password
         ] = $parsedBody;
 
-
-        $body = print_r($parsedBody, true);
-        $this->logger->info(sprintf('Received value %s for input login', $body));
+        $this->logger->info('Received value login', $parsedBody);
         $credentials = new Credentials($access, $password);
 
-        $tokenize = $this->loginService->auth($credentials);
-
-        $refreshToken = $tokenize->renewToken;
+        $promise = new Promise(function ($resolve) use ($credentials) {
+            $result = $this->loginService->auth($credentials);
+            $resolve($result);
+        });
+        $logger = $this->logger;
         $cookieTokenManager = new CookieTokenManager();
 
-        $this->logger->info(sprintf('Successfully implanted token %s', $refreshToken));
+        return $promise->then(static function (TokenLoginResponse $token) use ($logger) {
+            $refreshToken = $token->renewToken;
 
-        $response = $this
-            ->respondWithData(['token' => $tokenize->token])
-            ->withStatus(201, 'Created token');
+            $logger->info('Successfully implanted token', [$refreshToken]);
 
-        return $cookieTokenManager->appendCookieHeader($response, $refreshToken);
+            return $token;
+        })->then(
+                fn(TokenLoginResponse $token) => [
+                    $this
+                        ->respondWithData(['token' => $token->token])
+                        ->withStatus(201, 'Created token'),
+                    $token->renewToken
+                ]
+            )
+            ->then(
+                fn(array $response) => $cookieTokenManager->appendCookieHeader(...$response)
+            );
     }
 
     public function messages(): ?array

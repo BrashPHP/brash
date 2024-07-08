@@ -38,7 +38,7 @@ class DoctrineAccountRepository implements AccountRepository
 
         $doctrineAccount = $this->em->getRepository(DoctrineAccount::class)->findOneBy([$findBy => $access]);
 
-        return $doctrineAccount->toModel();
+        return $doctrineAccount?->toModel();
     }
 
     public function findByMail(string $mail): ?Account

@@ -15,6 +15,8 @@ use App\Infrastructure\Cryptography\AsymmetricKeyGeneration\OpenSSLAsymmetricEnc
 use App\Infrastructure\Cryptography\DataEncryption\Encrypter;
 use App\Infrastructure\Cryptography\HashComparer;
 use App\Infrastructure\Cryptography\HashCreator;
+use Bramus\Monolog\Formatter\ColoredLineFormatter;
+use Core\Services\Loggin\CommandLineLogger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
@@ -53,6 +55,7 @@ class DependenciesProvider implements AppProviderInterface
                 $logger->pushProcessor($processor);
 
                 $handler = new StreamHandler($loggerSettings['path'], $loggerSettings['level']);
+                $handler->setFormatter(new ColoredLineFormatter());
                 $logger->pushHandler($handler);
 
                 return $logger;

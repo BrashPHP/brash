@@ -138,7 +138,7 @@ class ManagerRegistry extends AbstractManagerRegistry
             );
         }
 
-        $this->loggerInterface->debug("Start new EntityManager and Connection");
+        $this->loggerInterface->info("Start new EntityManager and Connection");
 
         $this->services[$name] = $this->factories[$name]();
 

@@ -58,8 +58,21 @@ class HttpErrorHandler extends SlimErrorHandler
             'error_type' => $errorType->value,
             'status_code' => $statusCode,
             'error' => $error->getMessage(),
-            'stack_trace' => $isServerError ? $error->getTrace() : [],
         ];
+        if ($isServerError) {
+            foreach ($error->getTrace() as $trace) {
+                $file = $trace['file'] ?? "";
+                $line = $trace['line'] ?? "";
+                $class = $trace['class'] ?? "";
+                $type = $trace['type'] ?? "";
+                $this->logError("File: {$file}");
+                $this->logError("Line: {$line}");
+                $this->logError("Class {$class}");
+                if ($type) {
+                    $this->logError("[type]: {$type}");
+                }
+            }
+        }
 
         $this->logError(json_encode($template));
     }

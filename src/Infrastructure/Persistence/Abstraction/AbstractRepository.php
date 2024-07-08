@@ -21,12 +21,12 @@ abstract class AbstractRepository implements CrudOperationsInterface
     /**
      * @return class-string<T>
      */
-    public abstract function entity(): string;
+    abstract public function entity(): string;
 
     /**
      * @return RepositoryInterface<T>
      */
-    public abstract function repository(): RepositoryInterface;
+    abstract public function repository(): RepositoryInterface;
 
     public function findAll(bool $paginate = false, int $page = 1, int $limit = 20): ResultSetInterface
     {
@@ -36,6 +36,7 @@ abstract class AbstractRepository implements CrudOperationsInterface
     /**
      * @return ?T
      */
+    #[\ReturnTypeWillChange]
     public function findByKey(string $key, mixed $value): ?object
     {
         return $this->repository()->findOne([$key => $value]);
@@ -44,6 +45,7 @@ abstract class AbstractRepository implements CrudOperationsInterface
     /**
      * @return T[]
      */
+    #[\ReturnTypeWillChange]
     public function findItemsByKey(string $key, mixed $value): array
     {
         return $this->repository()->findBy([$key => $value]);
@@ -52,6 +54,7 @@ abstract class AbstractRepository implements CrudOperationsInterface
     /**
      * @return ?T
      */
+    #[\ReturnTypeWillChange]
     public function findByID(int $id): ?object
     {
         return $this->repository()->findByPK($id);
@@ -60,6 +63,7 @@ abstract class AbstractRepository implements CrudOperationsInterface
     /**
      * @return T[]
      */
+    #[\ReturnTypeWillChange]
     public function findWithConditions(array $conditions): array
     {
         return $this->repository()->findBy($conditions);
@@ -67,13 +71,14 @@ abstract class AbstractRepository implements CrudOperationsInterface
 
     /**
      * @param T|int $subject
-     * 
+     *
      * @return ?T
      */
-    public abstract function delete(ModelInterface|int $subject): ?object;
+    #[\ReturnTypeWillChange]
+    abstract public function delete(ModelInterface|int $subject): ?object;
 
     /**
      * @param T
      */
-    public abstract function insert(ModelInterface $model): void;
+    abstract public function insert(ModelInterface $model): void;
 }

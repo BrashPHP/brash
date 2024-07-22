@@ -4,30 +4,23 @@ declare(strict_types=1);
 
 namespace Core\Server;
 
-use Core\Http\Factories\ContainerFactory;
+use Core\Http\Interfaces\ApplicationInterface;
 use Core\Http\Middlewares\FiberMiddleware;
 use React\EventLoop\LoopInterface;
-use Core\Builder\AppBuilderManager;
 use React\EventLoop\Loop;
-use Slim\App;
-use function Core\functions\isProd;
 use function React\Async\async;
 
 final class Server
 {
     private LoopInterface $loop;
-    private App $app;
 
     public function __construct(
+        private ApplicationInterface $app,
         ?LoopInterface $loop = null,
         private string $address = '0.0.0.0',
-        private int $port = 8080
+        private int $port = 8080,
     ) {
         $this->loop = $loop ?? Loop::get();
-        $containerFactory = new ContainerFactory(enableCompilation: isProd());
-        $appBuilder = new AppBuilderManager($containerFactory->get());
-        $appBuilder->useDefaultShutdownHandler(true);
-        $this->app = $appBuilder->build();
     }
 
     public function run()

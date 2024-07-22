@@ -14,8 +14,8 @@ use function PHPUnit\Framework\assertSame;
 beforeEach(function () {
     $this->app = $this->createAppInstance();
     $this->apiEndpoint = '/api/test-auth';
-    $this->setUpErrorHandler($this->app);
 });
+
 test('should pass when jwt is provided', function () {
     self::autowireContainer(AccountRepository::class, new InMemoryAccountRepository());
 

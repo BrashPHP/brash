@@ -30,7 +30,7 @@ class GroupCacheResult
 
     public function get(string|object $group): ?GroupModel
     {
-        $key = $this->forgeKey(($group));
+        $key = $this->forgeKey($group);
 
         if (isset($this->cache[$key])) {
             return $this->cache[$key];

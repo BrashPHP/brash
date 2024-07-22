@@ -66,8 +66,8 @@ final class CycleOrmFactory
             ->files()
             ->in(
                 [
-                    $root . "/src/Data/Entities/Cycle",
-                    $root . "/src/Data/Entities/Cycle/Rbac",
+                    "$root/src/Data/Entities/Cycle",
+                    "$root/src/Data/Entities/Cycle/Rbac",
                 ]
             );
         $classLocator = new ClassLocator($finder);

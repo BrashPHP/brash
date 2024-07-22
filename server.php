@@ -6,14 +6,29 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\PhpSubprocess;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessUtils;
+use Amp\Promise;
 
-$process = new PhpSubprocess(['public/index.php'], env: getenv());
+echo getcwd();
+
+function logProcess($e, $buffer)
+{
+    if (Process::ERR === $e) {
+        echo 'ERR > ' . $buffer;
+    } else {
+        echo 'OUT > ' . $buffer;
+    }
+}
+
+$twentyMinutes = 1200;
+$process = new PhpSubprocess(['public/index.php'], env: getenv(), timeout: $twentyMinutes, cwd: __DIR__);
 $p2 = clone $process;
-$process->run(fn($e) => ($e));
+
+echo "Started server" . PHP_EOL;
+
+$process->run(fn($e, $buffer) => logProcess($e, $buffer));
+
 
 while ($process->isRunning()) {
-    // executes after the command finishes
     if (!$process->isSuccessful()) {
         throw new ProcessFailedException($process);
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Core\Providers;
+namespace App\Application\Providers;
 
 use function DI\autowire;
 use DI\ContainerBuilder;
@@ -30,12 +30,13 @@ class RepositoriesProvider implements AppProviderInterface
 {
     public function provide(ContainerBuilder $container)
     {
-        $repositories = [];
-        foreach ($this->createRepositoriesDefinitions() as $key => $value) {
-            $repositories[$key] = autowire($value);
-        }
         // Here we map our UserRepository interface to its in memory implementation
-        $container->addDefinitions($repositories);
+        $container->addDefinitions(
+            array_map(
+                autowire(...),
+                $this->createRepositoriesDefinitions()
+            )
+        );
     }
 
     private function createRepositoriesDefinitions()

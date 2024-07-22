@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Providers;
+namespace App\Application\Providers;
 
 use Core\Data\Domain\ConnectionModel;
 use DI\ContainerBuilder;
@@ -8,6 +8,7 @@ use Core\Providers\AppProviderInterface;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use function Core\functions\isDev;
+use function Core\functions\isProd;
 
 class SettingsProvider implements AppProviderInterface
 {
@@ -24,15 +25,15 @@ class SettingsProvider implements AppProviderInterface
 
         return [
             'root' => $root,
-            'temp' => $root . '/tmp',
-            'public' => $root . '/public',
+            'temp' => "{$root}/tmp",
+            'public' => "{$root}/public",
             'settings' => [
                 'displayErrorDetails' => true,
                 // Should be set to false in production
                 'logger' => [
                     'name' => 'kitsune',
-                    'path' => (getenv('docker') || !getenv('log-file'))? 'php://stdout' : $root . '/logs/app.log',
-                    'level' => Logger::DEBUG,
+                    'path' => (getenv('docker') || !getenv('log-file')) ? 'php://stdout' : "{$root}/temp/logs/app.log",
+                    'level' => isProd() ? Logger::INFO : Logger::DEBUG,
                 ],
                 'doctrine' => static function (ContainerInterface $c) use ($root): array {
                     return [
@@ -41,10 +42,10 @@ class SettingsProvider implements AppProviderInterface
 
                         // path where the compiled metadata info will be cached
                         // make sure the path exists and it is writable
-                        'cache_dir' => $root . '/var/doctrine',
+                        'cache_dir' => "{$root}/../var/doctrine",
 
                         // you should add any other path containing annotated entity classes
-                        'metadata_dirs' => [$root . '/src/Data/Entities/Doctrine'],
+                        'metadata_dirs' => ["{$root}/Data/Entities/Doctrine"],
 
                         'connection' => $c->get(ConnectionModel::class),
                     ];

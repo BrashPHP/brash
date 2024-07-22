@@ -6,15 +6,8 @@ namespace Core\Http\ErrorHandlers;
 
 use Core\Http\Domain\ActionPayload;
 use Core\Http\Errors\{ErrorsEnum, ActionError};
-use Core\Http\Exceptions\UnprocessableEntityException;
-use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpForbiddenException;
-use Slim\Exception\HttpMethodNotAllowedException;
 use Exception;
 use Slim\Exception\HttpException;
-use Slim\Exception\HttpNotFoundException;
-use Slim\Exception\HttpNotImplementedException;
-use Slim\Exception\HttpUnauthorizedException;
 
 
 class SlimHttpErrorHandler

@@ -31,8 +31,8 @@ test('should call authentication with correct values', function () {
     /** @var MockInterface|LoggerInterface */
     $logger = mock(LoggerInterface::class);
     $logger->shouldReceive('info')->andReturn(null);
-    $app->getContainer()->set(LoginServiceInterface::class, $service);
-    $app->getContainer()->set(
+    $this->getContainer()->set(LoginServiceInterface::class, $service);
+    $this->getContainer()->set(
         LoginController::class,
         new LoginController(
             $service,
@@ -51,7 +51,6 @@ test('should call authentication with correct values', function () {
 
 test('should return 422 if validation returns error', function () {
     $app = $this->app;
-    $this->setUpErrorHandler($app);
     $body = new Credentials('mike@gmail.com', 'pass');
     $request = $this->createJsonRequest('POST', $this->endpoint, $body->jsonSerialize());
 
@@ -69,7 +68,6 @@ test('should return 422 if validation returns error', function () {
 
 test('expects two errors', function () {
     $app = $this->app;
-    $this->setUpErrorHandler($app);
     $request = $this->constructPostRequest(new Credentials('GABRI@MAIL', 'pass'), 'POST', $this->endpoint);
 
     $response = $app->handle($request);

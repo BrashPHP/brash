@@ -19,7 +19,6 @@ use Tests\Traits\App\RequestManagerTrait;
 abstract class TestCase extends PHPUnit_TestCase
 {
     use AppTestTrait;
-    use ErrorHandlerTrait;
     use InstanceManagerTrait;
     use RequestManagerTrait;
 

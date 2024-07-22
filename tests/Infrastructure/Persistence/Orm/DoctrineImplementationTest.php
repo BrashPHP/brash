@@ -13,8 +13,7 @@ test('set environment correctly', function () {
 });
 
 test('if setup container works', function () {
-    $app = $this->getAppInstance();
-    $container = $app->getContainer();
+    $container = $this->getContainer();
     $settings = $container->get("settings");
     $doctrine = $settings["doctrine"];
 
@@ -22,8 +21,7 @@ test('if setup container works', function () {
 });
 
 test('if entity manager is not null', function () {
-    $app = $this->getAppInstance();
-    $container = $app->getContainer();
+    $container = $this->getContainer();
     $em = $container->get(EntityManager::class);
 
     assertIsObject($em);

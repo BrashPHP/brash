@@ -13,24 +13,22 @@ use Core\Http\Errors\ErrorsEnum;
 use DI\Container;
 use Tests\Traits\App\InstanceManager;
 
-beforeEach(function () {
-    $instanceApp = new InstanceManager();
-    $this->app = $instanceApp->createAppInstance();
-});
 
 test('action', function () {
-    $app = $this->app;
-
+    $instanceApp = new InstanceManager();
     /** @var Container $container */
-    $container = $app->getContainer();
+    $container = $instanceApp->getContainer(true);
 
     $user = new User(1, 'bill.gates', 'Bill', 'Gates');
 
-    $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
-    $userRepositoryProphecy->method('findUserOfId')->willReturn($user)->with(1);
-    $userRepositoryProphecy->expects($this->once())->method('findUserOfId');
+    /** @var \Mockery\MockInterface */
+    $repository = mock(UserRepository::class);
+    $repository->expects('findUserOfId')->andReturn($user);
+    
+    $app = $instanceApp->getAppInstance();
+        
 
-    $container->set(UserRepository::class, $userRepositoryProphecy);
+    $container->set(UserRepository::class, $repository);
 
     $request = $this->createRequest('GET', '/users/1');
     $response = $app->handle($request);
@@ -43,12 +41,10 @@ test('action', function () {
 });
 
 test('action throws user not found exception', function () {
-    $app = $this->createAppInstance();
-
-    $this->setUpErrorHandler($app);
-
+    $instanceApp = new InstanceManager();
     /** @var Container $container */
-    $container = $app->getContainer();
+    $container = $instanceApp->getContainer(true);
+    $app = $instanceApp->getAppInstance();
 
     $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
     $userRepositoryProphecy->method('findUserOfId')->willThrowException(new UserNotFoundException())->with(1);

@@ -1,4 +1,5 @@
 <?php
+
 namespace Core\Data\BehaviourComponents;
 
 use Cycle\Database\DatabaseManager;
@@ -19,9 +20,7 @@ class DatabaseCleaner
 
     public static function truncateDoctrineDatabase(ContainerInterface $containerInterface): void
     {
-        /**
- * @var EntityManager 
-*/
+        /** @var EntityManager */
         $entityManager = $containerInterface->get(EntityManager::class);
         $schemaTool = new SchemaTool($entityManager);
         $schemaTool->dropDatabase();
@@ -29,9 +28,7 @@ class DatabaseCleaner
 
     public static function truncateCycleDatabase(ContainerInterface $containerInterface): void
     {
-        /**
- * @var DatabaseManager 
-*/
+        /** @var DatabaseManager */
         $dbal = $containerInterface->get(DatabaseManager::class);
         $db = $dbal->database('default');
 

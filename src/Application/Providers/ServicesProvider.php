@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Core\Providers;
+namespace App\Application\Providers;
 
 use function DI\autowire;
 use DI\ContainerBuilder;

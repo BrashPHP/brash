@@ -37,7 +37,6 @@ test('should return401 for invalid cookie', function () {
 
 test('should return401 for expired cookie', function () {
     $app = $this->app;
-    $this->setUpErrorHandler($app);
     $now = new \DateTime();
     $future = new \DateTime();
     $future->sub(new \DateInterval('P15D'));
@@ -69,7 +68,6 @@ test('should return401 for expired cookie', function () {
 });
 test('should return201 for valid cookie', function () {
     $app = $this->app;
-    $this->setUpErrorHandler($app);
     $repository = $this->getMockBuilder(AccountRepository::class)->getMock();
     $repository
         ->expects($this->once())

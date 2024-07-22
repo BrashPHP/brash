@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Core\Providers;
+namespace App\Application\Providers;
 
 use App\Data\Protocols\AsymCrypto\AsymmetricVerifier;
 use App\Data\Protocols\Cryptography\AsymmetricEncrypter;
@@ -16,7 +16,6 @@ use App\Infrastructure\Cryptography\DataEncryption\Encrypter;
 use App\Infrastructure\Cryptography\HashComparer;
 use App\Infrastructure\Cryptography\HashCreator;
 use Bramus\Monolog\Formatter\ColoredLineFormatter;
-use Core\Services\Loggin\CommandLineLogger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;

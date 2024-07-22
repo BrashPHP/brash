@@ -2,10 +2,14 @@
 
 namespace Tests\Traits\App;
 
+use App\Application\Providers\DependenciesProvider;
+use App\Application\Providers\RepositoriesProvider;
+use App\Application\Providers\ServicesProvider;
+use App\Application\Providers\SettingsProvider;
+use Core\Application\App;
 use Core\Builder\AppBuilderManager;
 use Core\Http\Factories\ContainerFactory;
 use Psr\Container\ContainerInterface;
-use Slim\App;
 
 class InstanceManager
 {
@@ -37,6 +41,9 @@ class InstanceManager
 
     public function autowireContainer($key, $instance)
     {
+        /**
+         * @var \DI\Container
+         */
         $container = $this->getContainer();
         $container->set($key, $instance);
     }
@@ -44,6 +51,12 @@ class InstanceManager
     public static function setUpContainer(): ContainerInterface
     {
         $containerFactory = new ContainerFactory();
+        $containerFactory->addProviders(
+            new DependenciesProvider(),
+            new RepositoriesProvider(),
+            new ServicesProvider(),
+            new SettingsProvider
+        );
 
         return $containerFactory->get();
     }

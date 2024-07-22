@@ -3,7 +3,6 @@
 namespace Tests\Traits\App;
 
 use Exception;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\StreamFactory;
 use Slim\Psr7\Headers;

@@ -3,13 +3,11 @@
 namespace Core\Data\Doctrine;
 
 use Core\Data\Doctrine\EntityManagerBuilder;
-use Core\Exceptions\ConfigException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Internal\Hydration\ArrayHydrator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Doctrine\Persistence\AbstractManagerRegistry;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Ramsey\Uuid\Doctrine\UuidBinaryType;

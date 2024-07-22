@@ -7,14 +7,12 @@ use DI\Container;
 use Tests\Traits\App\InstanceManager;
 use Tests\Traits\App\RequestManager;
 
-beforeEach(function () {
-    $instanceApp = new InstanceManager();
-    $this->app = $instanceApp->createAppInstance();
-});
 
 test('should call action successfully', function () {
+    $instanceApp = new InstanceManager();
+    $app = $instanceApp->createAppInstance();
     /** @var Container $container */
-    $container = $this->app->getContainer();
+    $container = $instanceApp->getContainer();
 
     $user = new User(1, 'bill.gates', 'Bill', 'Gates');
 
@@ -25,7 +23,7 @@ test('should call action successfully', function () {
     $container->set(UserRepository::class, $userRepositoryProphecy);
     $request = new RequestManager();
     $request = $request->createRequest('GET', '/users');
-    $response = $this->app->handle($request);
+    $response = $app->handle($request);
 
     $payload = (string) $response->getBody();
     $expectedPayload = new ActionPayload(200, [$user]);

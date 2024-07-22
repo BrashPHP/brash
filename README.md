@@ -25,6 +25,10 @@ Run this command in the application directory to run the test suite
 composer test
 ```
 
+## Database
+You can choose between Doctrine and Cycle using this tool, with CycleORM being preferred for keeping PHP's connection open. 
+It is highly recommended that choosing Doctrine otherwise, you keep tracking of Doctrine's Entity Manager's state and always use the ManagerRegistry in your repositories instead of relying on the EntityManager class directly, due to a lack of consistency between requests when the connection is corrupted, closed or lost. 
+
 ## TODO
 
 ### ROADMAP

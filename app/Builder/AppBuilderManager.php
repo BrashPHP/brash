@@ -8,6 +8,7 @@ use Core\Http\Adapters\SlimFramework\SlimMiddlewareIncluder;
 use Core\Http\Adapters\SlimFramework\SlimRouteCollector;
 use Core\Http\ErrorHandlers\HttpErrorHandler;
 use Core\Http\Factories\RouteCollectorFactory;
+use Core\Http\Interfaces\ApplicationInterface;
 use Core\Http\Middlewares\ShutdownMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -33,7 +34,7 @@ class AppBuilderManager
         $this->preMiddlewares[] = $middlewareInterface;
     }
 
-    public function build(): App
+    public function build(): ApplicationInterface
     {
         $app = $this->createApp();
 
@@ -56,7 +57,7 @@ class AppBuilderManager
             $this->setErrorHandler($app);
         }
 
-        return $app;
+        return new \Core\Application\App($app);
     }
 
     public function useDefaultErrorHandler(bool $enable)

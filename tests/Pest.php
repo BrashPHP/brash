@@ -13,6 +13,8 @@
 
 uses(Tests\TestCase::class)->in('.');
 $_ENV['MODE'] = 'TEST';
+$_ENV['JWT_SECRET'] = 'JWT_SECRET';
+$_ENV['JWT_SECRET_COOKIE'] = 'JWT_SECRET_COOKIE';
 
 /*
 |--------------------------------------------------------------------------

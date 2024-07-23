@@ -16,7 +16,7 @@ final class DoctrineOrmFactory
     {
         return [
             ManagerRegistry::class => static fn(ContainerInterface $container) =>
-                new ManagerRegistry($container->get('settings')['doctrine'], $container->get(LoggerInterface::class)),
+                new ManagerRegistry($container->get('doctrine'), $container->get(LoggerInterface::class)),
 
             ReopeningEntityManagerDecorator::class => static fn(
                 ContainerInterface $container

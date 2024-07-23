@@ -14,8 +14,7 @@ test('set environment correctly', function () {
 
 test('if setup container works', function () {
     $container = $this->getContainer();
-    $settings = $container->get("settings");
-    $doctrine = $settings["doctrine"];
+    $doctrine = $container->get("doctrine");
 
     assertArrayHasKey("connection", $doctrine);
 });

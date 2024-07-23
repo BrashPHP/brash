@@ -3,9 +3,9 @@
 namespace Tests\Traits\App;
 
 use App\Application\Providers\DependenciesProvider;
+use App\Application\Providers\DoctrineDefinitionsProvider;
 use App\Application\Providers\RepositoriesProvider;
 use App\Application\Providers\ServicesProvider;
-use App\Application\Providers\SettingsProvider;
 use Core\Application\App;
 use Core\Builder\AppBuilderManager;
 use Core\Http\Factories\ContainerFactory;
@@ -55,7 +55,7 @@ class InstanceManager
             new DependenciesProvider(),
             new RepositoriesProvider(),
             new ServicesProvider(),
-            new SettingsProvider
+            new DoctrineDefinitionsProvider()
         );
 
         return $containerFactory->get();

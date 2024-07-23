@@ -15,12 +15,6 @@ use App\Infrastructure\Cryptography\AsymmetricKeyGeneration\OpenSSLAsymmetricEnc
 use App\Infrastructure\Cryptography\DataEncryption\Encrypter;
 use App\Infrastructure\Cryptography\HashComparer;
 use App\Infrastructure\Cryptography\HashCreator;
-use Bramus\Monolog\Formatter\ColoredLineFormatter;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use Monolog\Processor\UidProcessor;
-use Psr\Container\ContainerInterface;
-use Psr\Log\LoggerInterface;
 use League\OAuth2\Client\Provider\Google;
 
 use Core\Providers\AppProviderInterface;
@@ -44,21 +38,6 @@ class DependenciesProvider implements AppProviderInterface
         $encrypter = new Encrypter($_SERVER['ENCRYPTION_KEY'] ?? '');
 
         return [
-            LoggerInterface::class => static function (ContainerInterface $c) {
-                $settings = $c->get('settings');
-
-                $loggerSettings = $settings['logger'];
-                $logger = new Logger($loggerSettings['name']);
-
-                $processor = new UidProcessor();
-                $logger->pushProcessor($processor);
-
-                $handler = new StreamHandler($loggerSettings['path'], $loggerSettings['level']);
-                $handler->setFormatter(new ColoredLineFormatter());
-                $logger->pushHandler($handler);
-
-                return $logger;
-            },
             ComparerInterface::class => new HashComparer(),
             HasherInterface::class => new HashCreator(),
             DataDecrypter::class => $encrypter,

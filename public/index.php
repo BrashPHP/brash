@@ -12,7 +12,7 @@ use App\Application\Providers\{
     DependenciesProvider,
     RepositoriesProvider,
     ServicesProvider,
-    SettingsProvider
+    DoctrineDefinitionsProvider
 };
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -26,7 +26,7 @@ try {
         new DependenciesProvider(),
         new RepositoriesProvider(),
         new ServicesProvider(),
-        new SettingsProvider
+        new DoctrineDefinitionsProvider(),
     );
 
     $appBuilder = new AppBuilderManager($containerFactory->get());

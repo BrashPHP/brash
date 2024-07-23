@@ -106,6 +106,9 @@ function createMockRequest(\Tests\TestCase $app, array $cookies = []): ServerReq
 
 function createMockRepository(): AccountRepository|MockInterface
 {
+    /**
+     * @var AccountRepository|MockInterface
+     */
     $mock = mock(AccountRepository::class);
 
     $mock->shouldReceive('findByUUID')->andReturn(

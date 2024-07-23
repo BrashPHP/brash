@@ -10,7 +10,7 @@ use App\Application\Providers\{
     DependenciesProvider,
     RepositoriesProvider,
     ServicesProvider,
-    SettingsProvider
+    DoctrineDefinitionsProvider
 };
 
 trait InstanceManagerTrait
@@ -57,7 +57,7 @@ trait InstanceManagerTrait
             new DependenciesProvider(),
             new RepositoriesProvider(),
             new ServicesProvider(),
-            new SettingsProvider
+            new DoctrineDefinitionsProvider(),
         );
 
         return $containerFactory->get();

@@ -33,8 +33,6 @@ class RouterCollector implements RouterInterface
             ->map(fn(ReflectionClass $reflectionClass): ?RouteModel => $this->createRouteModel($reflectionClass))
             ->filter(fn(?RouteModel $route) => $route !== null)
             ->map(fn(RouteModel $route) => $this->routeIncluder->include($route));
-
-        $this->routeIncluder->setDefaults();
     }
 
     private function createRouteModel(ReflectionClass $reflectionClass): ?RouteModel

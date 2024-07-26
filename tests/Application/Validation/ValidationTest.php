@@ -48,6 +48,4 @@ test('should validate correct values', function () {
     $result = $factory->createValidations()->validate(['person' => 'optimusprime']);
 
     expect($result)->toBeNull();
-    
-
 });

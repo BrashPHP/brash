@@ -1,7 +1,6 @@
 <?php
 namespace Core\Http\Interfaces;
 
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\UriInterface;
 
 interface RouteCollectorInterface

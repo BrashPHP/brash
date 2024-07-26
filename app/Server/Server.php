@@ -44,15 +44,15 @@ final class Server
         $this->loop->run();
     }
 
+    public function close(){
+        $this->loop->stop();
+    }
+
     private function createAsyncHandler()
     {
         return async(
             function (\Psr\Http\Message\ServerRequestInterface $request) {
-                try {
-                    return $this->app->handle($request);
-                } catch (\Throwable $th) {
-                    dd($th);
-                }
+                return $this->app->handle($request);
             }
         );
     }

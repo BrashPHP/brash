@@ -68,7 +68,6 @@ class NestedValidationAdapter extends AbstractValidator
             function (ValidationError $error) {
                 $parentField = $this->field;
 
-                declare(strict_types=1);
                 $newError = new ValidationError(
                     $error->getMessage()
                 );

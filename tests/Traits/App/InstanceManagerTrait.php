@@ -2,7 +2,6 @@
 
 namespace Tests\Traits\App;
 
-use Core\Application\App;
 use Core\Builder\AppBuilderManager;
 use Core\Http\Factories\ContainerFactory;
 use Psr\Container\ContainerInterface;
@@ -12,17 +11,18 @@ use App\Application\Providers\{
     ServicesProvider,
     DoctrineDefinitionsProvider
 };
+use Core\Http\Interfaces\ApplicationInterface;
 
 trait InstanceManagerTrait
 {
     protected static ?ContainerInterface $container = null;
 
-    protected App $app;
+    protected ApplicationInterface $app;
 
     /**
      * @throws \Exception
      */
-    final protected function getAppInstance(): App
+    final protected function getAppInstance(): ApplicationInterface
     {
         $appBuilder = new AppBuilderManager($this->getContainer());
 

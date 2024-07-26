@@ -34,12 +34,10 @@ class RequestBuilder
 
     public function build()
     {
-        $headers = $this->getHeaders();
-
         $this->request = new Request(
             $this->method,
             $this->uri,
-            $headers,
+            $this->getHeaders(),
             $this->cookies,
             $this->serverParams,
             $this->stream

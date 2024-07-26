@@ -26,7 +26,7 @@ class AsymmetricValidator implements Middleware
     {
         $headers = $request->getHeader('app-client-token');
 
-        list($uuid, $token) = $this->filterHeader($request, $headers);
+        [$uuid, $token] = $this->filterHeader($request, $headers);
 
         $museum = $this->museumRepository->findByUUID($uuid);
 
@@ -59,10 +59,10 @@ class AsymmetricValidator implements Middleware
     private function filterHeader(Request $request, array $headers)
     {
         if ($headers !== []) {
-            list($headerValue) = $headers;
+            [$headerValue] = $headers;
 
             if (strpos($headerValue, '.')) {
-                list($uuid, $token) = explode('.', $headerValue);
+                [$uuid, $token] = explode('.', $headerValue);
                 $uuidDecoded = base64_decode($uuid, true);
                 $tokenDecoded = base64_decode($token, true);
 

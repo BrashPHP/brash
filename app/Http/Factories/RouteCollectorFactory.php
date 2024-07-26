@@ -17,18 +17,19 @@ class RouteCollectorFactory
     {
     }
 
-    public function getRouteCollector(RouteCollectorInterface $routeCollectorInterface): RouterCollector
+    public function getRouterCollector(RouteCollectorInterface $routeCollectorInterface): RouterCollector
     {
         $validationMiddlewareFactory = new ValidationMiddlewareFactory($this->containerInterface);
         $groupCollector = new GroupCollector();
         $caching = new GroupCacheResult();
         $routeFactory = new RouteFactory($groupCollector, $caching);
+        $routeIncluder = new RouteIncluder(
+            $routeCollectorInterface,
+            $validationMiddlewareFactory
+        );
         return new RouterCollector(
             $routeFactory,
-            new RouteIncluder(
-                $routeCollectorInterface,
-                $validationMiddlewareFactory
-            )
+            $routeIncluder
         );
     }
 }

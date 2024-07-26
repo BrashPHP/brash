@@ -2,62 +2,71 @@
 
 namespace Core\Builder;
 
-use Core\Builder\MiddlewareCollector;
 use Core\Exceptions\ConfigException;
-use Core\Http\Adapters\SlimFramework\SlimMiddlewareIncluder;
-use Core\Http\Adapters\SlimFramework\SlimRouteCollector;
-use Core\Http\ErrorHandlers\HttpErrorHandler;
-use Core\Http\Factories\RouteCollectorFactory;
+use Core\Http\Factories\SlimAppFactory;
 use Core\Http\Interfaces\ApplicationInterface;
-use Core\Http\Middlewares\ShutdownMiddleware;
+use Core\Http\Interfaces\ComponentsFactoryInterface;
+use Core\Http\Middlewares\TrailingSlashMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
-use Psr\Log\LoggerInterface;
-use Slim\App;
-use Slim\Factory\AppFactory;
+use App\Presentation\Middleware\JWTAuthMiddleware;
+use App\Presentation\Middleware\SessionMiddleware;
+use App\Presentation\Middleware\ResponseAdapterMiddleware;
+use Core\Http\Middlewares\BodyParsing\BodyParsingMiddleware;
 
 
 class AppBuilderManager
 {
+
     private bool $displayErrors;
+    private ComponentsFactoryInterface $componentsFactory;
+
+    /**
+     * Application Global Middlewares
+     *
+     * @var MiddlewareInterface|class-string<MiddlewareInterface>
+     */
+    private array $middlewares = [
+        SessionMiddleware::class,
+        JWTAuthMiddleware::class,
+        BodyParsingMiddleware::class,
+        ResponseAdapterMiddleware::class,
+        TrailingSlashMiddleware::class,
+    ];
     public function __construct(
         private ContainerInterface $container,
         private bool $enableErrorHandler = true,
         private bool $enableShutdownHandler = true,
-        private array $preMiddlewares = []
     ) {
         $this->displayErrors = $this->container->get('settings')['displayErrorDetails'];
+        $this->componentsFactory = new SlimAppFactory($container);
     }
 
-    public function appendMiddlewares(MiddlewareInterface $middlewareInterface)
+    public function appendMiddleware(MiddlewareInterface $middlewareInterface)
     {
-        $this->preMiddlewares[] = $middlewareInterface;
+        $this->middlewares[] = $middlewareInterface;
     }
 
     public function build(): ApplicationInterface
     {
-        $app = $this->createApp();
+        $middlewareCollector = $this->componentsFactory->createMiddlewareCollector();
 
-        foreach ($this->preMiddlewares as $preMiddleware) {
-            $app->addMiddleware($preMiddleware);
+        foreach ($this->middlewares as $preMiddleware) {
+            $middlewareCollector->add($preMiddleware);
         }
+        $middlewareCollector->collect();
 
-        $middlewareCollector = new MiddlewareCollector();
-        $middlewareCollector->collect(new SlimMiddlewareIncluder($app));
+        $router = $this->componentsFactory->createRouterInterface();
 
-        $app->addRoutingMiddleware(); // Add the Slim built-in routing middleware
+        $router->run();
 
-        $routerFactory = new RouteCollectorFactory($this->container);
-        $routeCollector = new SlimRouteCollector($app);
+        $configurableApplicationInterface = $this->componentsFactory->createConfigurableApplicationInterface();
 
-
-        $routerFactory->getRouteCollector($routeCollector)->run($routeCollector);
-
-        if ($this->enableErrorHandler) {
-            $this->setErrorHandler($app);
-        }
-
-        return new \Core\Application\App($app);
+        return $configurableApplicationInterface->createByConfig(
+            $this->enableErrorHandler,
+            $this->enableShutdownHandler,
+            $this->displayErrors
+        );
     }
 
     public function useDefaultErrorHandler(bool $enable)
@@ -71,29 +80,5 @@ class AppBuilderManager
             throw new ConfigException('Unable to use default shutdown handler when error handler is not enabled');
         }
         $this->enableShutdownHandler = $enable;
-    }
-
-    private function setErrorHandler(App $app)
-    {
-        $callableResolver = $app->getCallableResolver();
-        $responseFactory = $app->getResponseFactory();
-
-        $logger = $this->container->get(LoggerInterface::class);
-
-        $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory, $logger);
-
-        if ($this->enableShutdownHandler) {
-            $app->add(new ShutdownMiddleware($errorHandler, $this->displayErrors));
-        }
-
-        $errorMiddleware = $app->addErrorMiddleware($this->displayErrors, false, false);
-        $errorMiddleware->setDefaultErrorHandler($errorHandler);
-    }
-
-    private function createApp(): App
-    {
-        AppFactory::setContainer($this->container);
-
-        return AppFactory::create();
     }
 }

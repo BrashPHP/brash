@@ -17,7 +17,7 @@ class JWTAuthMiddleware implements Middleware
 {
     public function __construct(private LoggerInterface $logger)
     {
-        $shouldHave = ["JWT_SECRET", "JWT_SECRET_COOKIE"];
+        $shouldHave = ["JWT_SECRET", "REFRESH_TOKEN_SECRET"];
 
         foreach ($shouldHave as $field) {
             if (!array_key_exists($field, $_ENV)) {

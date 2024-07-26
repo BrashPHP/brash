@@ -21,7 +21,7 @@ class RefreshTokenAction extends Action
     public function action(Request $request): Response
     {
         $secretBody = $_ENV["JWT_SECRET"];
-        $secretCookie = $_ENV["JWT_SECRET_COOKIE"];
+        $secretCookie = $_ENV["REFRESH_TOKEN_SECRET"];
         $cookies = $request->getCookieParams();
 
         $cookieName = REFRESH_TOKEN;

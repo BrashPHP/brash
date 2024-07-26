@@ -9,18 +9,19 @@ use App\Application\Providers\ServicesProvider;
 use Core\Application\App;
 use Core\Builder\AppBuilderManager;
 use Core\Http\Factories\ContainerFactory;
+use Core\Http\Interfaces\ApplicationInterface;
 use Psr\Container\ContainerInterface;
 
 class InstanceManager
 {
     public static ?ContainerInterface $container = null;
 
-    protected App $app;
+    protected ApplicationInterface $app;
 
     /**
      * @throws \Exception
      */
-    final public function getAppInstance(): App
+    final public function getAppInstance(): ApplicationInterface
     {
         $appBuilder = new AppBuilderManager($this->getContainer());
 

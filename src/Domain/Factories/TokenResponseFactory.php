@@ -12,7 +12,7 @@ class TokenResponseFactory
     public static function createToken(Account $account): TokenLoginResponse
     {
         $secretBody = $_ENV['JWT_SECRET'] ?? '';
-        $secretCookie = $_ENV['JWT_SECRET_COOKIE'] ?? '';
+        $secretCookie = $_ENV['REFRESH_TOKEN_SECRET'] ?? '';
 
         $cookieTokenHandler = new CookieTokenCreator($account->uuid);
         $renewToken = $cookieTokenHandler->createToken($secretCookie);

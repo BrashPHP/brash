@@ -14,9 +14,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 beforeEach(function () {
     $this->app = $this->createAppInstance();
-    putenv('JWT_SECRET_COOKIE=cookieblabla');
+    putenv('REFRESH_TOKEN_SECRET=cookieblabla');
     putenv('JWT_SECRET=blabla');
-    $_ENV["JWT_SECRET_COOKIE"] = "cookieblabla";
+    $_ENV["REFRESH_TOKEN_SECRET"] = "cookieblabla";
     $_ENV["JWT_SECRET"] = "blabla";
 });
 

@@ -42,7 +42,7 @@
     "react/http": "^1.9",
     "respect/validation": "^2.2",
     "revolt/event-loop-adapter-react": "^1.1",
-    "slim/psr7": ">=1.0",
+    "slim/psr7": "^1.7",
     "slim/slim": "^4.11",
     "spatie/php-structure-discoverer": "^2.0",
     "symfony/cache": "^6.0",

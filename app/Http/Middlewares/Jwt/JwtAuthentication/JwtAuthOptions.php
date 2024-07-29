@@ -20,7 +20,7 @@ class JwtAuthOptions
     public bool $secure;
 
     /**
-     * @var array<string> 
+     * @var array<string>
      */
     public array $relaxed;
     public string $header;
@@ -28,17 +28,17 @@ class JwtAuthOptions
     public string $cookie;
     public string $attribute;
     /**
-     * @var array<string> 
+     * @var array<string>
      */
     public array $path;
 
     /**
-     * @var RuleInterface[] $rules 
+     * @var RuleInterface[] $rules
      */
     public array $rules;
 
     /**
-     * @var array<string> 
+     * @var array<string>
      */
     public array $ignore;
     public ?\Closure $before;
@@ -74,9 +74,9 @@ class JwtAuthOptions
         $this->path = $path;
         $this->rules = $rules;
         $this->ignore = $ignore;
-        $this->before = $before;
-        $this->after = $after;
-        $this->error = $error;
+        $this->before = $this->toClosure($before);
+        $this->after = $this->toClosure($after);
+        $this->error = $this->toClosure($error);
     }
 
     public static function fromArray(array $data): self
@@ -110,33 +110,23 @@ class JwtAuthOptions
     {
         $this->jwtAuthentication = $target;
 
-        $this->error = $this->bindClosure($this->error, $target);
-        $this->before = $this->bindClosure($this->before, $target);
-        $this->after = $this->bindClosure($this->after, $target);
-
         return $this;
     }
 
     public function onError(ResponseInterface $response, array $arguments): ?ResponseInterface
     {
-        $func = $this->error;
-
-        return is_null($func) ? null : $func($response, $arguments);
+        return $this->error?->call($this->jwtAuthentication, $response, $arguments);
     }
 
     public function onBeforeCallable(ServerRequestInterface $request, array $params): ?ServerRequestInterface
     {
-        $func = $this->before;
-
-        return is_null($func) ? null : $func($request, $params);
+        return $this->before?->call($this->jwtAuthentication, $request, $params);
     }
 
 
     public function onAfterCallable(ResponseInterface $response, array $params): ?ResponseInterface
     {
-        $func = $this->after;
-
-        return is_null($func) ? null : $func($response, $params);
+        return $this->after?->call($this->jwtAuthentication, $response, $params);
     }
 
     private function checkSecret($secret): array
@@ -169,16 +159,12 @@ class JwtAuthOptions
         return $algorithm;
     }
 
-    private function bindClosure(?callable $closure, JwtAuthentication $target): ?\Closure
+    private function toClosure(?callable $closure): ?\Closure
     {
-        if ($closure) {
-            if ($closure instanceof \Closure) {
-                return $closure->bindTo($target);
-            }
-
+        if (!(is_null($closure) || $closure instanceof \Closure)) {
             return \Closure::fromCallable($closure);
         }
 
-        return null;
+        return $closure;
     }
 }

@@ -10,11 +10,13 @@ use Slim\Psr7\Request;
 use Slim\Psr7\Uri;
 use Tests\Builders\Request\RequestBuilder;
 
-class BadRequestConfig extends Exception{}
+class BadRequestConfig extends Exception
+{
+}
 
 trait RequestManagerTrait
 {
-    public const FORMAT = 'application/json';
+    public const string FORMAT = 'application/json';
 
     public function createRequest(
         string $method,
@@ -25,7 +27,7 @@ trait RequestManagerTrait
         ],
         array $serverParams = [],
         array $cookies = []
-    ): Request {
+    ): ServerRequestInterface {
         $uri = new Uri('', '', 80, $path);
         $handle = fopen('php://temp', 'w+');
         $stream = (new StreamFactory())->createStreamFromResource($handle);

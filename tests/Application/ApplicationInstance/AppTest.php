@@ -10,10 +10,19 @@ use Tests\Traits\App\InstanceManager;
 const ENCODE = 'application/json';
 const ENDPOINT = '/test';
 
+class CustomExceptionApp extends \Exception
+{
+    public function __construct()
+    {
+        parent::__construct('ERROR');
+    }
+}
+
 test('should capture successful response', function () {
     $instanceApp = new InstanceManager();
     $app = $instanceApp->createAppInstance();
-    $app->map(['GET'], ENDPOINT, function (ServerRequestInterface $req, ResponseInterface $response) {
+    $app->map(['GET'], ENDPOINT, function (ServerRequestInterface $_, ResponseInterface $response) {
+        $_;
         $json = json_encode(['res' => true]);
         $response->getBody()->write($json);
 
@@ -39,9 +48,7 @@ test('should capture successful response', function () {
 test('should capture 5XX response', function () {
     $instanceApp = new InstanceManager();
     $app = $instanceApp->createAppInstance();
-    $app->map(['GET'], ENDPOINT, function (ServerRequestInterface $req) {
-        throw new \Exception('ERROR');
-    });
+    $app->map(['GET'], ENDPOINT, fn() => throw new CustomExceptionApp());
 
     $request = $this->createRequest(
         'GET',
@@ -53,7 +60,7 @@ test('should capture 5XX response', function () {
     );
     $response = $app->handle($request);
 
-    $body = json_decode($response->getBody()->__tostring(), associative: true);
+    $body = json_decode((string) $response->getBody(), associative: true);
 
     expect($response)->not->toBeNull();
     expect($body)->toBe([
@@ -68,9 +75,12 @@ test('should capture 5XX response', function () {
 test('should capture mapped error response', function () {
     $instanceApp = new InstanceManager();
     $app = $instanceApp->createAppInstance();
-    $app->map(['GET'], ENDPOINT, function (ServerRequestInterface $req) {
-        throw new BadRequestException($req);
-    });
+    $app->map(
+        ['GET'],
+        ENDPOINT,
+        fn(ServerRequestInterface $req) =>
+        throw new BadRequestException($req)
+    );
 
     $request = $this->createRequest(
         'GET',

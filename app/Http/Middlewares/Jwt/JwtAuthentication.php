@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Core\Http\Middlewares\Jwt;
 
 use Core\Http\Middlewares\DoublePass\DoublePassTrait;
+use Core\Http\Middlewares\Jwt\Exceptions\InsecureUseOfMiddlewareException;
+use Core\Http\Middlewares\Jwt\Exceptions\TokenNotFoundException;
 use Core\Http\Middlewares\Jwt\JwtAuthentication\JwtAuthOptions;
 use Core\Http\Middlewares\Jwt\JwtAuthentication\RequestMethodRule;
 use Core\Http\Middlewares\Jwt\JwtAuthentication\RequestPathRule;
@@ -13,6 +15,8 @@ use DomainException;
 use Firebase\JWT\Key;
 use Exception;
 use Firebase\JWT\JWT;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -20,7 +24,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use RuntimeException;
-use Slim\Psr7\Response;
 use SplStack;
 
 
@@ -42,7 +45,9 @@ final class JwtAuthentication implements MiddlewareInterface
 
     private JwtAuthOptions $options;
 
-    public function __construct(JwtAuthOptions $options, ?LoggerInterface $logger = null)
+    private ResponseFactoryInterface $responseFactory;
+
+    public function __construct(JwtAuthOptions $options, ?LoggerInterface $logger = null, ?ResponseFactoryInterface $responseFactoryInterface = null)
     {
         /* Setup stack for rules */
         $this->rules = new SplStack;
@@ -50,6 +55,8 @@ final class JwtAuthentication implements MiddlewareInterface
         $this->logger = $logger;
 
         $this->options = $options->bindToAuthentication($this);
+
+        $this->responseFactory = $responseFactoryInterface ?? new Psr17Factory();
 
         /* If nothing was passed in options add default rules. */
         /* This also means $options->rules overrides $options->path */
@@ -90,11 +97,8 @@ final class JwtAuthentication implements MiddlewareInterface
 
         /* HTTP allowed only if secure is false or server is in relaxed array. */
         if ("https" !== $scheme && $this->options->secure && !in_array($host, $this->options->relaxed)) {
-            $message = sprintf(
-                "Insecure use of middleware over %s denied by configuration.",
-                strtoupper($scheme)
-            );
-            throw new RuntimeException($message);
+            
+            throw new InsecureUseOfMiddlewareException($scheme);
         }
 
         /* If token cannot be found or decoded return with 401 Unauthorized. */
@@ -102,7 +106,7 @@ final class JwtAuthentication implements MiddlewareInterface
             $token = $this->fetchToken($request);
             $decoded = $this->decodeToken($token);
         } catch (RuntimeException | DomainException $exception) {
-            $response = (new Response())->withStatus(401);
+            $response = $this->responseFactory->createResponse(401);
 
             return $this->processError(
                 $response,
@@ -222,7 +226,7 @@ final class JwtAuthentication implements MiddlewareInterface
         /* If everything fails log and throw. */
         $this->log(LogLevel::WARNING, "Token not found");
 
-        throw new RuntimeException("Token not found.");
+        throw new TokenNotFoundException();
     }
 
     private function decodeToken(string $token): array

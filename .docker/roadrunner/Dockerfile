@@ -88,4 +88,6 @@ RUN find /app -type f -exec chmod u+rw,g+rw,o+r {} +
 
 RUN composer install 
 
+RUN composer require spiral/roadrunner-cli && ./vendor/bin/rr get-binary
+
 CMD ["/usr/bin/rr", "serve", "-d", "-c", "/etc/rr.yaml"]

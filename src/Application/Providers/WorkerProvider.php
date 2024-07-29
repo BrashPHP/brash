@@ -12,6 +12,11 @@ use function DI\autowire;
 
 class WorkerProvider implements AppProviderInterface
 {
+    /**
+     * Summary of provider
+     * @param \DI\ContainerBuilder $container
+     * @return void
+     */
     public function provide(ContainerBuilder $container)
     {
         $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();

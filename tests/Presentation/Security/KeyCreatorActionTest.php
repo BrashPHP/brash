@@ -5,9 +5,8 @@ use App\Data\Protocols\AsymCrypto\SignerInterface;
 use App\Presentation\Actions\ResourcesSecurity\KeyCreatorAction;
 use Core\Http\Exceptions\UnprocessableEntityException;
 use Mockery\MockInterface;
+use Nyholm\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
-use Ramsey\Uuid\Uuid;
-use Slim\Psr7\Response;
 
 beforeEach(function () {
     $service = createMockService();

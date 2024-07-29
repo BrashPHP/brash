@@ -50,6 +50,10 @@ test('should call error on jwterror handler when no refresh token is provided', 
 
     assertNotNull($response);
     assertSame(401, $response->getStatusCode());
+    assertSame(
+        '{"message":"You are not allowed to acess this resource"}',
+        $response->getBody()->__toString()
+    );
 });
 
 test('should intercept http cookie refresh', function () {

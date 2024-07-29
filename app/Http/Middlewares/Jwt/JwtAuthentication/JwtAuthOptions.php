@@ -41,9 +41,9 @@ class JwtAuthOptions
      * @var array<string> 
      */
     public array $ignore;
-    public $before;
-    public $after;
-    public $error;
+    public ?\Closure $before;
+    public ?\Closure $after;
+    public ?\Closure $error;
 
     private JwtAuthentication $jwtAuthentication;
 

@@ -52,6 +52,7 @@ class JWTAuthMiddleware implements Middleware
     {
         return function (Response $response) : Response {
             $response = $response->withHeader('Content-Type', 'application/json');
+            
             $response
                 ->getBody()
                 ->write(

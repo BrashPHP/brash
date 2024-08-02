@@ -6,8 +6,11 @@ namespace Core\Server;
 
 use Core\Http\Interfaces\ApplicationInterface;
 use Core\Http\Middlewares\FiberMiddleware;
+use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\Loop;
+use React\Socket\SocketServer;
+
 use function React\Async\async;
 
 final class Server
@@ -35,7 +38,7 @@ final class Server
 
         echo "Server running at $serverAddress" . PHP_EOL;
 
-        $socket = new \React\Socket\SocketServer($serverAddress, loop: $this->loop);
+        $socket = new SocketServer($serverAddress, loop: $this->loop);
 
         $http->listen($socket);
 
@@ -51,7 +54,7 @@ final class Server
     private function createAsyncHandler()
     {
         return async(
-            function (\Psr\Http\Message\ServerRequestInterface $request) {
+            function (ServerRequestInterface $request) {
                 return $this->app->handle($request);
             }
         );

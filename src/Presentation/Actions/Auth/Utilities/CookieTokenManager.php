@@ -39,12 +39,17 @@ class CookieTokenManager
 
     private function arrayValues(): array
     {
-        // $sameSite = isProd() ? 'Strict' : '';
-        return [
+        $options = [
             'expires' => time() + 31536000,
             'httponly' => 'true',
             // 'samesite' => $sameSite,
             'path' => '/'
         ];
+        
+        if (isProd()) {
+            $options['samesite'] = 'Strict';
+        }
+
+        return $options;
     }
 }

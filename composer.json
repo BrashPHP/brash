@@ -28,6 +28,7 @@
     "doctrine/migrations": "^3.6",
     "doctrine/orm": "^3.2",
     "firebase/php-jwt": "^6.0",
+    "league/climate": "^3.8",
     "league/mime-type-detection": "^1.11",
     "league/oauth2-google": "^4.0",
     "monolog/monolog": ">=3.4",

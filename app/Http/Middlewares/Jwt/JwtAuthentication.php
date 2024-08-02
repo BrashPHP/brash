@@ -47,8 +47,11 @@ final class JwtAuthentication implements MiddlewareInterface
 
     private ResponseFactoryInterface $responseFactory;
 
-    public function __construct(JwtAuthOptions $options, ?LoggerInterface $logger = null, ?ResponseFactoryInterface $responseFactoryInterface = null)
-    {
+    public function __construct(
+        JwtAuthOptions $options,
+        ?LoggerInterface $logger = null,
+        ?ResponseFactoryInterface $responseFactoryInterface = null
+    ) {
         /* Setup stack for rules */
         $this->rules = new SplStack;
 
@@ -97,7 +100,7 @@ final class JwtAuthentication implements MiddlewareInterface
 
         /* HTTP allowed only if secure is false or server is in relaxed array. */
         if ("https" !== $scheme && $this->options->secure && !in_array($host, $this->options->relaxed)) {
-            
+
             throw new InsecureUseOfMiddlewareException($scheme);
         }
 

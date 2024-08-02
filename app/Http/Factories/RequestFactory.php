@@ -12,13 +12,13 @@ class RequestFactory
         $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
 
         $creator = new \Nyholm\Psr7Server\ServerRequestCreator(
-            $psr17Factory,
+            serverRequestFactory: $psr17Factory,
             // ServerRequestFactory
-            $psr17Factory,
+            uriFactory: $psr17Factory,
             // UriFactory
-            $psr17Factory,
+            uploadedFileFactory: $psr17Factory,
             // UploadedFileFactory
-            $psr17Factory // StreamFactory
+            streamFactory: $psr17Factory // StreamFactory
         );
 
         return $creator->fromGlobals();

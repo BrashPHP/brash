@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Core\functions;
 
+require_once __DIR__ ."/string.php";
 
 define('REFRESH_TOKEN', 'refresh-token');
 define('JWT_NAME', 'jwt-token');
+
+
 
 /**
  * Redirect to a new page.
@@ -24,7 +27,7 @@ if (!function_exists('fromRootPath')) {
     {
         $root = dirname(dirname(__DIR__));
 
-        return $root .'/'. $path;
+        return "{$root}/{$path}";
     }
 }
 

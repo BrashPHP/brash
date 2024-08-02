@@ -2,6 +2,7 @@
 
 namespace Core\Services\Loggin;
 
+use League\CLImate\CLImate;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
@@ -12,6 +13,8 @@ use Symfony\Component\VarDumper\Caster\ScalarStub;
 /** Print Monolog logs on the command line */
 class CommandLineLogger extends StreamHandler
 {
+    private CLImate $climate;
+
     public function __construct(
         int|string|Level $level = Level::Debug,
         bool $bubble = true,
@@ -27,6 +30,7 @@ class CommandLineLogger extends StreamHandler
         );
         /** Set the default formatter to only print the message */
         $this->setFormatter(new LineFormatter("%message%\n"));
+        $this->climate = new CLImate();
     }
 
     /**
@@ -65,18 +69,15 @@ class CommandLineLogger extends StreamHandler
     private function dump(mixed ...$vars): void
     {
         if (!$vars) {
-            VarDumper::dump(new ScalarStub('🐛'));
+            $this->climate->dump(new ScalarStub('🐛'));
             return;
         }
 
         if (array_key_exists(0, $vars) && count($vars) === 1) {
-            VarDumper::dump(var: $vars[0]);
+            $this->climate->dump(var: $vars[0]);
         } else {
             foreach ($vars as $key => $value) {
-                VarDumper::dump(
-                    var: $value,
-                    label: is_int($key) ? $key + 1 : $key
-                );
+                $this->climate->dump([$key => $value]);
             }
         }
     }

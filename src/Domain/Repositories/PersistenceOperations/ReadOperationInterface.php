@@ -7,8 +7,10 @@ use App\Domain\Repositories\PersistenceOperations\Responses\ResultSetInterface;
 interface ReadOperationInterface
 {
     public function findAll(bool $paginate = false, int $page = 1, int $limit = 20): ResultSetInterface;
+
     #[\ReturnTypeWillChange]
     public function findByID(int $id): ?object;
+
     #[\ReturnTypeWillChange]
     public function findByKey(string $key, mixed $value): ?object;
 
@@ -17,7 +19,7 @@ interface ReadOperationInterface
     /**
      * Match conditions within repository
      *
-     * @param array<string, mixed> $conditions
+     * @param  array<string, mixed>  $conditions
      */
     public function findWithConditions(array $conditions): array;
 }

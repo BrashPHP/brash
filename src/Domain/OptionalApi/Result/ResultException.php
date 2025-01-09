@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ResultException
  *
@@ -14,6 +15,4 @@ use Exception;
 /**
  * ResultException
  */
-class ResultException extends Exception
-{
-}
+class ResultException extends Exception {}

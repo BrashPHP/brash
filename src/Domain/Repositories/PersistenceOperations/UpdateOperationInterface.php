@@ -2,7 +2,6 @@
 
 namespace App\Domain\Repositories\PersistenceOperations;
 
-
 interface UpdateOperationInterface
 {
     #[\ReturnTypeWillChange]

@@ -10,7 +10,7 @@ class AssetValidation
 {
     public function validation(): Validatable
     {
-        return v::key('file_name', new FileRule())
+        return v::key('file_name', new FileRule)
             ->key('path', v::stringType())
             ->key('url', v::optional(v::url()))
             ->key('original_name', v::StringType());

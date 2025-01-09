@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\Presentation\Auth;
@@ -26,8 +27,7 @@ test('should call authentication with correct values', function () {
 
     $service->shouldReceive('auth')
         ->once()
-        ->andReturn(new TokenLoginResponse('', ''))
-    ;
+        ->andReturn(new TokenLoginResponse('', ''));
     /** @var MockInterface|LoggerInterface */
     $logger = mock(LoggerInterface::class);
     $logger->shouldReceive('info')->andReturn(null);
@@ -57,7 +57,7 @@ test('should return 422 if validation returns error', function () {
     $response = $app->handle($request);
 
     $payload = (string) $response->getBody();
-    $expectedError = new ActionError(ErrorsEnum::UNPROCESSABLE_ENTITY, "[{\"password\":\"Password wrong my dude\"}]");
+    $expectedError = new ActionError(ErrorsEnum::UNPROCESSABLE_ENTITY, '[{"password":"Password wrong my dude"}]');
     $expectedPayload = new ActionPayload(statusCode: 422, error: $expectedError);
     $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
 
@@ -87,6 +87,7 @@ function makeCredentials(): Credentials
 {
     return new Credentials('any_mail@gmail.com', 'Password04');
 }
+
 function createValidatorService(): ValidationInterface|MockInterface
 {
     return mock(ValidationInterface::class);

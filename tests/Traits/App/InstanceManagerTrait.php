@@ -2,16 +2,14 @@
 
 namespace Tests\Traits\App;
 
+use App\Application\Providers\DependenciesProvider;
+use App\Application\Providers\DoctrineDefinitionsProvider;
+use App\Application\Providers\RepositoriesProvider;
+use App\Application\Providers\ServicesProvider;
 use Core\Builder\AppBuilderManager;
 use Core\Http\Factories\ContainerFactory;
-use Psr\Container\ContainerInterface;
-use App\Application\Providers\{
-    DependenciesProvider,
-    RepositoriesProvider,
-    ServicesProvider,
-    DoctrineDefinitionsProvider
-};
 use Core\Http\Interfaces\ApplicationInterface;
+use Psr\Container\ContainerInterface;
 
 trait InstanceManagerTrait
 {
@@ -29,7 +27,7 @@ trait InstanceManagerTrait
         return $appBuilder->build();
     }
 
-    final protected function createAppInstance()
+    final protected function createAppInstance(): ApplicationInterface
     {
         $appBuilder = new AppBuilderManager($this->getContainer(true));
 
@@ -52,12 +50,12 @@ trait InstanceManagerTrait
 
     public static function setUpContainer(): ContainerInterface
     {
-        $containerFactory = new ContainerFactory();
+        $containerFactory = new ContainerFactory;
         $containerFactory->addProviders(
-            new DependenciesProvider(),
-            new RepositoriesProvider(),
-            new ServicesProvider(),
-            new DoctrineDefinitionsProvider(),
+            new DependenciesProvider,
+            new RepositoriesProvider,
+            new ServicesProvider,
+            new DoctrineDefinitionsProvider,
         );
 
         return $containerFactory->get();
@@ -65,7 +63,7 @@ trait InstanceManagerTrait
 
     public static function requireContainer(bool $forceUpdate = false): ContainerInterface
     {
-        if (!self::$container instanceof ContainerInterface || $forceUpdate) {
+        if (! self::$container instanceof ContainerInterface || $forceUpdate) {
             self::$container = self::setUpContainer();
         }
 

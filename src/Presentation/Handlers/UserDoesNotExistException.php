@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Presentation\Handlers;
 
 final class UserDoesNotExistException extends \Exception

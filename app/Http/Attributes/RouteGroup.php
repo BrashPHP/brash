@@ -9,16 +9,14 @@ use Psr\Http\Server\MiddlewareInterface;
 readonly class RouteGroup
 {
     /**
-     * @param string                                                $path
-     * @param class-string|self|null                                $parent
-     * @param MiddlewareInterface|string|MiddlewareInterface[]|null $middleware
-     * @param bool                                                  $skip
+     * @param  string  $path
+     * @param  class-string|self|null  $parent
+     * @param  MiddlewareInterface|string|MiddlewareInterface[]|null  $middleware
      */
     public function __construct(
         public string $prefix,
         public string|self|null $parent = null,
         public MiddlewareInterface|string|array|null $middleware = null,
         public bool $skip = false,
-    ) {
-    }
+    ) {}
 }

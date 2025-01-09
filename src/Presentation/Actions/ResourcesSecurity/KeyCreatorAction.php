@@ -16,18 +16,17 @@ class KeyCreatorAction extends Action
 {
     public function __construct(
         private SignerInterface $signerService
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): Response
     {
         $parsedBody = json_decode((string) $request->getBody());
 
-        if (!$parsedBody?->uuid) {
+        if (! $parsedBody?->uuid) {
             throw new UnprocessableEntityException($request);
         }
 
-        $uuid = Uuid::fromString($parsedBody->uuid ?? "");
+        $uuid = Uuid::fromString($parsedBody->uuid ?? '');
 
         $publicKey = $this->signerService->sign($uuid);
 

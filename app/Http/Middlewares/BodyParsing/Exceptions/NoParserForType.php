@@ -6,6 +6,6 @@ final class NoParserForType extends \RuntimeException
 {
     public function __construct(string $mediaType)
     {
-        parent::__construct('No parser for type ' . $mediaType);
+        parent::__construct('No parser for type '.$mediaType);
     }
 }

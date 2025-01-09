@@ -8,13 +8,13 @@ use Core\Http\Interfaces\ConfigurableApplicationInterface;
 use Core\Http\Middlewares\ShutdownMiddleware;
 use Psr\Log\LoggerInterface;
 use Slim\App;
+
 use function Core\functions\isProd;
 
 final class SlimAppInterfaceBuilder implements ConfigurableApplicationInterface
 {
-    public function __construct(private App $app, private LoggerInterface $logger)
-    {
-    }
+    public function __construct(private App $app, private LoggerInterface $logger) {}
+
     /**
      * Configures error handling used in the application instance
      */
@@ -37,7 +37,6 @@ final class SlimAppInterfaceBuilder implements ConfigurableApplicationInterface
             $errorMiddleware = $app->addErrorMiddleware($displayErrors, true, isProd());
             $errorMiddleware->setDefaultErrorHandler($errorHandler);
         }
-
 
         return new SlimAppAdapter($app);
     }

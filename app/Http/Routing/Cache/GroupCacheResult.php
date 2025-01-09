@@ -1,18 +1,15 @@
 <?php
 
 namespace Core\Http\Routing\Cache;
+
 use Core\Http\Attributes\RouteGroup;
 use Core\Http\Domain\GroupModel;
-
-
 
 class GroupCacheResult
 {
     public function __construct(
         private array $cache = []
-    ) {
-
-    }
+    ) {}
 
     private function forgeKey(string|RouteGroup $group): string
     {

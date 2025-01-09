@@ -4,66 +4,57 @@ declare(strict_types=1);
 
 namespace Core\functions;
 
-require_once __DIR__ ."/string.php";
-
 define('REFRESH_TOKEN', 'refresh-token');
 define('JWT_NAME', 'jwt-token');
-
-
 
 /**
  * Redirect to a new page.
  *
- * @param string $path
+ * @param  string  $path
  */
 function redirect($path): void
 {
-    header("Location: /{$path}");
+    header('Location: /'.$path);
 }
 
-
-if (!function_exists('fromRootPath')) {
+if (! function_exists('fromRootPath')) {
     function fromRootPath(string $path)
     {
         $root = dirname(dirname(__DIR__));
 
-        return "{$root}/{$path}";
+        return sprintf('%s/%s', $root, $path);
     }
 }
 
-if (!function_exists('println')) {
+if (! function_exists('println')) {
     function println(string $str): string
     {
-        return $str . PHP_EOL;
+        return $str.PHP_EOL;
     }
 }
 
-
-
 // provides a dump & die helper
-if (!function_exists('dd')) {
-    function dd()
+if (! function_exists('dd')) {
+    function dd(...$args)
     {
-        $args = func_get_args();
-        call_user_func_array('dump', $args);
+        dump(...$args);
 
         exit();
     }
 }
 
 // provides a dump helper
-if (!function_exists('d')) {
-    function d()
+if (! function_exists('d')) {
+    function d(...$args)
     {
-        $args = func_get_args();
-        call_user_func_array('dump', $args);
+        dump(...$args);
     }
 }
 
 /**
  * provides a hashed string.
  */
-if (!function_exists('manoucheHash')) {
+if (! function_exists('manoucheHash')) {
     function manoucheHash(string $password, array $options = ['cost' => 8]): string
     {
         return password_hash($password, PASSWORD_BCRYPT, $options);
@@ -81,7 +72,7 @@ function manoucheCheck(string $plainText, string $hash): bool
 /**
  * Provides information about the system's mode
  */
-if (!function_exists('mode')) {
+if (! function_exists('mode')) {
     function mode(): string
     {
         return $_ENV['MODE'] ?? '';
@@ -91,10 +82,11 @@ if (!function_exists('mode')) {
 /**
  * Provides information about the system's mode, whether it is in production mode or not.
  */
-if (!function_exists('inTesting')) {
+if (! function_exists('inTesting')) {
     function inTesting()
     {
         $mode = $_ENV['MODE'] ?? '';
+
         return $mode === 'TEST';
     }
 }
@@ -102,10 +94,11 @@ if (!function_exists('inTesting')) {
 /**
  * Provides information about the system's mode, whether it is in production mode or not.
  */
-if (!function_exists('isProd')) {
+if (! function_exists('isProd')) {
     function isProd()
     {
         $mode = $_ENV['MODE'] ?? '';
+
         return $mode === 'PRODUCTION';
     }
 }
@@ -113,10 +106,11 @@ if (!function_exists('isProd')) {
 /**
  * Provides information about the system's mode, whether it is in dev mode or not.
  */
-if (!function_exists('isDev')) {
+if (! function_exists('isDev')) {
     function isDev(): bool
     {
         $mode = $_ENV['MODE'] ?? '';
+
         return $mode === 'DEV';
     }
 }
@@ -124,17 +118,17 @@ if (!function_exists('isDev')) {
 /**
  * Makes a string camel case
  */
-if (!function_exists('toCamelCase')) {
+if (! function_exists('toCamelCase')) {
     function toCamelCase(string $input, ?string $sepators = '_'): string
     {
-        return str_replace("_", "", lcfirst(ucwords($input, $sepators)));
+        return str_replace('_', '', lcfirst(ucwords($input, $sepators)));
     }
 }
 
 /**
  * Creates a new array applying camel case to keys
  */
-if (!function_exists('arrayToCamelCase')) {
+if (! function_exists('arrayToCamelCase')) {
     function arrayToCamelCase(array $array): array
     {
         $result = [];

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Core\Http\ErrorHandlers;
 
 use Core\Http\Exceptions\HttpInternalServerErrorException;
-use Slim\ResponseEmitter;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Interfaces\ErrorHandlerInterface;
+use Slim\ResponseEmitter;
 
 class ShutdownHandler
 {
@@ -15,8 +15,7 @@ class ShutdownHandler
         private Request $request,
         private ErrorHandlerInterface $errorHandler,
         private bool $displayErrorDetails
-    ) {
-    }
+    ) {}
 
     public function __invoke()
     {
@@ -30,27 +29,27 @@ class ShutdownHandler
 
             if ($this->displayErrorDetails) {
                 switch ($errorType) {
-                case E_USER_ERROR:
-                    $message = sprintf('FATAL ERROR: %s. ', $errorMessage);
-                    $message .= sprintf(' on line %d in file %s.', $errorLine, $errorFile);
+                    case E_USER_ERROR:
+                        $message = sprintf('FATAL ERROR: %s. ', $errorMessage);
+                        $message .= sprintf(' on line %d in file %s.', $errorLine, $errorFile);
 
-                    break;
+                        break;
 
-                case E_USER_WARNING:
-                    $message = sprintf('WARNING: %s', $errorMessage);
+                    case E_USER_WARNING:
+                        $message = sprintf('WARNING: %s', $errorMessage);
 
-                    break;
+                        break;
 
-                case E_USER_NOTICE:
-                    $message = sprintf('NOTICE: %s', $errorMessage);
+                    case E_USER_NOTICE:
+                        $message = sprintf('NOTICE: %s', $errorMessage);
 
-                    break;
+                        break;
 
-                default:
-                    $message = sprintf('ERROR: %s', $errorMessage);
-                    $message .= sprintf(' on line %d in file %s.', $errorLine, $errorFile);
+                    default:
+                        $message = sprintf('ERROR: %s', $errorMessage);
+                        $message .= sprintf(' on line %d in file %s.', $errorLine, $errorFile);
 
-                    break;
+                        break;
                 }
             }
 
@@ -74,7 +73,7 @@ class ShutdownHandler
                 ob_clean();
             }
 
-            $responseEmitter = new ResponseEmitter();
+            $responseEmitter = new ResponseEmitter;
             $responseEmitter->emit($response);
         }
     }

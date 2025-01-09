@@ -9,11 +9,10 @@ use App\Data\Protocols\Media\MediaHostInterface;
 use App\Domain\Contracts\ModelInterface;
 use App\Domain\Models\Assets\AbstractAsset;
 use App\Domain\Models\Marker\Marker;
-use DateTimeImmutable;
 use DateTimeInterface;
 use Ramsey\Uuid\UuidInterface;
 
-class PlacementObject implements ModelInterface, MediaHostInterface
+class PlacementObject implements MediaHostInterface, ModelInterface
 {
     public function __construct(
         public ?int $id,
@@ -21,11 +20,10 @@ class PlacementObject implements ModelInterface, MediaHostInterface
         public ?Marker $marker,
         public bool $isActive = true,
         public ?AbstractAsset $asset = null,
-        public ?DateTimeInterface $createdAt = new \DateTime(),
-        public ?DateTimeInterface $updated = new \DateTime(),
+        public ?DateTimeInterface $createdAt = new \DateTime,
+        public ?DateTimeInterface $updated = new \DateTime,
         public ?UuidInterface $uuid = null
-    ) {
-    }
+    ) {}
 
     public function assetInformation(): ?AbstractAsset
     {

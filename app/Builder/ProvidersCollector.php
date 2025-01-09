@@ -8,7 +8,7 @@ use DI\ContainerBuilder;
 class ProvidersCollector
 {
     /**
-     * @var class-string<AppProviderInterface>|AppProviderInterface $providers
+     * @var class-string<AppProviderInterface>|AppProviderInterface
      */
     private array $providers = [];
 
@@ -17,8 +17,9 @@ class ProvidersCollector
         foreach ($this->providers as $provider) {
             $objectProvider = $provider;
             if (is_string($provider)) {
-                $objectProvider = new $provider();
+                $objectProvider = new $provider;
             }
+
             $objectProvider->provide($containerBuilder);
         }
     }
@@ -26,9 +27,7 @@ class ProvidersCollector
     /**
      * Includes a provider to add entries to the container and boots application dependencies.
      *
-     * @param class-string<AppProviderInterface>|\Core\Providers\AppProviderInterface $provider
-     *
-     * @return void
+     * @param  class-string<AppProviderInterface>|\Core\Providers\AppProviderInterface  $provider
      */
     public function addProvider(string|AppProviderInterface $provider): void
     {

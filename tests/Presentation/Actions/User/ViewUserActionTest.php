@@ -13,9 +13,8 @@ use Core\Http\Errors\ErrorsEnum;
 use DI\Container;
 use Tests\Traits\App\InstanceManager;
 
-
 test('action', function () {
-    $instanceApp = new InstanceManager();
+    $instanceApp = new InstanceManager;
     /** @var Container $container */
     $container = $instanceApp->getContainer(true);
 
@@ -24,9 +23,8 @@ test('action', function () {
     /** @var \Mockery\MockInterface */
     $repository = mock(UserRepository::class);
     $repository->expects('findUserOfId')->andReturn($user);
-    
+
     $app = $instanceApp->getAppInstance();
-        
 
     $container->set(UserRepository::class, $repository);
 
@@ -41,13 +39,13 @@ test('action', function () {
 });
 
 test('action throws user not found exception', function () {
-    $instanceApp = new InstanceManager();
+    $instanceApp = new InstanceManager;
     /** @var Container $container */
     $container = $instanceApp->getContainer(true);
     $app = $instanceApp->getAppInstance();
 
     $userRepositoryProphecy = $this->getMockBuilder(UserRepository::class)->getMock();
-    $userRepositoryProphecy->method('findUserOfId')->willThrowException(new UserNotFoundException())->with(1);
+    $userRepositoryProphecy->method('findUserOfId')->willThrowException(new UserNotFoundException)->with(1);
     $userRepositoryProphecy->expects($this->once())->method('findUserOfId');
 
     $container->set(UserRepository::class, $userRepositoryProphecy);

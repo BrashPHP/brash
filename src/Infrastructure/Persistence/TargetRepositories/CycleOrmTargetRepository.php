@@ -1,16 +1,13 @@
 <?php
+
 namespace App\Infrastructure\Persistence\TargetRepositories;
 
 use App\Infrastructure\Persistence\Contracts\RepositoryInterface;
 use Cycle\ORM\Select\Repository as CycleRepository;
 
-
 class CycleOrmTargetRepository implements RepositoryInterface
 {
-    public function __construct(private CycleRepository $repository)
-    {
-
-    }
+    public function __construct(private CycleRepository $repository) {}
 
     public function findByPK(mixed $id): ?object
     {
@@ -52,6 +49,6 @@ class CycleOrmTargetRepository implements RepositoryInterface
 
     public function entityTargetName(): string
     {
-        return "";
+        return '';
     }
 }

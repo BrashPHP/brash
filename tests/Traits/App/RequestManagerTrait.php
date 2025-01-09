@@ -10,9 +10,7 @@ use Slim\Psr7\Request;
 use Slim\Psr7\Uri;
 use Tests\Builders\Request\RequestBuilder;
 
-class BadRequestConfig extends Exception
-{
-}
+class BadRequestConfig extends Exception {}
 
 trait RequestManagerTrait
 {
@@ -30,9 +28,9 @@ trait RequestManagerTrait
     ): ServerRequestInterface {
         $uri = new Uri('', '', 80, $path);
         $handle = fopen('php://temp', 'w+');
-        $stream = (new StreamFactory())->createStreamFromResource($handle);
+        $stream = (new StreamFactory)->createStreamFromResource($handle);
 
-        $h = new Headers();
+        $h = new Headers;
         foreach ($headers as $name => $value) {
             $h->addHeader($name, $value);
         }
@@ -44,11 +42,11 @@ trait RequestManagerTrait
         array|object $data,
         string $method,
         string $path,
-        array $headers = null,
-        array $serverParams = null,
-        array $cookies = null
+        ?array $headers = null,
+        ?array $serverParams = null,
+        ?array $cookies = null
     ): ServerRequestInterface {
-        if (!($method && $path)) {
+        if (! ($method && $path)) {
             throw new BadRequestConfig('Unable to create request');
         }
 
@@ -84,14 +82,14 @@ trait RequestManagerTrait
     /**
      * Create a JSON request.
      *
-     * @param string                                $method The HTTP method
-     * @param string|\Psr\Http\Message\UriInterface $uri    The URI
-     * @param null|array                            $data   The json data
+     * @param  string  $method  The HTTP method
+     * @param  string|\Psr\Http\Message\UriInterface  $uri  The URI
+     * @param  null|array  $data  The json data
      */
     protected function createJsonRequest(
         string $method,
         $uri,
-        array|object $data = null
+        array|object|null $data = null
     ): ServerRequestInterface {
         $request = $this->createRequest($method, $uri);
 

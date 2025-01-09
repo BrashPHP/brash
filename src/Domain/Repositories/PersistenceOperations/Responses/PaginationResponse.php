@@ -9,8 +9,7 @@ final class PaginationResponse implements ResultSetInterface
         private int $lastPage,
         private bool $currentHasNoResults,
         private array $items
-    ) {
-    }
+    ) {}
 
     public function jsonSerialize(): mixed
     {

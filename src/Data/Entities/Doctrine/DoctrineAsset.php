@@ -12,18 +12,18 @@ use App\Domain\Models\Assets\Types\AssetFactoryFacade;
 use App\Domain\Models\Assets\Types\Helpers\AllowedExtensionChecker;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\Table;
 
 /**
  * Assets resources comprehend the entities which hold data such as medias, assets, etc.
- * 
+ *
  * @implements ModelCoercionInterface<AbstractAsset>
  * @implements ModelParsingInterface<AbstractAsset>
  */
@@ -62,23 +62,22 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
 
     /**
      * One Asset may have a set of sub assets, e.g., a 3D object can have many textures.
-     * 
-     * @param Collection<static> $children
+     *
+     * @param  Collection<static>  $children
      */
-    #[OneToMany(targetEntity: self::class, mappedBy: "parent")]
+    #[OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private Collection $children;
 
     /**
      * Many sub assets have a single parent.
      */
-    #[ManyToOne(targetEntity: self::class, inversedBy: "children")]
+    #[ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     private ?self $parent = null;
 
     public function __construct()
     {
-        $this->children = new ArrayCollection();
+        $this->children = new ArrayCollection;
     }
-
 
     public function getId()
     {
@@ -128,12 +127,10 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
         return $this;
     }
 
-
     public function getMediaType(): string
     {
         return $this->mediaType;
     }
-
 
     public function setMediaType(string $mediaType): self
     {
@@ -143,7 +140,7 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
     }
 
     /**
-     * @return array 
+     * @return array
      */
     public function jsonSerialize(): mixed
     {
@@ -161,7 +158,6 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
         ];
     }
 
-
     public function getTemporaryLocation(): ?string
     {
         return $this->temporaryLocation;
@@ -174,12 +170,10 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
         return $this;
     }
 
-
     public function getOriginalName(): string
     {
         return $this->originalName;
     }
-
 
     public function setOriginalName(string $originalName): self
     {
@@ -187,7 +181,6 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
 
         return $this;
     }
-
 
     public function getMimeType(): string
     {
@@ -205,7 +198,6 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
     {
         return $this->parent;
     }
-
 
     public function setParent(self $parent): self
     {
@@ -248,7 +240,7 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
 
     public function toModel(): AbstractAsset
     {
-        $children = $this->getChildren()->map(static fn(DoctrineAsset $el) => $el->toModel())->toArray();
+        $children = $this->getChildren()->map(static fn (DoctrineAsset $el) => $el->toModel())->toArray();
         $createAsset = new CreateAsset(
             path: $this->getPath(),
             fileName: $this->getFileName(),
@@ -257,7 +249,7 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
             children: $children,
         );
 
-        $factoryFacade = new AssetFactoryFacade(new AllowedExtensionChecker());
+        $factoryFacade = new AssetFactoryFacade(new AllowedExtensionChecker);
         $asset = $factoryFacade->create($createAsset);
         $asset->setId($this->getId());
         $asset->setUuid($this->getUuid());
@@ -267,9 +259,8 @@ class DoctrineAsset implements ModelCoercionInterface, ModelParsingInterface
         return $asset;
     }
 
-
     /**
-     * @param AbstractAsset $model 
+     * @param  AbstractAsset  $model
      */
     public function fromModel(object $model): static
     {

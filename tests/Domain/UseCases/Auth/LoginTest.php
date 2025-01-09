@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Domain\UseCases\Auth;
 
-use Mockery;
-use Mockery\MockInterface;
-use \Tests\Domain\UseCases\Auth\AuthSutTypes;
 use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Data\Protocols\Cryptography\ComparerInterface;
 use App\Data\UseCases\Authentication\Errors\IncorrectPasswordException;
@@ -16,9 +13,11 @@ use App\Domain\Dto\TokenLoginResponse;
 use App\Domain\Exceptions\NoAccountFoundException;
 use App\Domain\Models\Account;
 use App\Domain\Repositories\AccountRepository;
+use Mockery;
+use Mockery\MockInterface;
 use Ramsey\Uuid\Uuid;
-use function PHPUnit\Framework\assertTrue;
 
+use function PHPUnit\Framework\assertTrue;
 
 beforeEach(function () {
     $this->sut = new AuthSutTypes(mockRepository(), makeComparer());
@@ -30,14 +29,16 @@ function makeCredentials()
 {
     return new Credentials(access: '@mail.com', password: 'password');
 }
+
 /**
- * @param AccountRepository $repository
- * @param ComparerInterface $comparer
+ * @param  AccountRepository  $repository
+ * @param  ComparerInterface  $comparer
  */
 function makeService($repository, $comparer): LoginServiceInterface
 {
     return new Login($repository, $comparer);
 }
+
 function mockRepository(): AccountRepository|MockInterface
 {
     return mock(AccountRepository::class);
@@ -68,7 +69,7 @@ test('should throw error if no account is found', function () {
     $mock->expects('findByAccess')->andReturn(null);
     $accountStub = makeCredentials();
 
-    expect(fn() => $loginService->auth($accountStub))->toThrow(NoAccountFoundException::class);
+    expect(fn () => $loginService->auth($accountStub))->toThrow(NoAccountFoundException::class);
 });
 
 test('should call hash comparer with correct values', function () {
@@ -86,8 +87,8 @@ test('should call hash comparer with correct values', function () {
     $loginService = $this->sut->service;
     try {
         $loginService->auth($credentialsStub);
-    } catch (\Throwable $th) {
-        expect($th->getMessage())->toBe('');
+    } catch (\Throwable $throwable) {
+        expect($throwable->getMessage())->toBe('');
     }
 });
 
@@ -118,7 +119,7 @@ test('should throw if password differs from retrieved one', function () {
     $credentialsStub = makeCredentials();
     $loginService->auth($credentialsStub);
 
-    expect(fn() => $loginService->auth($credentialsStub))->toThrow(IncorrectPasswordException::class);
+    expect(fn () => $loginService->auth($credentialsStub))->toThrow(IncorrectPasswordException::class);
 });
 
 test('success case', function () {
@@ -129,7 +130,6 @@ test('success case', function () {
     $this->sut->repository->shouldReceive('findByAccess')->andReturn(
         $account
     );
-
 
     $credentialsStub = makeCredentials();
     $response = $this->sut->service->auth($credentialsStub);

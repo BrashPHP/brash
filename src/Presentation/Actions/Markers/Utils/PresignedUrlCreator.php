@@ -9,7 +9,7 @@ use S3DataTransfer\S3\Factories\ClientProvider;
 class PresignedUrlCreator
 {
     private S3Client $s3Client;
-    
+
     private string $bucket = 'artchier-markers';
 
     public function __construct()
@@ -29,8 +29,8 @@ class PresignedUrlCreator
         if ($this->s3Client->doesObjectExist($this->bucket, $object)) {
             $cmd = $this->s3Client->getCommand(
                 'GetObject', [
-                'Bucket' => $this->bucket,
-                'Key' => $object,
+                    'Bucket' => $this->bucket,
+                    'Key' => $object,
                 ]
             );
 

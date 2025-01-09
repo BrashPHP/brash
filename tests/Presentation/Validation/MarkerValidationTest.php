@@ -3,10 +3,11 @@
 declare(strict_types=1);
 use App\Presentation\Actions\Markers\MarkerValidations\MarkerValidation;
 use Core\Validation\Facade\ValidationFacade;
+
 use function PHPUnit\Framework\assertNotNull;
 
 beforeEach(function () {
-    $facade = new ValidationFacade((new MarkerValidation())->validation());
+    $facade = new ValidationFacade((new MarkerValidation)->validation());
     $this->sut = $facade->createValidations();
 });
 test('should return false when fields are empty', function () {

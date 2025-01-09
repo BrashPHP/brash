@@ -1,17 +1,17 @@
 <?php
 
 declare(strict_types=1);
-use Doctrine\ORM\EntityManagerInterface;
-use Mockery\MockInterface;
-use \Tests\Domain\UseCases\Markers\Store\SutTypes;
 use App\Domain\Dto\Credentials;
 use App\Domain\Models\Marker\Marker;
 use App\Domain\Models\Museum;
 use App\Domain\Repositories\MarkerRepositoryInterface;
 use App\Domain\Repositories\MuseumRepository;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
+use Mockery\MockInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Tests\Domain\UseCases\Markers\Store\SutTypes;
 
 beforeEach(function () {
     $this->sut = new SutTypes(
@@ -45,8 +45,8 @@ function mockMarkerRepository(): MarkerRepositoryInterface|MockInterface
 test('should pass when service is called', function () {
     $service = $this->sut->service;
     $conn = mock(Connection::class);
-    $conn->shouldReceive("beginTransaction")->once()->andReturn(true);
-    $conn->shouldReceive("commit")->once()->andReturn(true);
+    $conn->shouldReceive('beginTransaction')->once()->andReturn(true);
+    $conn->shouldReceive('commit')->once()->andReturn(true);
 
     $this->sut->em->expects('getConnection')->twice()->andReturn($conn);
 
@@ -65,9 +65,9 @@ test('should pass when service is called', function () {
         new Marker(
             null,
             null,
-            "name",
-            "text",
-            "title",
+            'name',
+            'text',
+            'title',
         )
     );
 });

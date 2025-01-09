@@ -14,8 +14,7 @@ class UpdateMuseumAction extends Action
 {
     public function __construct(
         private MuseumRepository $museumRepository
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): Response
     {

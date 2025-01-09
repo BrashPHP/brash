@@ -7,14 +7,14 @@ namespace Core\Http\Exceptions;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * @api 
+ * @api
  */
 class HttpUnauthorizedException extends BaseHttpException
 {
     public function __construct(
         ServerRequestInterface $request,
         string $message = 'Unauthorized',
-        \Throwable|null $previous = null,
+        ?\Throwable $previous = null,
     ) {
         parent::__construct(
             $request,

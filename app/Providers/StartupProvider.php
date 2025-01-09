@@ -2,15 +2,15 @@
 
 namespace Core\Providers;
 
-use Core\Providers\AppProviderInterface;
 use DI\ContainerBuilder;
-use Symfony\Component\Dotenv\Dotenv;
-use function Core\functions\fromRootPath;
 use Respect\Validation\Factory;
+use Symfony\Component\Dotenv\Dotenv;
+
+use function Core\functions\fromRootPath;
 
 class StartupProvider implements AppProviderInterface
 {
-    public function provide(ContainerBuilder $container)
+    public function provide(ContainerBuilder $container): void
     {
         // Error reporting for production
         // error_reporting(0);
@@ -22,7 +22,7 @@ class StartupProvider implements AppProviderInterface
         $envPath = fromRootPath('.env');
 
         if (file_exists($envPath)) {
-            $dotenv = new Dotenv();
+            $dotenv = new Dotenv;
             $dotenv->load($envPath);
         }
 
@@ -32,11 +32,9 @@ class StartupProvider implements AppProviderInterface
     private function setCustomValidations()
     {
         Factory::setDefaultInstance(
-            (new Factory())
+            (new Factory)
                 ->withRuleNamespace('App\\Presentation\\Validation\\Rules')
                 ->withExceptionNamespace('App\\Presentation\\Validation\\Exceptions')
         );
     }
-
-
 }

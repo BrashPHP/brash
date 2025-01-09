@@ -24,10 +24,10 @@ class AssetFactoryFacade implements AssetFactoryInterface
 
     public function __construct(private AllowedExtensionChecker $allowedExtensionChecker)
     {
-        $this->factories[] = new PictureAssetFactory();
-        $this->factories[] = new VideoAssetFactory();
-        $this->factories[] = new ThreeDimensionalAssetFactory();
-        $this->factories[] = new TextureAssetFactory();
+        $this->factories[] = new PictureAssetFactory;
+        $this->factories[] = new VideoAssetFactory;
+        $this->factories[] = new ThreeDimensionalAssetFactory;
+        $this->factories[] = new TextureAssetFactory;
     }
 
     public function create(CreateAsset $command): AbstractAsset
@@ -38,7 +38,7 @@ class AssetFactoryFacade implements AssetFactoryInterface
                 foreach ($command->children() as $child) {
                     $childrenAssets[] = $this->create($child);
                 }
-        
+
                 $asset = $factory->create($command);
                 $asset->setChildren(new ArrayCollection($childrenAssets));
 
@@ -46,6 +46,6 @@ class AssetFactoryFacade implements AssetFactoryInterface
             }
         }
 
-        throw new NotAllowedAssetType();
+        throw new NotAllowedAssetType;
     }
 }

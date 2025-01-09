@@ -20,8 +20,7 @@ class StoreMarkerAction extends Action
     public function __construct(
         private MarkerServiceStoreInterface $markerServiceStore,
         private MarkerBuilder $markerBuilder
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): Response
     {
@@ -43,11 +42,11 @@ class StoreMarkerAction extends Action
         if (is_object($marker)) {
             $body = (array) $marker;
         }
-        
+
         [
-            "marker_name" => $name,
-            "marker_text" => $text,
-            "marker_title" => $title,
+            'marker_name' => $name,
+            'marker_text' => $text,
+            'marker_title' => $title,
         ] = $body;
 
         $this->markerServiceStore->insert(
@@ -75,16 +74,13 @@ class StoreMarkerAction extends Action
         ];
     }
 
-
     /**
      * Summary of rules
-     *
-     * @return array
      */
     public function rules(Request $request): ?array
     {
-        $markerValidation = new MarkerValidation();
-        $posedObjectValidation = new PlacementObjectValidation();
+        $markerValidation = new MarkerValidation;
+        $posedObjectValidation = new PlacementObjectValidation;
 
         return [
             'museum_id' => Validator::intType(),

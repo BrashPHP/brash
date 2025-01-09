@@ -21,7 +21,7 @@ class OpenSSLAsymmetricEncrypter implements AsymmetricEncrypter
         $details = openssl_pkey_get_details($new_key_pair);
         $publicKey = $details['key'];
 
-        //create signature
+        // create signature
         openssl_sign($json_data, $signature, $privateKey, OPENSSL_ALGO_SHA256);
 
         $signature = base64_encode($signature);

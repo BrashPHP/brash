@@ -16,12 +16,10 @@ class MediaCollectorVisitor implements MediaCollectorInterface
      */
     private array $collection = [];
 
-
     public function collect(): array
     {
         return $this->collection;
     }
-
 
     public function visit(MediaHostInterface $mediaAdapter): void
     {

@@ -8,12 +8,10 @@ use Doctrine\Common\Collections\Collection;
 class MarkerResource extends Asset
 {
     /**
-     * 
-     *
-     * @var Collection<PlacementResource> 
+     * @var Collection<PlacementResource>
      */
     private Collection $placementResource;
-  
+
     private ?AssetInfo $dataInfo = null;
 
     public function __construct(
@@ -21,7 +19,7 @@ class MarkerResource extends Asset
         protected string $path,
         protected ?string $url
     ) {
-        $this->placementResource = new ArrayCollection();
+        $this->placementResource = new ArrayCollection;
     }
 
     public function addElement(PlacementResource $el)
@@ -37,8 +35,7 @@ class MarkerResource extends Asset
     }
 
     /**
-     *
-     * @param PlacementResource[] $placementResources
+     * @param  PlacementResource[]  $placementResources
      */
     public function attachPlacementResources(array $placementResources): self
     {
@@ -60,8 +57,8 @@ class MarkerResource extends Asset
     public function jsonSerialize(): mixed
     {
         return parent::jsonSerialize() + [
-        'asset_info' => $this->dataInfo,
-        'placement_objects' => $this->placementResource->toArray()
+            'asset_info' => $this->dataInfo,
+            'placement_objects' => $this->placementResource->toArray(),
         ];
     }
 }

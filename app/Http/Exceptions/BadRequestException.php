@@ -2,7 +2,6 @@
 
 namespace Core\Http\Exceptions;
 
-use Core\Http\Exceptions\HttpBadRequestException;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
@@ -11,7 +10,7 @@ class BadRequestException extends HttpBadRequestException
     public function __construct(
         ServerRequestInterface $request,
         string $message = '',
-        Throwable|null $previous = null,
+        ?Throwable $previous = null,
     ) {
         parent::__construct(
             $request,

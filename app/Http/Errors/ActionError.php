@@ -6,14 +6,12 @@ namespace Core\Http\Errors;
 
 use JsonSerializable;
 
-
 readonly class ActionError implements JsonSerializable
 {
     public function __construct(
         public ErrorsEnum $type,
         public string $description
-    ) {
-    }
+    ) {}
 
     /**
      * @return array

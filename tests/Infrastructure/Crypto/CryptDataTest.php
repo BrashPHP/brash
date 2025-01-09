@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 use App\Infrastructure\Cryptography\DataEncryption\Encrypter;
+
 use function PHPUnit\Framework\assertNotSame;
 use function PHPUnit\Framework\assertSame;
 

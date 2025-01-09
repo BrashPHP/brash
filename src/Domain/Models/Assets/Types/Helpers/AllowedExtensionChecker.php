@@ -9,7 +9,8 @@ class AllowedExtensionChecker
 {
     public function isAllowed(CreateAsset $command, ConstrainedAssetFactoryInterface $factory): bool
     {
-        $converter = new ExtensionConverter();
+        $converter = new ExtensionConverter;
+
         return in_array(
             strtoupper($command->extension()),
             $converter->formatsToUpper($factory)

@@ -14,7 +14,7 @@ class LogoutController extends Action
     public function action(Request $request): Response
     {
         try {
-            $cookieManager = new CookieTokenManager();
+            $cookieManager = new CookieTokenManager;
 
             $response = $this
                 ->respondWithData(['message' => 'You have been unlogged'])

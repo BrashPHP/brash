@@ -11,14 +11,13 @@ use App\Data\Entities\Doctrine\Traits\UuidTrait;
 use App\Domain\Models\Museum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
-
 
 #[Entity, Table(name: 'museums'), HasLifecycleCallbacks]
 class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
@@ -42,16 +41,14 @@ class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
     private ?string $info;
 
     /**
-* 
-     *
- * @var Collection<DoctrineMarker> 
-*/
-    #[OneToMany(targetEntity: DoctrineMarker::class, mappedBy: "museum", cascade: ["persist", "remove"])]
+     * @var Collection<DoctrineMarker>
+     */
+    #[OneToMany(targetEntity: DoctrineMarker::class, mappedBy: 'museum', cascade: ['persist', 'remove'])]
     private Collection $markers;
 
     public function __construct()
     {
-        $this->markers = new ArrayCollection();
+        $this->markers = new ArrayCollection;
     }
 
     public function getId(): ?int
@@ -108,9 +105,7 @@ class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
     }
 
     /**
-     * 
-     *
-     * @return array 
+     * @return array
      */
     public function jsonSerialize(): mixed
     {
@@ -128,7 +123,6 @@ class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
     {
         return $this->description;
     }
-
 
     public function setDescription(string $description): self
     {
@@ -170,11 +164,8 @@ class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
         );
     }
 
-
     /**
-     * 
-     *
-     * @param Museum $model 
+     * @param  Museum  $model
      */
     public function fromModel(object $model): static
     {
@@ -184,9 +175,8 @@ class DoctrineMuseum implements ModelCoercionInterface, ModelParsingInterface
         $this->description = $model->description;
         $this->info = $model->info;
 
-
         foreach ($model->markers as $marker) {
-            $doctrineMarker = new DoctrineMarker();
+            $doctrineMarker = new DoctrineMarker;
             $this->addMarker(
                 $doctrineMarker->fromModel($marker)
             );

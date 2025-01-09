@@ -13,8 +13,7 @@ class ActionPayload implements JsonSerializable
         private int $statusCode = 200,
         private array|object|null $data = null,
         private ?ActionError $error = null
-    ) {
-    }
+    ) {}
 
     public function getStatusCode(): int
     {

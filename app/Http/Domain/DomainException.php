@@ -6,6 +6,4 @@ namespace Core\Http\Domain;
 
 use Exception;
 
-abstract class DomainException extends Exception
-{
-}
+abstract class DomainException extends Exception {}

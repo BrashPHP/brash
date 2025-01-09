@@ -13,52 +13,52 @@ use App\Domain\Models\Marker\Marker;
 use App\Domain\Models\PlacementObject\PlacementObject;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
-use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 
 /**
  * @implements ModelParsingInterface<PlacementObject>
  * @implements ModelCoercionInterface<PlacementObject>
  */
-#[Entity, Table(name: "placement_objects"), HasLifecycleCallbacks]
-class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInterface
+#[Entity, Table(name: 'placement_objects'), HasLifecycleCallbacks]
+class DoctrinePlacementObject implements ModelCoercionInterface, ModelParsingInterface
 {
     use TimestampsTrait;
     use UuidTrait;
 
-    #[Id, Column(type: "integer"), GeneratedValue(strategy: "AUTO")]
+    #[Id, Column(type: 'integer'), GeneratedValue(strategy: 'AUTO')]
     protected ?int $id;
 
-    #[Column(type: "string")]
+    #[Column(type: 'string')]
     private ?string $name;
 
-    #[Column(type: "boolean")]
+    #[Column(type: 'boolean')]
     private bool $isActive = true;
 
     /**
      * Many resources have one marker. This is the owning side.
      */
     #[
-        ManyToOne(targetEntity: DoctrineMarker::class, inversedBy: "resources"),
+        ManyToOne(targetEntity: DoctrineMarker::class, inversedBy: 'resources'),
         JoinColumn(
-        name: "marker_id",
-        referencedColumnName: "id",
-        onDelete: "CASCADE"
-    )
+            name: 'marker_id',
+            referencedColumnName: 'id',
+            onDelete: 'CASCADE'
+        )
     ]
     private ?DoctrineMarker $marker;
 
     #[
         OneToOne(
-        targetEntity: DoctrinePosedAsset::class,
-        mappedBy: "posedObject",
-        cascade: ["persist", "remove"]
-    )
+            targetEntity: DoctrinePosedAsset::class,
+            mappedBy: 'posedObject',
+            cascade: ['persist', 'remove']
+        )
     ]
     private ?DoctrinePosedAsset $asset = null;
 
@@ -78,10 +78,10 @@ class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInt
     public function jsonSerialize(): mixed
     {
         return [
-            "id" => $this->id,
-            "uuid" => $this->uuid,
-            "name" => $this->name,
-            "asset" => $this->asset?->getAsset(),
+            'id' => $this->id,
+            'uuid' => $this->uuid,
+            'name' => $this->name,
+            'asset' => $this->asset?->getAsset(),
         ];
     }
 
@@ -167,7 +167,7 @@ class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInt
     }
 
     /**
-     * @param PlacementObject $model
+     * @param  PlacementObject  $model
      */
     public function fromModel(object $model): static
     {
@@ -179,14 +179,14 @@ class DoctrinePlacementObject implements ModelParsingInterface, ModelCoercionInt
         $this->uuid = $model->uuid;
 
         if ($model->asset instanceof AbstractAsset) {
-            $doctrineAsset = new DoctrineAsset();
+            $doctrineAsset = new DoctrineAsset;
             $doctrineAsset->fromModel($model->asset);
             $doctrinePosedAsset = new DoctrinePosedAsset($this, $doctrineAsset);
             $this->setAsset($doctrinePosedAsset);
         }
 
         if ($model->marker instanceof Marker) {
-            $doctrineMarker = new DoctrineMarker();
+            $doctrineMarker = new DoctrineMarker;
             $this->setMarker($doctrineMarker->fromModel($model->marker));
         }
 

@@ -14,6 +14,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use React\Promise\PromiseInterface;
+
 use function React\Async\await;
 
 abstract class Action implements ActionInterface
@@ -24,9 +25,7 @@ abstract class Action implements ActionInterface
 
     protected array $args;
 
-    public function __construct(protected LoggerInterface $logger)
-    {
-    }
+    public function __construct(protected LoggerInterface $logger) {}
 
     /**
      * @throws BaseHttpException
@@ -45,11 +44,11 @@ abstract class Action implements ActionInterface
 
             assert(
                 $response instanceof Response,
-                new \RuntimeException("Response must be an instance of ResponseInterface")
+                new \RuntimeException('Response must be an instance of ResponseInterface')
             );
 
             return $response;
-        } catch (HttpSpecializedAdapter | HttpExceptionAdapter $httpSpecializedAdapter) {
+        } catch (HttpSpecializedAdapter|HttpExceptionAdapter $httpSpecializedAdapter) {
             throw $httpSpecializedAdapter->wire($request);
         }
     }
@@ -70,17 +69,16 @@ abstract class Action implements ActionInterface
     }
 
     /**
-     * @throws HttpBadRequestException
-     *
      * @return mixed
+     *
+     * @throws HttpBadRequestException
      */
     protected function resolveArg(string $name)
     {
-        if (!isset($this->args[$name])) {
-            throw new class ($name) extends HttpExceptionAdapter {
-                public function __construct(private string $name)
-                {
-                }
+        if (! isset($this->args[$name])) {
+            throw new class($name) extends HttpExceptionAdapter
+            {
+                public function __construct(private string $name) {}
 
                 public function wire(Request $request): BaseHttpException
                 {

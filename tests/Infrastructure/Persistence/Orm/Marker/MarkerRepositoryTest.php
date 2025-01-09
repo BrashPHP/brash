@@ -9,6 +9,7 @@ use App\Domain\Models\Marker\Marker;
 use App\Domain\Models\PlacementObject\PlacementObject;
 use App\Domain\Repositories\MarkerRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
+
 use function PHPUnit\Framework\assertInstanceOf;
 
 $markerTitle = 'Boy with apple.png';
@@ -40,6 +41,7 @@ afterEach(function () {
     foreach ($collection as $c) {
         $entityManager->remove($c);
     }
+
     $entityManager->flush();
     $entityManager->clear();
 });
@@ -76,12 +78,13 @@ test('should retrieve marker', function ($markerTitle, $markerDescription, $mark
 })->with('assetProvider');
 
 test('should insert marker with asset', function ($markerTitle, $markerDescription, $markerRealTitle) {
-    $asset = new PictureAsset();
+    $asset = new PictureAsset;
     $asset->setFileName('boyapple.png');
     $asset->setPath('domain/path/boyaple.png');
     $asset->setUrl('www.name.com');
     $asset->setOriginalName('boyapp.png');
     $asset->setMimeType('file/png');
+
     $marker = new Marker(
         null,
         null,
@@ -130,10 +133,9 @@ function getTotalCount(EntityManager $entityManager): int
     $qb = $entityManager->createQueryBuilder();
 
     $qb->select($qb->expr()->count('u'))
-        ->from(DoctrineMarker::class, 'u')
-        // ->where('u.type = ?1')
-        // ->setParameter(1, 'employee')
-    ;
+        ->from(DoctrineMarker::class, 'u');
+    // ->where('u.type = ?1')
+    // ->setParameter(1, 'employee')
 
     $query = $qb->getQuery();
 

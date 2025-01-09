@@ -8,9 +8,7 @@ use App\Domain\Repositories\UserRepository;
 
 class UserService implements UserUseCaseInterface
 {
-    public function __construct(private UserRepository $userRepository)
-    {
-    }
+    public function __construct(private UserRepository $userRepository) {}
 
     /**
      * @return User[]

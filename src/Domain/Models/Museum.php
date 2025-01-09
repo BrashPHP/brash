@@ -21,10 +21,9 @@ readonly class Museum implements ModelInterface
          */
         public array $markers = [],
         public ?UuidInterface $uuid = null,
-        public ?DateTimeInterface $createdAt = new \DateTime(),
-        public ?DateTimeInterface $updated = new \DateTime()
-    ) {
-    }
+        public ?DateTimeInterface $createdAt = new \DateTime,
+        public ?DateTimeInterface $updated = new \DateTime
+    ) {}
 
     public function jsonSerialize(): mixed
     {

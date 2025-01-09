@@ -2,7 +2,6 @@
 
 namespace App\Infrastructure\Persistence\RepositoryTraits;
 
-use App\Infrastructure\Uuid\UuidEncoder;
 use Ramsey\Uuid\Uuid;
 
 trait UuidFinderTrait
@@ -14,7 +13,7 @@ trait UuidFinderTrait
 
         return $this->findOneBy(
             [
-            'uuid' => $decodedUuid->toString(),
+                'uuid' => $decodedUuid->toString(),
             ]
         );
     }

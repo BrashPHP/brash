@@ -12,31 +12,31 @@ class FileRule extends AbstractRule
     private string $gourpAllowedChars = '([a-zA-Z0-9_\\.\-\(\):%&$#\/]+)';
 
     private array $allowedFormats = [
-        "obj",
-        "fbx",
-        "png",
-        "jpg",
-        "dae",
-        "3ds",
-        "dxf",
-        "bpm",
-        "tif",
-        "tga",
-        "jpg",
-        "psd",
-        "glb",
-        "gltf",
+        'obj',
+        'fbx',
+        'png',
+        'jpg',
+        'dae',
+        '3ds',
+        'dxf',
+        'bpm',
+        'tif',
+        'tga',
+        'jpg',
+        'psd',
+        'glb',
+        'gltf',
     ];
 
     public function validate($input): bool
     {
-        $joinedFormats = implode("|", $this->allowedFormats);
+        $joinedFormats = implode('|', $this->allowedFormats);
         $groupAllowedFormats = sprintf('(%s)', $joinedFormats);
         $fullRegex =
-            "/^" .
-            $this->gourpAllowedChars .
-            "\." .
-            $groupAllowedFormats .
+            '/^'.
+            $this->gourpAllowedChars.
+            "\.".
+            $groupAllowedFormats.
             '$/m';
 
         return (bool) preg_match($fullRegex, $input, $output_array);

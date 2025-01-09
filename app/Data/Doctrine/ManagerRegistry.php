@@ -1,18 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Core\Data\Doctrine;
 
-use Core\Data\Doctrine\EntityManagerBuilder;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\ORM\Internal\Hydration\ArrayHydrator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Internal\Hydration\ArrayHydrator;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Doctrine\Persistence\AbstractManagerRegistry;
-use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Doctrine\UuidType;
-use Ramsey\Uuid\Doctrine\UuidBinaryType;
-use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Doctrine\Persistence\Proxy;
+use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
+use Ramsey\Uuid\Doctrine\UuidBinaryType;
+use Ramsey\Uuid\Doctrine\UuidType;
 
 use function key;
 use function reset;
@@ -23,7 +24,6 @@ use function sprintf;
  */
 class ManagerRegistry extends AbstractManagerRegistry
 {
-
     /**
      * @var \Closure[]
      */
@@ -41,7 +41,6 @@ class ManagerRegistry extends AbstractManagerRegistry
         $connections = [];
         $managers = [];
 
-
         $connections[$connectionName] = $connectionName;
         $managers[$managerName] = $managerName;
 
@@ -52,7 +51,6 @@ class ManagerRegistry extends AbstractManagerRegistry
         $this->factories[$managerName] = function () {
             return $this->createManager();
         };
-
 
         reset($connections);
         reset($managers);
@@ -67,8 +65,6 @@ class ManagerRegistry extends AbstractManagerRegistry
      *
      * It will be useful for long-running applications.
      * When to use it? When you expect your repositories to break with doctrine possibly closing connection.
-     *
-     * @return void
      */
     public function reopenManagers(): void
     {
@@ -81,8 +77,6 @@ class ManagerRegistry extends AbstractManagerRegistry
      * Clears all managers
      *
      * It will be useful for long-running applications.
-     *
-     * @return void
      */
     public function clearManagers(): void
     {
@@ -95,8 +89,6 @@ class ManagerRegistry extends AbstractManagerRegistry
      * Closes all connections
      *
      * It will be useful for long-running applications.
-     *
-     * @return void
      */
     public function closeConnections(): void
     {
@@ -108,13 +100,11 @@ class ManagerRegistry extends AbstractManagerRegistry
     /**
      * Gets an array hydrator
      *
-     * @param string $name
      *
-     * @return ArrayHydrator
      *
      * @link https://github.com/pmill/doctrine-array-hydrator
      */
-    public function getHydrator(string $name = null): ArrayHydrator
+    public function getHydrator(?string $name = null): ArrayHydrator
     {
         return new ArrayHydrator($this->getManager($name));
     }
@@ -124,19 +114,19 @@ class ManagerRegistry extends AbstractManagerRegistry
      *
      * @throws \RuntimeException If the registry doesn't contain the named service.
      */
-    protected function getService($name)
+    protected function getService($name): object
     {
         if (isset($this->services[$name]) && $this->services[$name]->isOpen()) {
             return $this->services[$name];
         }
 
-        if (!isset($this->factories[$name])) {
+        if (! isset($this->factories[$name])) {
             throw new ORMInvalidArgumentException(
                 sprintf('Doctrine Manager registry does not contain named service "%s"', $name)
             );
         }
 
-        $this->loggerInterface->info("Start new EntityManager and Connection");
+        $this->loggerInterface->info('Start new EntityManager and Connection');
 
         $this->services[$name] = $this->factories[$name]();
 
@@ -146,20 +136,16 @@ class ManagerRegistry extends AbstractManagerRegistry
     /**
      * {@inheritDoc}
      */
-    protected function resetService($name)
+    protected function resetService($name): void
     {
         unset($this->services[$name]);
     }
-
 
     private function createManager(): EntityManagerInterface
     {
         return EntityManagerBuilder::produce($this->doctrineParams);
     }
 
-    /**
-     * @return void
-     */
     private function registerUuidType(): void
     {
         Type::hasType(UuidType::NAME) ?

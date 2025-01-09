@@ -13,8 +13,7 @@ class GetAllMarkersAction extends Action
 {
     public function __construct(
         private MarkerRepositoryInterface $repo,
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): Response
     {

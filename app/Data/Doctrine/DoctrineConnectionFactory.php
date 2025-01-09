@@ -2,8 +2,8 @@
 
 namespace Core\Data\Doctrine;
 
+use Brash\Dbal\DriverManager;
 use Core\Data\Domain\ConnectionModel;
-use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
 use Doctrine\DBAL\Types\Type;
 
@@ -11,8 +11,8 @@ final class DoctrineConnectionFactory
 {
     public function createConnectionFromArray(array $doctrine, \Doctrine\ORM\Configuration $config): \Doctrine\DBAL\Connection
     {
-        if (!Type::hasType('uuid')) {
-            Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+        if (! Type::hasType('uuid')) {
+            Type::addType('uuid', \Ramsey\Uuid\Doctrine\UuidType::class);
         }
 
         $connection = $doctrine['connection'];
@@ -30,7 +30,7 @@ final class DoctrineConnectionFactory
     private function getFromUrl(string $url)
     {
         $dsnParser = new DsnParser(['mysql' => 'mysqli', 'postgresql' => 'pdo_pgsql']);
-        
+
         return $dsnParser->parse($url);
     }
 }

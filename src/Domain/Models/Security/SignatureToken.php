@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Models\Security;
 
 use App\Domain\Models\Museum;
-use DateTimeInterface;
-
 use DateInterval;
+use DateTimeInterface;
 use JsonSerializable;
 
 readonly class SignatureToken implements JsonSerializable
@@ -27,9 +26,9 @@ readonly class SignatureToken implements JsonSerializable
         ?DateTimeInterface $updated,
         ?DateTimeInterface $ttl
     ) {
-        $this->createdAt = $createdAt ?? new \DateTime();
-        $this->updated = $updated ?? new \DateTime();
-        $this->ttl = $ttl ?? (new \DateTime())->add(new DateInterval('P6M'));
+        $this->createdAt = $createdAt ?? new \DateTime;
+        $this->updated = $updated ?? new \DateTime;
+        $this->ttl = $ttl ?? (new \DateTime)->add(new DateInterval('P6M'));
     }
 
     public function jsonSerialize(): mixed

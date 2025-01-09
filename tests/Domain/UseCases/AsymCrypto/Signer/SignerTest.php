@@ -12,6 +12,7 @@ use App\Domain\Models\Museum;
 use App\Domain\Repositories\MuseumRepository;
 use App\Domain\Repositories\SignatureTokenRepositoryInterface;
 use Ramsey\Uuid\Uuid;
+
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
@@ -48,7 +49,7 @@ it('returns valid 64-based string', function () {
     $this->encrypter->expects('encrypt')->once()->with($subject)->andReturn(new Signature('privKey', 'pubKey', 'test'));
 
     $response = $this->signer->sign($uuid);
-    list($responseUuid, $responsePrivateKey) = explode('.', $response);
+    [$responseUuid, $responsePrivateKey] = explode('.', $response);
 
     assertSame(base64_decode($responseUuid, true), $this->defaultUuid);
     assertSame(base64_decode($responsePrivateKey, true), 'pubKey');
@@ -86,7 +87,7 @@ it('throws when museum is not found', function () {
     $uuid = Uuid::fromString($this->defaultUuid);
     $this->repository->shouldReceive('findByUUID')->with($this->defaultUuid)->andReturn(null);
 
-    expect(fn() => $this->signer->sign($uuid))->toThrow(MuseumNotFoundException::class);
+    expect(fn () => $this->signer->sign($uuid))->toThrow(MuseumNotFoundException::class);
 });
 
 function createTokenRepositoryMock(): SignatureTokenRepositoryInterface

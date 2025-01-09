@@ -8,18 +8,15 @@ use Core\Validation\Interfaces\ValidationInterface;
 use Core\Validation\ValidationExceptions\ErrorBag;
 use Core\Validation\ValidationExceptions\ValidationError;
 
-
 class Composite implements ValidationInterface
 {
-
     public function __construct(
         /**
          * @var ValidationInterface[]
          */
         public array $compositions = [],
-        public readonly ErrorBag $errorBag = new ErrorBag()
-    ) {
-    }
+        public readonly ErrorBag $errorBag = new ErrorBag
+    ) {}
 
     public function pushValidation(ValidationInterface $validation): self
     {
@@ -45,4 +42,3 @@ class Composite implements ValidationInterface
         return $this->errorBag;
     }
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\Presentation\Middleware;
@@ -8,6 +9,7 @@ use App\Domain\Repositories\AccountRepository;
 use App\Infrastructure\Cryptography\BodyTokenCreator;
 use App\Infrastructure\Persistence\MemoryRepositories\InMemoryAccountRepository;
 use App\Presentation\Handlers\RefreshTokenHandler;
+
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertSame;
 
@@ -17,7 +19,7 @@ beforeEach(function () {
 });
 
 test('should pass when jwt is provided', function () {
-    self::autowireContainer(AccountRepository::class, new InMemoryAccountRepository());
+    self::autowireContainer(AccountRepository::class, new InMemoryAccountRepository);
 
     $dto = new AccountDto(email: 'mail.com', username: 'user', password: 'pass');
     $repository = $this->getContainer()->get(AccountRepository::class);
@@ -26,7 +28,7 @@ test('should pass when jwt is provided', function () {
     $tokenCreator = new BodyTokenCreator($account);
     $token = $tokenCreator->createToken($_ENV['JWT_SECRET']);
 
-    $bearer = 'Bearer ' . $token;
+    $bearer = 'Bearer '.$token;
 
     $request = $this->createRequest(
         'GET',
@@ -41,7 +43,7 @@ test('should pass when jwt is provided', function () {
     $response = $this->app->handle($request);
 
     assertNotNull($response);
-    assertSame($response->getBody()->__toString(), "Works");
+    assertSame($response->getBody()->__toString(), 'Works');
     assertSame(200, $response->getStatusCode());
 });
 
@@ -73,4 +75,3 @@ test('should intercept http cookie refresh', function () {
 
     assertNotNull($response);
 });
-

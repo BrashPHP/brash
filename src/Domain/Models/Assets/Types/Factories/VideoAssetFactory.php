@@ -11,7 +11,8 @@ class VideoAssetFactory implements ConstrainedAssetFactoryInterface
 {
     public function create(CreateAsset $command): AbstractAsset
     {
-        $asset = new VideoAsset();
+        $asset = new VideoAsset;
+
         return $asset->fromCommand($command);
     }
 

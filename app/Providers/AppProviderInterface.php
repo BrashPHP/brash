@@ -6,5 +6,5 @@ use DI\ContainerBuilder;
 
 interface AppProviderInterface
 {
-    public function provide(ContainerBuilder $container);
+    public function provide(ContainerBuilder $container): void;
 }

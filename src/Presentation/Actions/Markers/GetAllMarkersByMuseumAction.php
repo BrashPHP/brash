@@ -10,13 +10,11 @@ use Core\Http\Exceptions\HttpBadRequestException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-
 class GetAllMarkersByMuseumAction extends Action
 {
     public function __construct(
         private MarkerRepositoryInterface $repo,
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): Response
     {

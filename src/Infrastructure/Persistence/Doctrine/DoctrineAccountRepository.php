@@ -31,7 +31,6 @@ class DoctrineAccountRepository implements AccountRepository
         return $this->getEm()->getRepository(DoctrineAccount::class)->findAll();
     }
 
-
     public function findByAccess(string $access): ?Account
     {
         $findBy = filter_var($access, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -60,7 +59,7 @@ class DoctrineAccountRepository implements AccountRepository
         $doctrineAccount = $this->em->getRepository(DoctrineAccount::class)->findOneBy(
             [
                 'email' => $email,
-                'authType' => $authType->value
+                'authType' => $authType->value,
             ]
         );
 
@@ -70,19 +69,18 @@ class DoctrineAccountRepository implements AccountRepository
     public function insert(AccountDto $accountDto): Account
     {
         try {
-            $doctrineAccount = new DoctrineAccount();
+            $doctrineAccount = new DoctrineAccount;
             $doctrineAccount->setAuthType($accountDto->authType->value);
             $doctrineAccount->setEmail($accountDto->email);
             $doctrineAccount->setPassword($accountDto->password);
             $doctrineAccount->setUsername($accountDto->username);
-
 
             $this->getEm()->persist($doctrineAccount);
             $this->getEm()->flush();
 
             return $doctrineAccount->toModel();
         } catch (UniqueConstraintViolationException) {
-            throw new UserAlreadyRegisteredException();
+            throw new UserAlreadyRegisteredException;
         }
     }
 }

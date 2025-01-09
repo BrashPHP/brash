@@ -16,8 +16,8 @@ interface MarkerRepositoryInterface
     /**
      * @var Marker[]
      *
-     * @param mixed $page
-     * @param mixed $limit
+     * @param  mixed  $page
+     * @param  mixed  $limit
      */
     public function findAllByMuseum(int|Museum $museum, bool $paginate = false, $page = 1, $limit = 20): ResultSetInterface;
 

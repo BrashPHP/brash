@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\Infrastructure\Persistence\Orm\Account;
@@ -33,6 +34,7 @@ afterEach(function () {
     foreach ($collection as $c) {
         $entityManager->remove($c);
     }
+
     $entityManager->flush();
     $entityManager->clear();
 });
@@ -59,10 +61,9 @@ function getTotalCount(EntityManager $entityManager): int
     $qb = $entityManager->createQueryBuilder();
 
     $qb->select($qb->expr()->count('u'))
-        ->from(DoctrineAccount::class, 'u')
-        // ->where('u.type = ?1')
-        // ->setParameter(1, 'employee')
-    ;
+        ->from(DoctrineAccount::class, 'u');
+    // ->where('u.type = ?1')
+    // ->setParameter(1, 'employee')
 
     $query = $qb->getQuery();
 

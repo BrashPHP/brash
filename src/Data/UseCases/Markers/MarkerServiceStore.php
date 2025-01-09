@@ -19,8 +19,7 @@ class MarkerServiceStore implements MarkerServiceStoreInterface
         private MuseumRepository $museumRepository,
         private MarkerRepositoryInterface $markerRepository,
         private EntityManager $em
-    ) {
-    }
+    ) {}
 
     public function insert(int $museumId, Marker $marker): Marker
     {
@@ -29,10 +28,10 @@ class MarkerServiceStore implements MarkerServiceStoreInterface
         try {
             $museum = $this->museumRepository->findByID($museumId);
 
-            if (!$museum instanceof \App\Domain\Models\Museum) {
+            if (! $museum instanceof \App\Domain\Models\Museum) {
                 throw new InstanceNotFoundException('Museum');
             }
-            
+
             $input = [...$marker->jsonSerialize()];
             $input['museum'] = $museum;
             $input['resources'] = new ArrayCollection($input['resources']);
@@ -49,7 +48,6 @@ class MarkerServiceStore implements MarkerServiceStoreInterface
         } catch (Exception $ex) {
             echo $ex;
             $this->em->getConnection()->rollBack();
-
 
             throw $ex;
         }

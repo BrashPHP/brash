@@ -13,7 +13,7 @@ class ReopeningEntityManagerDecorator extends EntityManagerDecorator
     {
         parent::__construct(
             EntityManagerBuilder::produce(
-                $container->get("settings")["doctrine"]
+                $container->get('settings')['doctrine']
             )
         );
     }
@@ -26,7 +26,7 @@ class ReopeningEntityManagerDecorator extends EntityManagerDecorator
     public function open(): EntityManagerInterface
     {
         if (
-            !($this->wrapped->isOpen() && $this->wrapped->getConnection()->isConnected())
+            ! ($this->wrapped->isOpen() && $this->wrapped->getConnection()->isConnected())
         ) {
             $this->wrapped = $this->generateNewEm();
         }

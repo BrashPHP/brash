@@ -5,22 +5,18 @@ declare(strict_types=1);
 namespace Core\Validation\Factories;
 
 use Closure;
-use Core\Validation\Adapters\{
-    NestedValidationAdapter,
-    AwesomeValidationAdapter,
-    CallbackValidationAdapter
-};
+use Core\Validation\Adapters\AwesomeValidationAdapter;
+use Core\Validation\Adapters\CallbackValidationAdapter;
+use Core\Validation\Adapters\NestedValidationAdapter;
 use Core\Validation\Interfaces\AbstractValidator;
 use Respect\Validation\Validatable;
-
 
 class ValidatorFactory
 {
     public function create(mixed $validation, string $key, string|array|null $message = null): ?AbstractValidator
     {
-        $validator = null;
         if (is_array($validation)) {
-            $validator = $this->validationIsArray(
+            return $this->validationIsArray(
                 $validation,
                 $key,
                 $message
@@ -28,13 +24,14 @@ class ValidatorFactory
         }
 
         if ($validation instanceof Validatable) {
-            $validator = $this->validationIsAwesomeValidatable($validation, $key, $message);
-        }
-        if (is_callable($validation)) {
-            $validator = $this->validationIsACallable($validation, $key, $message);
+            return $this->validationIsAwesomeValidatable($validation, $key, $message);
         }
 
-        return $validator;
+        if (is_callable($validation)) {
+            return $this->validationIsACallable($validation, $key, $message);
+        }
+
+        return null;
     }
 
     private function validationIsACallable(
@@ -43,6 +40,7 @@ class ValidatorFactory
         string|array|null $message = null
     ): AbstractValidator {
         $closureValidation = Closure::fromCallable($validation);
+
         return new CallbackValidationAdapter($key, $closureValidation, $message);
     }
 
@@ -57,6 +55,7 @@ class ValidatorFactory
             if (is_array($message)) {
                 $nestedMessage = $message[$key] ?? null;
             }
+
             $nestedValidation = $this->create($value, $key, $nestedMessage);
             $nestedValidationAdapter->pushValidation($nestedValidation);
         }

@@ -1,6 +1,6 @@
 {
-  "name": "berfi/kitsune",
-  "description": "A Microframework for APIs",
+  "name": "brash/framework",
+  "description": "A Framework for Async PHP APIs",
   "keywords": [
     "microframework",
     "rest",
@@ -20,17 +20,11 @@
     "php": "^8.3",
     "ext-json": "*",
     "bramus/monolog-colored-line-formatter": "^3.1",
-    "cycle/annotated": "^3.2",
-    "cycle/entity-behavior-uuid": "^1.1",
-    "cycle/migrations": "^4.1",
-    "cycle/orm": "^2.3",
+    "brash/dbal": "^1.0",
     "doctrine/dbal": "^4.0",
     "doctrine/migrations": "^3.6",
     "doctrine/orm": "^3.2",
     "firebase/php-jwt": "^6.0",
-    "league/climate": "^3.8",
-    "league/mime-type-detection": "^1.11",
-    "league/oauth2-google": "^4.0",
     "monolog/monolog": ">=3.4",
     "nyholm/psr7": "^1.8",
     "nyholm/psr7-server": "^1.0",
@@ -41,6 +35,7 @@
     "react/async": "^4.2",
     "react/event-loop": "^1.5",
     "react/http": "^1.9",
+    "react/mysql": "^0.7@dev",
     "respect/validation": "^2.2",
     "revolt/event-loop-adapter-react": "^1.1",
     "slim/psr7": "^1.7",
@@ -51,11 +46,13 @@
     "symfony/process": "^7.1"
   },
   "require-dev": {
+    "laravel/pint": "^1.18.1",
     "mockery/mockery": "^1.6",
-    "pestphp/pest": "^2.34",
-    "rector/rector": "^0.17.5",
-    "squizlabs/php_codesniffer": "3.*",
-    "symfony/var-dumper": "^7.0"
+    "pestphp/pest": "^3.5.1",
+    "pestphp/pest-plugin-type-coverage": "^3.1",
+    "phpstan/phpstan": "^1.12.7",
+    "rector/rector": "^1.2.8",
+    "symfony/var-dumper": "^7.1.6"
   },
   "config": {
     "process-timeout": 0,

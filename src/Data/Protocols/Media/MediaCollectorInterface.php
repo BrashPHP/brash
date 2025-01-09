@@ -4,10 +4,8 @@ namespace App\Data\Protocols\Media;
 
 use App\Domain\Dto\MediaResource;
 
-
 interface MediaCollectorInterface
 {
-
     public function visit(MediaHostInterface $mediaAdapters): void;
 
     /**

@@ -23,8 +23,7 @@ class RefreshTokenHandler
 {
     public function __construct(
         private AccountRepository $repository
-    ) {
-    }
+    ) {}
 
     /**
      * @return \App\Domain\OptionalApi\Result<string,UnauthorizedException>
@@ -41,11 +40,12 @@ class RefreshTokenHandler
             $user = $this->repository->findByUUID($uuid);
             if ($user instanceof \App\Domain\Models\Account) {
                 $tokenCreator = new BodyTokenCreator($user);
+
                 return new Ok($tokenCreator->createToken($secretBody));
             }
 
-            throw new UserDoesNotExistException();
-        } catch (ExpiredException | UnexpectedValueException $exception) {
+            throw new UserDoesNotExistException;
+        } catch (ExpiredException|UnexpectedValueException $exception) {
             $message = 'Cannot craft new token for invalid refresh token';
 
             return new Err(

@@ -6,8 +6,6 @@ namespace App\Data\Entities\Doctrine;
 
 use App\Data\Entities\Contracts\ModelCoercionInterface;
 use App\Data\Entities\Contracts\ModelParsingInterface;
-use App\Data\Entities\Doctrine\DoctrineAsset;
-use App\Data\Entities\Doctrine\DoctrineMuseum;
 use App\Data\Entities\Doctrine\Traits\TimestampsTrait;
 use App\Data\Entities\Doctrine\Traits\UuidTrait;
 use App\Domain\Models\Assets\AbstractAsset;
@@ -15,55 +13,55 @@ use App\Domain\Models\Marker\Marker;
 use App\Domain\Models\Museum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
 
 /**
  * @implements ModelCoercionInterface<Marker>
  * @implements ModelParsingInterface<Marker>
  */
-#[Entity, Table(name: "markers"), HasLifecycleCallbacks]
+#[Entity, Table(name: 'markers'), HasLifecycleCallbacks]
 class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
 {
     use TimestampsTrait;
     use UuidTrait;
 
-    #[Id, Column(type: "integer"), GeneratedValue(strategy: "AUTO")]
+    #[Id, Column(type: 'integer'), GeneratedValue(strategy: 'AUTO')]
     protected ?int $id;
 
     #[
-        ManyToOne(targetEntity: DoctrineMuseum::class, inversedBy: "markers"),
-        JoinColumn(name: "museum_id", referencedColumnName: "id")
+        ManyToOne(targetEntity: DoctrineMuseum::class, inversedBy: 'markers'),
+        JoinColumn(name: 'museum_id', referencedColumnName: 'id')
     ]
     private ?DoctrineMuseum $museum;
 
-    #[Column(type: "string", nullable: false)]
+    #[Column(type: 'string', nullable: false)]
     private ?string $name;
 
-    #[Column(type: "text", nullable: true)]
+    #[Column(type: 'text', nullable: true)]
     private ?string $text;
 
-    #[Column(type: "string", nullable: true)]
+    #[Column(type: 'string', nullable: true)]
     private ?string $title;
 
     #[
         OneToOne(
-        targetEntity: DoctrineMarkerAsset::class,
-        mappedBy: "marker",
-        cascade: ["persist", "remove"]
-    )
+            targetEntity: DoctrineMarkerAsset::class,
+            mappedBy: 'marker',
+            cascade: ['persist', 'remove']
+        )
     ]
     private ?DoctrineMarkerAsset $asset = null;
 
-    #[Column(type: "boolean", nullable: false)]
+    #[Column(type: 'boolean', nullable: false)]
     private bool $isActive = true;
 
     /**
@@ -73,16 +71,16 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
      */
     #[
         OneToMany(
-        targetEntity: DoctrinePlacementObject::class,
-        mappedBy: "marker",
-        cascade: ["persist", "remove"]
-    )
+            targetEntity: DoctrinePlacementObject::class,
+            mappedBy: 'marker',
+            cascade: ['persist', 'remove']
+        )
     ]
     private Collection $resources;
 
     public function __construct()
     {
-        $this->resources = new ArrayCollection();
+        $this->resources = new ArrayCollection;
     }
 
     public function assetInformation(): ?DoctrineAsset
@@ -101,13 +99,13 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
     public function jsonSerialize(): mixed
     {
         return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "text" => $this->text,
-            "title" => $this->title,
-            "asset" => $this->asset?->getAsset(),
-            "resources" => $this->resources->toArray(),
-            "isActive" => $this->isActive,
+            'id' => $this->id,
+            'name' => $this->name,
+            'text' => $this->text,
+            'title' => $this->title,
+            'asset' => $this->asset?->getAsset(),
+            'resources' => $this->resources->toArray(),
+            'isActive' => $this->isActive,
         ];
     }
 
@@ -233,7 +231,7 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
     public function toModel(): Marker
     {
         $resources = $this->getResources()->map(
-            static fn(DoctrinePlacementObject $el) => $el->toModel()
+            static fn (DoctrinePlacementObject $el) => $el->toModel()
         );
 
         $asset = $this->getAsset()?->getAsset()?->toModel();
@@ -254,7 +252,7 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
     }
 
     /**
-     * @param Marker $model
+     * @param  Marker  $model
      */
     public function fromModel(object $model): static
     {
@@ -269,20 +267,19 @@ class DoctrineMarker implements ModelCoercionInterface, ModelParsingInterface
         $this->uuid = $model->uuid;
 
         if ($asset instanceof AbstractAsset) {
-            $doctrineAsset = new DoctrineAsset();
+            $doctrineAsset = new DoctrineAsset;
             $markerAsset = new DoctrineMarkerAsset($this, $doctrineAsset->fromModel($asset));
 
             $this->asset = $markerAsset;
         }
 
         if ($model->museum instanceof Museum) {
-            $doctrineMuseum = new DoctrineMuseum();
+            $doctrineMuseum = new DoctrineMuseum;
             $this->setMuseum($doctrineMuseum->fromModel($model->museum));
         }
 
-
         foreach ($model->resources as $resource) {
-            $doctrinePlacementObject = new DoctrinePlacementObject();
+            $doctrinePlacementObject = new DoctrinePlacementObject;
             $this->addResource($doctrinePlacementObject->fromModel($resource));
         }
 

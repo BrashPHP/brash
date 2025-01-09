@@ -13,10 +13,7 @@ use App\Infrastructure\Persistence\PersistenceUtils\ItemsRetriever;
  */
 abstract class AbstractRepository implements CrudOperationsInterface
 {
-
-    public function __construct(protected ItemsRetriever $itemsRetriever)
-    {
-    }
+    public function __construct(protected ItemsRetriever $itemsRetriever) {}
 
     /**
      * @return class-string<T>
@@ -70,8 +67,7 @@ abstract class AbstractRepository implements CrudOperationsInterface
     }
 
     /**
-     * @param T|int $subject
-     *
+     * @param  T|int  $subject
      * @return ?T
      */
     #[\ReturnTypeWillChange]

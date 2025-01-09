@@ -16,7 +16,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Respect\Validation\Validator;
 
-#[Route(path: "signup", method: "POST")]
+#[Route(path: 'signup', method: 'POST')]
 class SignUpController extends Action implements ValidationInterface
 {
     private CookieTokenManager $cookieManager;
@@ -26,7 +26,7 @@ class SignUpController extends Action implements ValidationInterface
         private HasherInterface $hasherInterface,
         protected LoggerInterface $logger
     ) {
-        $this->cookieManager = new CookieTokenManager();
+        $this->cookieManager = new CookieTokenManager;
     }
 
     public function action(Request $request): Response
@@ -65,8 +65,6 @@ class SignUpController extends Action implements ValidationInterface
 
     /**
      * Summary of rules
-     *
-     * @return array
      */
     public function rules(Request $request): ?array
     {
@@ -79,7 +77,7 @@ class SignUpController extends Action implements ValidationInterface
             'password' => static function ($value): bool {
                 return (bool) preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w$@]{6,}$/m', $value);
             },
-            'passwordConfirmation' => static fn($value) => $value === $password,
+            'passwordConfirmation' => static fn ($value) => $value === $password,
         ];
     }
 }

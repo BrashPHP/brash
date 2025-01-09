@@ -6,7 +6,7 @@ use App\Data\Protocols\Cryptography\DataDecrypter;
 use App\Data\Protocols\Cryptography\DataEncrypter;
 use Exception;
 
-class Encrypter implements DataEncrypter, DataDecrypter
+class Encrypter implements DataDecrypter, DataEncrypter
 {
     public function __construct(private string $key = '', private string $cipher = 'AES-128-CBC')
     {

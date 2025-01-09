@@ -18,8 +18,8 @@ class HomeController extends Action
 
     public function action(Request $request): Response|Promise
     {
-        $this->logger->info('HI, person '. $this->counter . PHP_EOL);
-        $data = new stdClass();
+        $this->logger->info('HI, person '.$this->counter.PHP_EOL);
+        $data = new stdClass;
         $data->message = file_get_contents(__DIR__.'/welcome.txt');
 
         return $this->respondWithData($data);

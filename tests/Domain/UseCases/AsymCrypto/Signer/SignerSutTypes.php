@@ -14,6 +14,5 @@ class SignerSutTypes
         public MuseumRepository $repository,
         public AsymmetricEncrypter $encrypter,
         public SignatureTokenRepositoryInterface $signatureTokenRepository
-    ) {
-    }
+    ) {}
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Core\Http\Middlewares\BodyParsing\Parsers;
 
 final class JsonBodyParser

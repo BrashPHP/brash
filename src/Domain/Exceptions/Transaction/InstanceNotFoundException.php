@@ -9,9 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class InstanceNotFoundException extends HttpExceptionAdapter
 {
-    public function __construct(private string $object)
-    {
-    }
+    public function __construct(private string $object) {}
 
     public function wire(ServerRequestInterface $request): BaseHttpException
     {

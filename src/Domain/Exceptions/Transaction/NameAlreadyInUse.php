@@ -7,7 +7,6 @@ use Core\Http\Exceptions\BaseHttpException;
 use Core\Http\Exceptions\HttpBadRequestException;
 use Psr\Http\Message\ServerRequestInterface;
 
-
 class NameAlreadyInUse extends HttpExceptionAdapter
 {
     public function wire(ServerRequestInterface $request): BaseHttpException

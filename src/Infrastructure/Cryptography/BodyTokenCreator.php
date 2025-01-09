@@ -9,13 +9,11 @@ use Firebase\JWT\JWT;
 
 class BodyTokenCreator implements TokenGeneratorInterface
 {
-    public function __construct(private Account $account)
-    {
-    }
+    public function __construct(private Account $account) {}
 
     public function createToken(string $secret): string
     {
-        $now = new DateTime();
+        $now = new DateTime;
         $future = new DateTime('now +15 minutes');
 
         $jti = base64_encode(random_bytes(16));
@@ -45,7 +43,7 @@ class BodyTokenCreator implements TokenGeneratorInterface
             'uuid' => $uuid,
             'role' => $role,
             'username' => $username,
-            'auth_type' => $authType
+            'auth_type' => $authType,
         ];
     }
 }

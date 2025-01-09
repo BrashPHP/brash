@@ -26,11 +26,11 @@ readonly class ConnectionModel
                 $port,
                 $user,
                 $password,
-                $charset
-            ], fn($el) => $el === ''))
+                $charset,
+            ], fn ($el) => $el === ''))
         ) {
             throw new ConfigException(
-                "'DATABASE_URL' must be used if fields" .
+                "'DATABASE_URL' must be used if fields".
                 "'DRIVER', 'HOST', 'DBNAME', 'PORT', 'USER', 'PASSWORD' are not present",
                 500
             );
@@ -40,15 +40,15 @@ readonly class ConnectionModel
     public function getAsArray()
     {
         return array_filter([
-            "url" => $this->url,
-            "driver" => $this->driver,
-            "host" => $this->host,
-            "dbname" => $this->dbname,
-            "port" => $this->port,
-            "user" => $this->user,
-            "password" => $this->password,
-            "charset" => $this->charset,
-            "memory" => $this->memory
-        ], fn($value) => !is_null($value) && $value !== '');
+            'url' => $this->url,
+            'driver' => $this->driver,
+            'host' => $this->host,
+            'dbname' => $this->dbname,
+            'port' => $this->port,
+            'user' => $this->user,
+            'password' => $this->password,
+            'charset' => $this->charset,
+            'memory' => $this->memory,
+        ], fn ($value) => ! is_null($value) && $value !== '');
     }
 }

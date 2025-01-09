@@ -26,8 +26,7 @@ class DeliveryMan implements ResourcesDownloaderInterface
         private MuseumRepository $museumRepository,
         private MarkerRepositoryInterface $repository,
         private PresignedUrlCreator $presignedUrlCreator
-    ) {
-    }
+    ) {}
 
     /**
      * Returns all mapped marker instances from a museum
@@ -38,8 +37,7 @@ class DeliveryMan implements ResourcesDownloaderInterface
         try {
             return $this->doOrThrowIf(
                 isset($museum),
-                doCallback: fn() =>
-                $this->mapCollectionToAssets(
+                doCallback: fn () => $this->mapCollectionToAssets(
                     $this->filterPlacementObjectsFromMarkers(
                         $this->filterMarkers(
                             $this->gatherMarkersFromMuseum(
@@ -49,11 +47,11 @@ class DeliveryMan implements ResourcesDownloaderInterface
                     )
                 ),
                 orThrow: new MuseumNotFoundException(
-                    "Could not identify a museum by this code"
+                    'Could not identify a museum by this code'
                 )
             );
         } catch (\Throwable $throwable) {
-            echo ($throwable);
+            echo $throwable;
 
             return [];
         }
@@ -62,8 +60,7 @@ class DeliveryMan implements ResourcesDownloaderInterface
     /**
      * Maps over Markers Collection and return an array of assets
      *
-     * @param Collection<Marker> $markers
-     *
+     * @param  Collection<Marker>  $markers
      * @return MarkerResource[]
      */
     private function mapCollectionToAssets(Collection $markers): array
@@ -71,27 +68,25 @@ class DeliveryMan implements ResourcesDownloaderInterface
 
         return $this->preventNotFoundAssets(
             $markers->map(
-                fn(Marker $el) => (
+                fn (Marker $el) => (
                 new MarkerResource(
                     ...$this->convertMediaMapperToAssetBase($el)
                 )
                 )
-                ->withInformation(
-                    new TransferenceAssetInfo($el->title, $el->text)
-                )
-                ->attachPlacementResources(
-                    $this->mapPlacementObjectsToPlacementResources(
-                        $el->resources
+                    ->withInformation(
+                        new TransferenceAssetInfo($el->title, $el->text)
                     )
-                )
+                    ->attachPlacementResources(
+                        $this->mapPlacementObjectsToPlacementResources(
+                            $el->resources
+                        )
+                    )
             )
         )->toArray();
     }
 
     /**
-     *
-     * @param Collection<PlacementObject> $resources
-     *
+     * @param  Collection<PlacementObject>  $resources
      * @return \App\Domain\Dto\Asset\Transference\PlacementResource[]
      */
     private function mapPlacementObjectsToPlacementResources(
@@ -99,7 +94,7 @@ class DeliveryMan implements ResourcesDownloaderInterface
     ): array {
         return $this->preventNotFoundAssets(
             $resources->map(
-                fn(PlacementObject $po) => new TransferencePlacementResource(
+                fn (PlacementObject $po) => new TransferencePlacementResource(
                     ...$this->convertMediaMapperToAssetBase($po)
                 )
             )
@@ -110,9 +105,9 @@ class DeliveryMan implements ResourcesDownloaderInterface
         MediaHostInterface $host
     ): array {
         return [
-        "name" => $host->namedBy(),
-        "path" => $host->assetInformation()->getPath(),
-        "url" => $this->assignUrl($host->assetInformation()),
+            'name' => $host->namedBy(),
+            'path' => $host->assetInformation()->getPath(),
+            'url' => $this->assignUrl($host->assetInformation()),
         ];
     }
 
@@ -124,7 +119,7 @@ class DeliveryMan implements ResourcesDownloaderInterface
     private function preventNotFoundAssets(Collection $collection): Collection
     {
         return $collection->filter(
-            static fn(TransferenceAsset $asset) => !($asset->url === null && $asset->url === "")
+            static fn (TransferenceAsset $asset) => ! ($asset->url === null && $asset->url === '')
         );
     }
 
@@ -141,8 +136,7 @@ class DeliveryMan implements ResourcesDownloaderInterface
     }
 
     /**
-     * @param Collection<Marker> $collection
-     *
+     * @param  Collection<Marker>  $collection
      * @return Collection<Marker>
      */
     private function filterMarkers(Collection $collection): Collection
@@ -161,8 +155,7 @@ class DeliveryMan implements ResourcesDownloaderInterface
     }
 
     /**
-     * @param Collection<Marker> $markers
-     *
+     * @param  Collection<Marker>  $markers
      * @return Collection<Marker> $markers
      */
     private function filterPlacementObjectsFromMarkers(
@@ -184,8 +177,8 @@ class DeliveryMan implements ResourcesDownloaderInterface
         return $collection->filter(
             static function (MediaHostInterface $el) {
 
-                return !is_null($el->assetInformation());
-    
+                return ! is_null($el->assetInformation());
+
             }
         );
     }

@@ -5,12 +5,12 @@ use App\Domain\Dto\AccountDto;
 use App\Infrastructure\Cryptography\BodyTokenCreator;
 use App\Infrastructure\Persistence\MemoryRepositories\InMemoryAccountRepository;
 use App\Presentation\Middleware\JWTAuthMiddleware;
-
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
+
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertSame;
 
@@ -18,7 +18,7 @@ class RequestHandler implements RequestHandlerInterface
 {
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $response = new Response();
+        $response = new Response;
         $response->getBody()->write(json_encode($request->getAttribute('token')));
 
         return $response;
@@ -34,7 +34,7 @@ beforeEach(function () {
 
 test('should pass when jwt is provided and return token in attributes', function () {
     $dto = new AccountDto(email: 'mail.com', username: 'user', password: 'pass');
-    $repository = new InMemoryAccountRepository();
+    $repository = new InMemoryAccountRepository;
     $account = $repository->insert($dto);
 
     $tokenCreator = new BodyTokenCreator($account);
@@ -42,7 +42,7 @@ test('should pass when jwt is provided and return token in attributes', function
     $request = createRequestWithAuthentication($this, $token);
     $response = $this->sut->process(
         $request,
-        new RequestHandler()
+        new RequestHandler
     );
 
     assertNotNull($response);
@@ -52,7 +52,7 @@ test('should pass when jwt is provided and return token in attributes', function
 });
 function createRequestWithAuthentication(\Tests\TestCase $app, string $token)
 {
-    $bearer = 'Bearer ' . $token;
+    $bearer = 'Bearer '.$token;
 
     return $app->createRequest(
         'GET',

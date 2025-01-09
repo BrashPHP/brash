@@ -6,14 +6,11 @@ namespace Core\Http\Routing;
 
 use App\Presentation\RoutingColletor;
 use Core\Http\Attributes\Route as RouteAttribute;
-use Core\Http\Abstractions\AbstractRouterTemplate;
 use Core\Http\Domain\RouteModel;
-use Core\Http\Interfaces\RouteCollectorInterface;
 use Core\Http\Interfaces\RouterInterface;
-use Core\Http\Routing\RouteFactory;
 use Doctrine\Common\Collections\ArrayCollection;
-use Spatie\StructureDiscoverer\Data\DiscoveredStructure;
 use ReflectionClass;
+use Spatie\StructureDiscoverer\Data\DiscoveredStructure;
 
 class RouterCollector implements RouterInterface
 {
@@ -21,18 +18,17 @@ class RouterCollector implements RouterInterface
         private RouteFactory $routeFactory,
         private RouteIncluder $routeIncluder,
 
-    ) {
-    }
+    ) {}
 
     public function run(): void
     {
         $controllers = new ArrayCollection(RoutingColletor::getActions());
 
         $controllers
-            ->map(fn(DiscoveredStructure|string $controller) => new ReflectionClass($controller))
-            ->map(fn(ReflectionClass $reflectionClass): ?RouteModel => $this->createRouteModel($reflectionClass))
-            ->filter(fn(?RouteModel $route) => $route !== null)
-            ->map(fn(RouteModel $route) => $this->routeIncluder->include($route));
+            ->map(fn (DiscoveredStructure|string $controller) => new ReflectionClass($controller))
+            ->map(fn (ReflectionClass $reflectionClass): ?RouteModel => $this->createRouteModel($reflectionClass))
+            ->filter(fn (?RouteModel $route) => $route instanceof \Core\Http\Domain\RouteModel)
+            ->map(fn (RouteModel $route) => $this->routeIncluder->include($route));
     }
 
     private function createRouteModel(ReflectionClass $reflectionClass): ?RouteModel

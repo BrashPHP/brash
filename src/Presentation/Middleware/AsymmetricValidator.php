@@ -19,8 +19,7 @@ class AsymmetricValidator implements Middleware
     public function __construct(
         private MuseumRepository $museumRepository,
         private SignatureTokenRetrieverInterface $tokenRepository
-    ) {
-    }
+    ) {}
 
     public function process(Request $request, RequestHandler $handler): Response
     {
@@ -33,8 +32,8 @@ class AsymmetricValidator implements Middleware
         if ($museum instanceof \App\Domain\Models\Museum) {
             $signature = json_encode(
                 [
-                'uuid' => $museum->uuid->toString(),
-                'museum_name' => $museum->name,
+                    'uuid' => $museum->uuid->toString(),
+                    'museum_name' => $museum->name,
                 ]
             );
 

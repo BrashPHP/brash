@@ -8,10 +8,7 @@ use JsonSerializable;
 
 readonly class TokenLoginResponse implements JsonSerializable
 {
-
-    public function __construct(public string $token, public string $renewToken)
-    {
-    }
+    public function __construct(public string $token, public string $renewToken) {}
 
     /**
      * @return array

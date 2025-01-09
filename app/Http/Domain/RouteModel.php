@@ -12,6 +12,5 @@ readonly class RouteModel
         public ActionInterface|string $controller,
         /** @param array<string|object> $middlewares */
         public array $middlewares = [],
-    ) {
-    }
+    ) {}
 }

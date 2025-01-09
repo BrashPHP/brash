@@ -2,8 +2,6 @@
 
 namespace Core\Http\Errors;
 
-
-
 enum ErrorsEnum: int
 {
     case BAD_REQUEST = 400;

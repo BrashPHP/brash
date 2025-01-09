@@ -2,17 +2,15 @@
 
 namespace Core\Http\Exceptions;
 
-
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
 class UnprocessableEntityException extends BaseHttpException
 {
-
     public function __construct(
         ServerRequestInterface $request,
         string $message = '',
-        Throwable|null $previous = null,
+        ?Throwable $previous = null,
     ) {
         parent::__construct(
             $request,

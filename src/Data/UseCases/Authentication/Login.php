@@ -16,8 +16,7 @@ class Login implements LoginServiceInterface
     public function __construct(
         private AccountRepository $accountRepository,
         private ComparerInterface $hashComparer
-    ) {
-    }
+    ) {}
 
     public function auth(Credentials $credentials): TokenLoginResponse
     {
@@ -28,9 +27,9 @@ class Login implements LoginServiceInterface
                 return TokenResponseFactory::createToken($account);
             }
 
-            throw new IncorrectPasswordException();
+            throw new IncorrectPasswordException;
         }
 
-        throw new NoAccountFoundException();
+        throw new NoAccountFoundException;
     }
 }

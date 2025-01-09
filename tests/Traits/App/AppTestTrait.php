@@ -13,8 +13,8 @@ trait AppTestTrait
     /**
      * Verify that the given array is an exact match for the JSON returned.
      *
-     * @param array             $expected The expected array
-     * @param ResponseInterface $response The response
+     * @param  array  $expected  The expected array
+     * @param  ResponseInterface  $response  The response
      *
      * @throws JsonException
      */

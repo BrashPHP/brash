@@ -16,7 +16,7 @@ abstract class AbstractValidator implements ValidationInterface
     {
         if (array_key_exists($this->field, $input)) {
             $subject = $input[$this->field];
-            
+
             if ($this->makeValidation($subject)) {
                 return null;
             }
@@ -25,13 +25,12 @@ abstract class AbstractValidator implements ValidationInterface
 
             return $this->returnError(message: $message);
         }
-        
+
         return $this->returnError(message: sprintf('%s is empty', $this->field));
     }
 
-    
     abstract protected function makeValidation(mixed $subject): bool;
-    
+
     private function returnError(string $message): ValidationError
     {
         return (

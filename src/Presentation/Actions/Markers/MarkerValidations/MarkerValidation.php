@@ -8,7 +8,7 @@ class MarkerValidation
 {
     public function validation(): array
     {
-        $assetValidation = new AssetValidation();
+        $assetValidation = new AssetValidation;
 
         return [
             'marker_name' => v::alnum('$', '*', '-', '#', '&', ' ', '.'),

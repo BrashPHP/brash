@@ -10,19 +10,10 @@ use Tests\Traits\App\InstanceManager;
 const ENCODE = 'application/json';
 const ENDPOINT = '/test';
 
-class CustomExceptionApp extends \Exception
-{
-    public function __construct()
-    {
-        parent::__construct('ERROR');
-    }
-}
-
 test('should capture successful response', function () {
-    $instanceApp = new InstanceManager();
+    $instanceApp = new InstanceManager;
     $app = $instanceApp->createAppInstance();
     $app->map(['GET'], ENDPOINT, function (ServerRequestInterface $_, ResponseInterface $response) {
-        $_;
         $json = json_encode(['res' => true]);
         $response->getBody()->write($json);
 
@@ -39,16 +30,26 @@ test('should capture successful response', function () {
     );
     $response = $app->handle($request);
 
-    $body = json_decode($response->getBody()->__tostring(), associative: true);
+    $body = json_decode($response->getBody()->__toString(), associative: true);
 
     expect($response)->not->toBeNull();
     expect($body)->toBe(['res' => true]);
 });
 
 test('should capture 5XX response', function () {
-    $instanceApp = new InstanceManager();
+    $instanceApp = new InstanceManager;
     $app = $instanceApp->createAppInstance();
-    $app->map(['GET'], ENDPOINT, fn() => throw new CustomExceptionApp());
+    $app->map(
+        ['GET'],
+        ENDPOINT,
+        fn () => throw new class extends \Exception
+        {
+            public function __construct()
+            {
+                parent::__construct('ERROR');
+            }
+        }
+    );
 
     $request = $this->createRequest(
         'GET',
@@ -73,13 +74,12 @@ test('should capture 5XX response', function () {
 });
 
 test('should capture mapped error response', function () {
-    $instanceApp = new InstanceManager();
+    $instanceApp = new InstanceManager;
     $app = $instanceApp->createAppInstance();
     $app->map(
         ['GET'],
         ENDPOINT,
-        fn(ServerRequestInterface $req) =>
-        throw new BadRequestException($req)
+        fn (ServerRequestInterface $req) => throw new BadRequestException($req)
     );
 
     $request = $this->createRequest(
@@ -92,7 +92,7 @@ test('should capture mapped error response', function () {
     );
     $response = $app->handle($request);
 
-    $body = json_decode($response->getBody()->__tostring(), associative: true);
+    $body = json_decode($response->getBody()->__toString(), associative: true);
 
     expect($response)->not->toBeNull();
     expect($body)->toBe([

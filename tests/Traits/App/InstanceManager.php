@@ -6,7 +6,6 @@ use App\Application\Providers\DependenciesProvider;
 use App\Application\Providers\DoctrineDefinitionsProvider;
 use App\Application\Providers\RepositoriesProvider;
 use App\Application\Providers\ServicesProvider;
-use Core\Application\App;
 use Core\Builder\AppBuilderManager;
 use Core\Http\Factories\ContainerFactory;
 use Core\Http\Interfaces\ApplicationInterface;
@@ -51,12 +50,12 @@ class InstanceManager
 
     public static function setUpContainer(): ContainerInterface
     {
-        $containerFactory = new ContainerFactory();
+        $containerFactory = new ContainerFactory;
         $containerFactory->addProviders(
-            new DependenciesProvider(),
-            new RepositoriesProvider(),
-            new ServicesProvider(),
-            new DoctrineDefinitionsProvider()
+            new DependenciesProvider,
+            new RepositoriesProvider,
+            new ServicesProvider,
+            new DoctrineDefinitionsProvider
         );
 
         return $containerFactory->get();
@@ -64,7 +63,7 @@ class InstanceManager
 
     public static function requireContainer(bool $forceUpdate = false): ContainerInterface
     {
-        if (!self::$container instanceof ContainerInterface || $forceUpdate) {
+        if (! self::$container instanceof ContainerInterface || $forceUpdate) {
             self::$container = self::setUpContainer();
         }
 

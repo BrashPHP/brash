@@ -2,14 +2,14 @@
 
 namespace App\Data\Entities\Doctrine\Traits;
 
-use Ramsey\Uuid\UuidInterface;
-use Ramsey\Uuid\Uuid;
-use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\PrePersist;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 trait UuidTrait
 {
-    #[Column(type: 'uuid', unique:true)]
+    #[Column(type: 'uuid', unique: true)]
     private ?UuidInterface $uuid = null;
 
     #[PrePersist]
@@ -28,8 +28,6 @@ trait UuidTrait
 
     /**
      * Set the internal primary identity key.
-     *
-     * @param UuidInterface|string $uuid
      */
     public function setUuid(UuidInterface|string|null $uuid): self
     {

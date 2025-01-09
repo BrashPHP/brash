@@ -4,9 +4,5 @@ namespace App\Presentation\Actions\ActionGroups;
 
 use Core\Http\Attributes\RouteGroup;
 
-#[RouteGroup("/users")]
-final class UsersEntrypoint
-{
-}
-
-
+#[RouteGroup('/users')]
+final class UsersEntrypoint {}

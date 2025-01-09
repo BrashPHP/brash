@@ -22,16 +22,16 @@ class EntityManagerBuilder
         );
         $config->setIdentityGenerationPreferences(
             [
-            PostgreSQLPlatform::class => ClassMetadata::GENERATOR_TYPE_SEQUENCE,
+                PostgreSQLPlatform::class => ClassMetadata::GENERATOR_TYPE_SEQUENCE,
             ]
         );
-        $connectionFactory = new DoctrineConnectionFactory();
+        $connectionFactory = new DoctrineConnectionFactory;
         $connection = $connectionFactory->createConnectionFromArray($doctrine, $config);
 
         $entityManager = new EntityManager($connection, $config);
 
-        if (!Type::hasType('uuid_binary')) {
-            Type::addType('uuid_binary', 'Ramsey\Uuid\Doctrine\UuidBinaryType');
+        if (! Type::hasType('uuid_binary')) {
+            Type::addType('uuid_binary', \Ramsey\Uuid\Doctrine\UuidBinaryType::class);
             $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('uuid_binary', 'binary');
         }
 

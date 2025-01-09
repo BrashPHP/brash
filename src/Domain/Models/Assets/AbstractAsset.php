@@ -14,33 +14,32 @@ use Ramsey\Uuid\UuidInterface;
 abstract class AbstractAsset implements ModelInterface
 {
     protected ?int $id = null;
-    
+
     private string $path;
-    
+
     private string $fileName;
-    
+
     private ?string $url;
-    
+
     private string $mediaType;
-    
+
     private string $originalName;
-    
+
     private string $mimeType;
-    
+
     private ?string $temporaryLocation = null;
-    
+
     private ?UuidInterface $uuid = null;
-    
+
     private ?DateTimeInterface $createdAt = null;
-    
+
     private ?DateTimeInterface $updated = null;
 
     /**
      * One Asset may have a set of sub assets, e.g., a 3D object can have many textures.
-     * 
-     * @param Collection<AbstractAsset> $children
+     *
+     * @param  Collection<AbstractAsset>  $children
      */
-
     private Collection $children;
 
     private self $parent;
@@ -48,14 +47,12 @@ abstract class AbstractAsset implements ModelInterface
     public function __construct(string $mediaType)
     {
         if ($mediaType === '') {
-            throw new Exception("Cannot create an asset subtype without expliciting its media type");
+            throw new Exception('Cannot create an asset subtype without expliciting its media type');
         }
-        
+
         $this->mediaType = $mediaType;
-        $this->children = new ArrayCollection();
+        $this->children = new ArrayCollection;
     }
-
-
 
     /**
      * Get the value of id.
@@ -168,8 +165,7 @@ abstract class AbstractAsset implements ModelInterface
     /**
      * Set the value of mediaType.
      *
-     * @param mixed $mediaType
-     *
+     * @param  mixed  $mediaType
      * @return self
      */
     public function setMediaType(string $mediaType)
@@ -211,16 +207,16 @@ abstract class AbstractAsset implements ModelInterface
     public function jsonSerialize(): mixed
     {
         return [
-        'id' => $this->id,
-        'uuid' => $this->uuid,
-        'path' => $this->path,
-        'fileName' => $this->fileName,
-        'url' => $this->url,
-        'mediaType' => $this->mediaType,
-        'created_at' => $this->createdAt,
-        'last_update' => $this->updated,
-        'mimeType' => $this->mimeType,
-        'temporary_location' => $this->temporaryLocation,
+            'id' => $this->id,
+            'uuid' => $this->uuid,
+            'path' => $this->path,
+            'fileName' => $this->fileName,
+            'url' => $this->url,
+            'mediaType' => $this->mediaType,
+            'created_at' => $this->createdAt,
+            'last_update' => $this->updated,
+            'mimeType' => $this->mimeType,
+            'temporary_location' => $this->temporaryLocation,
         ];
     }
 
@@ -235,8 +231,7 @@ abstract class AbstractAsset implements ModelInterface
     /**
      * Set the value of temporaryLocation.
      *
-     * @param mixed $temporaryLocation
-     *
+     * @param  mixed  $temporaryLocation
      * @return self
      */
     public function setTemporaryLocation(?string $temporaryLocation)
@@ -257,8 +252,7 @@ abstract class AbstractAsset implements ModelInterface
     /**
      * Set the value of originalName.
      *
-     * @param mixed $originalName
-     *
+     * @param  mixed  $originalName
      * @return self
      */
     public function setOriginalName(string $originalName)

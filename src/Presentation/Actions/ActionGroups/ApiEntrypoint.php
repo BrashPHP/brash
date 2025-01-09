@@ -4,9 +4,5 @@ namespace App\Presentation\Actions\ActionGroups;
 
 use Core\Http\Attributes\RouteGroup;
 
-
-#[RouteGroup("/test")]
-final class ApiEntrypoint
-{
-
-}
+#[RouteGroup('/test')]
+final class ApiEntrypoint {}

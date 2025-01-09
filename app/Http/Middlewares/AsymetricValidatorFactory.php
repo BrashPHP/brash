@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Core\Http\Middlewares;
 
-
 use App\Domain\Repositories\MuseumRepository;
 use App\Domain\Repositories\SignatureTokenRetrieverInterface;
 use App\Presentation\Middleware\AsymmetricValidator;

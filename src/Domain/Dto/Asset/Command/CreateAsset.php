@@ -10,14 +10,13 @@ class CreateAsset
         public readonly string $originalName,
         public readonly ?string $url,
         private array $children = []
-    ) {
-    }
+    ) {}
 
     public function mimeType(): string
     {
-        $detector = new \League\MimeTypeDetection\FinfoMimeTypeDetector();
+        $detector = new \League\MimeTypeDetection\FinfoMimeTypeDetector;
 
-        return $detector->detectMimeTypeFromPath($this->path) ?? "";
+        return $detector->detectMimeTypeFromPath($this->path) ?? '';
     }
 
     public function extension()

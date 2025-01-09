@@ -8,17 +8,15 @@ use App\Data\Entities\Contracts\ModelCoercionInterface;
 use App\Data\Entities\Contracts\ModelParsingInterface;
 use App\Data\Entities\Doctrine\Traits\TimestampsTrait;
 use App\Domain\Models\Security\SignatureToken;
-use DateTimeInterface;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Table;
-
 use DateInterval;
-
+use DateTimeInterface;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\Table;
 
 #[Entity, Table(name: 'signature_tokens'), HasLifecycleCallbacks]
 class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInterface
@@ -42,7 +40,7 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
 
     public function __construct()
     {
-        $currentDate = new \DateTime();
+        $currentDate = new \DateTime;
         $this->createdAt = $currentDate;
         $this->updated = $currentDate;
         $this->ttl = $currentDate->add(new DateInterval('P6M'));
@@ -60,7 +58,6 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
     {
         return $this->signature;
     }
-
 
     public function setSignature(string $signature): self
     {
@@ -81,12 +78,10 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
         ];
     }
 
-
     public function getPrivateKey()
     {
         return $this->privateKey;
     }
-
 
     public function setPrivateKey(string $privateKey): self
     {
@@ -102,7 +97,6 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
     {
         return $this->museum;
     }
-
 
     public function setMuseum(DoctrineMuseum $museum): self
     {
@@ -127,7 +121,7 @@ class DoctrineSignatureToken implements ModelCoercionInterface, ModelParsingInte
     }
 
     /**
-     * @param SignatureToken $model
+     * @param  SignatureToken  $model
      */
     public function fromModel(object $model): static
     {

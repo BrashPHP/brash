@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Domain\Models\Enums;
 
 enum AuthTypes: string

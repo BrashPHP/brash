@@ -13,17 +13,18 @@ class FiberMiddleware
 {
     /**
      * @return ResponseInterface|PromiseInterface<ResponseInterface>|\Generator
-     *     Returns a `ResponseInterface` from the next request handler in the
-     *     chain. If the next request handler returns immediately, this method
-     *     will return immediately. If the next request handler suspends the
-     *     fiber (see `await()`), this method will return a `PromiseInterface`
-     *     that is fulfilled with a `ResponseInterface` when the fiber is
-     *     terminated successfully. If the next request handler returns a
-     *     promise, this method will return a promise that follows its
-     *     resolution. If the next request handler returns a Generator-based
-     *     coroutine, this method returns a `Generator`. This method never
-     *     throws or resolves a rejected promise. If the handler fails, it will
-     *     be turned into a valid error response before returning.
+     *                                                                          Returns a `ResponseInterface` from the next request handler in the
+     *                                                                          chain. If the next request handler returns immediately, this method
+     *                                                                          will return immediately. If the next request handler suspends the
+     *                                                                          fiber (see `await()`), this method will return a `PromiseInterface`
+     *                                                                          that is fulfilled with a `ResponseInterface` when the fiber is
+     *                                                                          terminated successfully. If the next request handler returns a
+     *                                                                          promise, this method will return a promise that follows its
+     *                                                                          resolution. If the next request handler returns a Generator-based
+     *                                                                          coroutine, this method returns a `Generator`. This method never
+     *                                                                          throws or resolves a rejected promise. If the handler fails, it will
+     *                                                                          be turned into a valid error response before returning.
+     *
      * @throws void
      */
     public function __invoke(ServerRequestInterface $request, callable $next)
@@ -39,7 +40,7 @@ class FiberMiddleware
                 /**
                  * @var ?Deferred<ResponseInterface> $deferred
                  */
-                if ($deferred !== null) {
+                if ($deferred instanceof \React\Promise\Deferred) {
                     assert($response instanceof ResponseInterface);
                     $deferred->resolve($response);
                 }
@@ -62,7 +63,8 @@ class FiberMiddleware
             return $fiber->getReturn();
         }
 
-        $deferred = new Deferred();
+        $deferred = new Deferred;
+
         return $deferred->promise();
     }
 }

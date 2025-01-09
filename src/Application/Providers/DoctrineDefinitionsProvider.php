@@ -7,11 +7,11 @@ use DI\ContainerBuilder;
 
 final class DoctrineDefinitionsProvider implements AppProviderInterface
 {
-    public function provide(ContainerBuilder $container)
+    public function provide(ContainerBuilder $container): void
     {
         $src = dirname(dirname(__DIR__));
         $container->addDefinitions([
-            'doctrine_metadata_dirs' => ["{$src}/Data/Entities/Doctrine",]
+            'doctrine_metadata_dirs' => [$src.'/Data/Entities/Doctrine'],
         ]);
     }
 }

@@ -13,7 +13,7 @@ class HomeController extends Action
 {
     public function action(Request $request): Response
     {
-        $data = new stdClass();
+        $data = new stdClass;
         $data->message = file_get_contents(__DIR__.'/welcome.txt');
 
         return $this->respondWithData($data);

@@ -7,9 +7,8 @@ use DI\Container;
 use Tests\Traits\App\InstanceManager;
 use Tests\Traits\App\RequestManager;
 
-
 test('should call action successfully', function () {
-    $instanceApp = new InstanceManager();
+    $instanceApp = new InstanceManager;
     $app = $instanceApp->createAppInstance();
     /** @var Container $container */
     $container = $instanceApp->getContainer();
@@ -21,8 +20,9 @@ test('should call action successfully', function () {
     $userRepositoryProphecy->shouldReceive('findAll')->once()->andReturn([$user]);
 
     $container->set(UserRepository::class, $userRepositoryProphecy);
-    $request = new RequestManager();
+    $request = new RequestManager;
     $request = $request->createRequest('GET', '/users');
+
     $response = $app->handle($request);
 
     $payload = (string) $response->getBody();

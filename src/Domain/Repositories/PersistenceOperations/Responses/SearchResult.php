@@ -4,9 +4,7 @@ namespace App\Domain\Repositories\PersistenceOperations\Responses;
 
 class SearchResult implements ResultSetInterface
 {
-    public function __construct(private array $arrayItems)
-    {
-    }
+    public function __construct(private array $arrayItems) {}
 
     public function getItems(): array
     {

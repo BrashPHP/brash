@@ -13,9 +13,7 @@ use Doctrine\ORM\EntityManagerInterface as EntityManager;
 
 class SignatureTokenRepository implements SignatureTokenRepositoryInterface, SignatureTokenRetrieverInterface
 {
-    public function __construct(private EntityManager $em)
-    {
-    }
+    public function __construct(private EntityManager $em) {}
 
     public function save(SignatureToken $token): bool
     {
@@ -26,14 +24,14 @@ class SignatureTokenRepository implements SignatureTokenRepositoryInterface, Sig
                 $this->em->flush();
             }
 
-            $newToken = new DoctrineSignatureToken();
+            $newToken = new DoctrineSignatureToken;
 
             $this->em->persist($newToken->fromModel($token));
             $this->em->flush();
 
             return true;
         } catch (UniqueConstraintViolationException) {
-            throw new DuplicatedTokenException();
+            throw new DuplicatedTokenException;
         }
     }
 

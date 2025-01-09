@@ -9,7 +9,7 @@ class RequestFactory
     // Create Request object from globals
     public function createRequest(): ServerRequestInterface
     {
-        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory;
 
         $creator = new \Nyholm\Psr7Server\ServerRequestCreator(
             serverRequestFactory: $psr17Factory,

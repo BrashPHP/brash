@@ -11,19 +11,20 @@ final class GroupCollector
     {
         $groupAttribute = $this->extractAttributeGroup($controller);
 
-        if (is_null($groupAttribute)) {
+        if (! $groupAttribute instanceof \Core\Http\Attributes\RouteGroup) {
             return new GroupModel('');
         }
 
-        $path = "";
-        $middlewares = new \SplStack();
+        $path = '';
+        $middlewares = new \SplStack;
         $shouldSkip = false;
 
         while ($groupAttribute) {
             if ($groupAttribute->skip) {
                 $shouldSkip = true;
             }
-            $path = implode('/', [trim(trim($groupAttribute->prefix, "/")), trim($path)]);
+
+            $path = implode('/', [trim(trim($groupAttribute->prefix, '/')), trim($path)]);
             if ($groupAttribute->middleware instanceof MiddlewareInterface || is_string($groupAttribute->middleware)) {
                 $middlewares->push($groupAttribute->middleware);
             } elseif (is_array($groupAttribute->middleware)) {
@@ -44,11 +45,10 @@ final class GroupCollector
 
         $attrs = $reflector->getAttributes(RouteGroup::class);
 
-        if (!empty($attrs)) {
+        if ($attrs !== []) {
             return $attrs[0]->newInstance();
         }
 
         return null;
     }
 }
-

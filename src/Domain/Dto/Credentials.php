@@ -12,9 +12,7 @@ final readonly class Credentials implements JsonSerializable
         public string $access,
         public string $password,
         public string $role = '',
-    ) {
-
-    }
+    ) {}
 
     /**
      * @return array

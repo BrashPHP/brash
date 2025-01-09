@@ -8,7 +8,6 @@ use Cycle\Annotated\Annotation\Column;
 
 trait TimestampsTrait
 {
-
     #[Column(type: 'datetime')]
     private ?\DateTime $createdAt = null;
 

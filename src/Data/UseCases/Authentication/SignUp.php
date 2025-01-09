@@ -2,19 +2,16 @@
 
 namespace App\Data\UseCases\Authentication;
 
+use App\Data\Protocols\Auth\SignUpServiceInterface;
 use App\Domain\Dto\AccountDto;
 use App\Domain\Dto\TokenLoginResponse;
 use App\Domain\Exceptions\Account\UserAlreadyRegisteredException;
-use App\Domain\Repositories\AccountRepository;
-use App\Data\Protocols\Auth\SignUpServiceInterface;
 use App\Domain\Factories\TokenResponseFactory;
+use App\Domain\Repositories\AccountRepository;
 
 class SignUp implements SignUpServiceInterface
 {
-    public function __construct(private AccountRepository $accountRepository)
-    {
-    }
-
+    public function __construct(private AccountRepository $accountRepository) {}
 
     public function register(AccountDto $accountDto): TokenLoginResponse
     {
@@ -25,6 +22,6 @@ class SignUp implements SignUpServiceInterface
             return TokenResponseFactory::createToken($account);
         }
 
-        throw new UserAlreadyRegisteredException();
+        throw new UserAlreadyRegisteredException;
     }
 }

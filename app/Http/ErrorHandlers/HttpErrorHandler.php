@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Core\Http\ErrorHandlers;
 
 use Core\Http\Domain\ActionPayload;
-use Core\Http\Errors\{ErrorsEnum, ActionError};
+use Core\Http\Errors\ActionError;
+use Core\Http\Errors\ErrorsEnum;
 use Core\Http\Exceptions\BaseHttpException;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpException as SlimHttpException;
 use Slim\Handlers\ErrorHandler as SlimErrorHandler;
-
-
 use Throwable;
 
 use function Core\functions\mode;
@@ -26,7 +25,7 @@ class HttpErrorHandler extends SlimErrorHandler
     {
         $exception = $this->exception;
         $statusCode = 500;
-        $message = "";
+        $message = '';
 
         if ($exception instanceof SlimHttpException || $exception instanceof BaseHttpException) {
             $statusCode = $exception->getCode();
@@ -61,15 +60,15 @@ class HttpErrorHandler extends SlimErrorHandler
         ];
         if ($isServerError) {
             foreach ($error->getTrace() as $trace) {
-                $file = $trace['file'] ?? "";
-                $line = $trace['line'] ?? "";
-                $class = $trace['class'] ?? "";
-                $type = $trace['type'] ?? "";
-                $this->logError("File: {$file}");
-                $this->logError("Line: {$line}");
-                $this->logError("Class {$class}");
+                $file = $trace['file'] ?? '';
+                $line = $trace['line'] ?? '';
+                $class = $trace['class'] ?? '';
+                $type = $trace['type'] ?? '';
+                $this->logError('File: '.$file);
+                $this->logError('Line: '.$line);
+                $this->logError('Class '.$class);
                 if ($type) {
-                    $this->logError("[type]: {$type}");
+                    $this->logError('[type]: '.$type);
                 }
             }
         }
@@ -79,7 +78,7 @@ class HttpErrorHandler extends SlimErrorHandler
 
     protected function logError(string $error): void
     {
-        if (mode() === "TEST") {
+        if (mode() === 'TEST') {
             return;
         }
 

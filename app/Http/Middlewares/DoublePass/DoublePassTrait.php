@@ -2,7 +2,6 @@
 
 namespace Core\Http\Middlewares\DoublePass;
 
-
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

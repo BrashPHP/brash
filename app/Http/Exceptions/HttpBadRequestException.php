@@ -7,16 +7,16 @@ namespace Core\Http\Exceptions;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * @api 
+ * @api
  */
 class HttpBadRequestException extends BaseHttpException
 {
     public function __construct(
         ServerRequestInterface $request,
         string $message = 'Bad request.',
-        string $description = 'The server cannot or will not process ' .
+        string $description = 'The server cannot or will not process '.
         'the request due to an apparent client error.',
-        \Throwable|null $previous = null,
+        ?\Throwable $previous = null,
     ) {
         parent::__construct(
             $request,

@@ -20,14 +20,13 @@ class UploadAction extends Action
 {
     public function __construct(
         private UploadCollectorInterface $uploader,
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): Response
     {
         $bucket = 'artchier-markers';
         $params = $request->getQueryParams();
-        $prefix = $params['prefix'] . '-' ?? '';
+        $prefix = $params['prefix'].'-' ?? '';
         $files = $request->getUploadedFiles();
         $objects = [];
 
@@ -38,12 +37,12 @@ class UploadAction extends Action
         $results = $this->uploader->uploadObjects($bucket, ...$objects);
 
         $returnValues = array_map(
-            static fn($result, UploadableObjectInterface $object, string $originalName) => [
-            'URL' => $result['ObjectURL'],
-            'fileName' => $object->key(),
-            'created_at' => new DateTime(),
-            'mimeType' => MimeType::fromFilename($object->key()),
-            'originalName' => $originalName,
+            static fn ($result, UploadableObjectInterface $object, string $originalName) => [
+                'URL' => $result['ObjectURL'],
+                'fileName' => $object->key(),
+                'created_at' => new DateTime,
+                'mimeType' => MimeType::fromFilename($object->key()),
+                'originalName' => $originalName,
             ], $results, $objects, array_keys($objects)
         );
 
@@ -57,7 +56,7 @@ class UploadAction extends Action
 
             $stream = $uploadedFile->getStream();
 
-            return new UploadableObject($prefix . $fileName, $stream);
+            return new UploadableObject($prefix.$fileName, $stream);
         }
 
         throw new UploadError($request, $uploadedFile->getClientFilename());

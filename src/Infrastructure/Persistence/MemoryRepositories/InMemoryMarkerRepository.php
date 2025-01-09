@@ -14,19 +14,16 @@ use App\Domain\Repositories\PersistenceOperations\Responses\SearchResult;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-
 class InMemoryMarkerRepository implements MarkerRepositoryInterface
 {
     /**
-     *
-     *
      * @var Collection<Marker>
      */
     private readonly Collection $markers;
 
     public function __construct()
     {
-        $this->markers = new ArrayCollection();
+        $this->markers = new ArrayCollection;
     }
 
     /**
@@ -55,8 +52,8 @@ class InMemoryMarkerRepository implements MarkerRepositoryInterface
     /**
      * @var Marker[]
      *
-     * @param mixed $page
-     * @param mixed $limit
+     * @param  mixed  $page
+     * @param  mixed  $limit
      */
     public function findAllByMuseum(int|Museum $museum, bool $paginate = false, $page = 1, $limit = 20): ResultSetInterface
     {
@@ -72,16 +69,15 @@ class InMemoryMarkerRepository implements MarkerRepositoryInterface
         return new SearchResult($this->markers->toArray());
     }
 
-
     public function update(int $id, array $values): ?Marker
     {
         $updatable = $this->findByID($id);
         if ($updatable instanceof Marker) {
             $fields = [
-                "text",
-                "name",
-                "title",
-                "isActive",
+                'text',
+                'name',
+                'title',
+                'isActive',
             ];
 
             foreach ($fields as $key) {
@@ -94,7 +90,7 @@ class InMemoryMarkerRepository implements MarkerRepositoryInterface
 
     public function delete(ModelInterface|int $subject): ?Marker
     {
-        if (!is_int($subject)) {
+        if (! is_int($subject)) {
             $jsonId = $subject->jsonSerialize()['id'];
 
             return $this->markers->remove($jsonId);

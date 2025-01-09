@@ -9,6 +9,7 @@ use App\Domain\Dto\Credentials;
 use App\Domain\Dto\TokenLoginResponse;
 use App\Presentation\Actions\Auth\Utilities\CookieTokenManager;
 use Core\Http\Action;
+use Core\Http\Attributes\Route;
 use Core\Http\Interfaces\ValidationInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -17,16 +18,13 @@ use React\Promise\Promise;
 use React\Promise\PromiseInterface;
 use Respect\Validation\Validator;
 
-use Core\Http\Attributes\Route;
-
-#[Route(path: "login", method: "POST")]
+#[Route(path: 'login', method: 'POST')]
 class LoginController extends Action implements ValidationInterface
 {
     public function __construct(
         private LoginServiceInterface $loginService,
         protected LoggerInterface $logger
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): PromiseInterface|Response
     {
@@ -45,7 +43,7 @@ class LoginController extends Action implements ValidationInterface
             $resolve($result);
         });
         $logger = $this->logger;
-        $cookieTokenManager = new CookieTokenManager();
+        $cookieTokenManager = new CookieTokenManager;
 
         return $promise->then(static function (TokenLoginResponse $token) use ($logger) {
             $refreshToken = $token->renewToken;
@@ -54,15 +52,15 @@ class LoginController extends Action implements ValidationInterface
 
             return $token;
         })->then(
-                fn(TokenLoginResponse $token) => [
-                    $this
-                        ->respondWithData(['token' => $token->token])
-                        ->withStatus(201, 'Created token'),
-                    $token->renewToken
-                ]
-            )
+            fn (TokenLoginResponse $token) => [
+                $this
+                    ->respondWithData(['token' => $token->token])
+                    ->withStatus(201, 'Created token'),
+                $token->renewToken,
+            ]
+        )
             ->then(
-                fn(array $response) => $cookieTokenManager->appendCookieHeader(...$response)
+                fn (array $response) => $cookieTokenManager->appendCookieHeader(...$response)
             );
     }
 

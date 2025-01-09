@@ -13,8 +13,7 @@ class ResourcesDownloaderAction extends Action
 {
     public function __construct(
         private ResourcesDownloaderInterface $downloader
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): Response
     {

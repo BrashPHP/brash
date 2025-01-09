@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Domain\Events;
 
 /**
@@ -7,7 +8,7 @@ namespace App\Domain\Events;
 interface ListenerInterface
 {
     /**
-     * @param T $subject
+     * @param  T  $subject
      */
     public function execute(Event $subject): void;
 }

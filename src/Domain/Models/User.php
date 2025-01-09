@@ -9,11 +9,11 @@ use JsonSerializable;
 class User implements JsonSerializable
 {
     public readonly ?int $id;
-    
+
     public readonly string $username;
-    
+
     public readonly string $firstName;
-    
+
     public readonly string $lastName;
 
     public function __construct(?int $id, string $username, string $firstName, string $lastName)
@@ -24,7 +24,6 @@ class User implements JsonSerializable
         $this->lastName = ucfirst($lastName);
     }
 
-   
     /**
      * @return array
      */

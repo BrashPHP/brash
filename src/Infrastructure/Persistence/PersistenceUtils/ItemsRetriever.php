@@ -9,9 +9,7 @@ use Doctrine\ORM\EntityManagerInterface as EntityManager;
 
 class ItemsRetriever
 {
-    public function __construct(private EntityManager $em)
-    {
-    }
+    public function __construct(private EntityManager $em) {}
 
     public function findAll(string $className, bool $paginate = false, $page = 1, $limit = 20): ResultSetInterface
     {

@@ -16,9 +16,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
  */
 class MuseumDoctrineRepository extends DoctrineAbstractCrud implements MuseumRepository
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function entity(): string
     {
@@ -36,7 +34,7 @@ class MuseumDoctrineRepository extends DoctrineAbstractCrud implements MuseumRep
 
                 $this->em->flush();
             } catch (UniqueConstraintViolationException) {
-                throw new MuseumAlreadyRegisteredException();
+                throw new MuseumAlreadyRegisteredException;
             }
         }
 
@@ -79,12 +77,12 @@ class MuseumDoctrineRepository extends DoctrineAbstractCrud implements MuseumRep
     public function add(Museum $museum): bool
     {
         try {
-            $museumDoctrine = new DoctrineMuseum();
+            $museumDoctrine = new DoctrineMuseum;
             $this->insert($museumDoctrine->fromModel($museum));
 
             return true;
         } catch (UniqueConstraintViolationException) {
-            throw new MuseumAlreadyRegisteredException();
+            throw new MuseumAlreadyRegisteredException;
         }
     }
 

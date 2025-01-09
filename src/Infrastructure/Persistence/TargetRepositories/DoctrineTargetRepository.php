@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Infrastructure\Persistence\TargetRepositories;
 
 use App\Infrastructure\Persistence\Contracts\RepositoryInterface;
@@ -6,9 +7,7 @@ use Doctrine\Persistence\ObjectRepository;
 
 class DoctrineTargetRepository implements RepositoryInterface
 {
-    public function __construct(private ObjectRepository $repository)
-    {
-    }
+    public function __construct(private ObjectRepository $repository) {}
 
     public function findByPK(mixed $id): ?object
     {

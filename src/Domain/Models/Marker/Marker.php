@@ -16,7 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 
-readonly class Marker implements ModelInterface, MediaHostParentInterface
+readonly class Marker implements MediaHostParentInterface, ModelInterface
 {
     public function __construct(
         public ?int $id,
@@ -27,16 +27,13 @@ readonly class Marker implements ModelInterface, MediaHostParentInterface
         public ?AbstractAsset $asset = null,
         public bool $isActive = true,
         /**
-         *
          * @var Collection<PlacementObject> $resouces
          */
-        public Collection $resources = new ArrayCollection(),
-        public ?DateTimeInterface $createdAt = new \DateTime(),
-        public ?DateTimeInterface $updated = new \DateTime(),
+        public Collection $resources = new ArrayCollection,
+        public ?DateTimeInterface $createdAt = new \DateTime,
+        public ?DateTimeInterface $updated = new \DateTime,
         public ?UuidInterface $uuid = null
-    ) {
-    }
-
+    ) {}
 
     public function assetInformation(): ?AbstractAsset
     {
@@ -95,7 +92,7 @@ readonly class Marker implements ModelInterface, MediaHostParentInterface
     /**
      * Undocumented function
      *
-     * @param Collection<PlacementObject> $collection
+     * @param  Collection<PlacementObject>  $collection
      */
     public function setResources(Collection $collection): self
     {
@@ -105,7 +102,6 @@ readonly class Marker implements ModelInterface, MediaHostParentInterface
 
         return $this;
     }
-
 
     /**
      * Set the value of resource.

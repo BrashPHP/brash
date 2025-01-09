@@ -12,20 +12,19 @@ use Core\Http\Middlewares\Jwt\JwtAuthentication\RequestMethodRule;
 use Core\Http\Middlewares\Jwt\JwtAuthentication\RequestPathRule;
 use Core\Http\Middlewares\Jwt\JwtAuthentication\RuleInterface;
 use DomainException;
-use Firebase\JWT\Key;
 use Exception;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use RuntimeException;
 use SplStack;
-
 
 final class JwtAuthentication implements MiddlewareInterface
 {
@@ -59,24 +58,24 @@ final class JwtAuthentication implements MiddlewareInterface
 
         $this->options = $options->bindToAuthentication($this);
 
-        $this->responseFactory = $responseFactoryInterface ?? new Psr17Factory();
+        $this->responseFactory = $responseFactoryInterface ?? new Psr17Factory;
 
         /* If nothing was passed in options add default rules. */
         /* This also means $options->rules overrides $options->path */
         /* and $options->ignore */
-        if (!count($options->rules)) {
+        if ($options->rules === []) {
             $this->rules->push(
                 new RequestMethodRule(
                     [
-                        "ignore" => ["OPTIONS"]
+                        'ignore' => ['OPTIONS'],
                     ]
                 )
             );
             $this->rules->push(
                 new RequestPathRule(
                     [
-                        "path" => $this->options->path,
-                        "ignore" => $this->options->ignore
+                        'path' => $this->options->path,
+                        'ignore' => $this->options->ignore,
                     ]
                 )
             );
@@ -94,12 +93,12 @@ final class JwtAuthentication implements MiddlewareInterface
         $host = $request->getUri()->getHost();
 
         /* If rules say we should not authenticate call next and return. */
-        if (false === $this->shouldAuthenticate($request)) {
+        if ($this->shouldAuthenticate($request) === false) {
             return $handler->handle($request);
         }
 
         /* HTTP allowed only if secure is false or server is in relaxed array. */
-        if ("https" !== $scheme && $this->options->secure && !in_array($host, $this->options->relaxed)) {
+        if ($scheme !== 'https' && $this->options->secure && ! in_array($host, $this->options->relaxed)) {
 
             throw new InsecureUseOfMiddlewareException($scheme);
         }
@@ -108,25 +107,25 @@ final class JwtAuthentication implements MiddlewareInterface
         try {
             $token = $this->fetchToken($request);
             $decoded = $this->decodeToken($token);
-        } catch (RuntimeException | DomainException $exception) {
+        } catch (RuntimeException|DomainException $exception) {
             $response = $this->responseFactory->createResponse(401);
 
             return $this->processError(
                 $response,
                 [
-                    "message" => $exception->getMessage(),
-                    "uri" => (string) $request->getUri()
+                    'message' => $exception->getMessage(),
+                    'uri' => (string) $request->getUri(),
                 ]
             );
         }
 
         $params = [
-            "decoded" => $decoded,
-            "token" => $token,
+            'decoded' => $decoded,
+            'token' => $token,
         ];
 
         /* Add decoded token to request as attribute when requested. */
-        if ($this->options->attribute) {
+        if ($this->options->attribute !== '' && $this->options->attribute !== '0') {
             $request = $request->withAttribute($this->options->attribute, $decoded);
         }
 
@@ -149,7 +148,7 @@ final class JwtAuthentication implements MiddlewareInterface
     /**
      * Set all rules in the stack.
      *
-     * @param RuleInterface[] $rules
+     * @param  RuleInterface[]  $rules
      */
     public function withRules(array $rules): self
     {
@@ -184,7 +183,7 @@ final class JwtAuthentication implements MiddlewareInterface
     {
         /* If any of the rules in stack return false will not authenticate */
         foreach ($this->rules as $callable) {
-            if (!$callable($request)) {
+            if (! $callable($request)) {
                 return false;
             }
         }
@@ -195,7 +194,7 @@ final class JwtAuthentication implements MiddlewareInterface
     /**
      * Call the error handler if it exists.
      *
-     * @param mixed[] $arguments
+     * @param  mixed[]  $arguments
      */
     private function processError(ResponseInterface $response, array $arguments): ResponseInterface
     {
@@ -210,8 +209,9 @@ final class JwtAuthentication implements MiddlewareInterface
         /* Check for token in header. */
         $header = $request->getHeaderLine($this->options->header);
 
-        if (!empty($header) && preg_match($this->options->regexp, $header, $matches)) {
-            $this->log(LogLevel::DEBUG, "Using token from request header");
+        if (! empty($header) && preg_match($this->options->regexp, $header, $matches)) {
+            $this->log(LogLevel::DEBUG, 'Using token from request header');
+
             return $matches[1];
         }
 
@@ -219,17 +219,18 @@ final class JwtAuthentication implements MiddlewareInterface
         $cookieParams = $request->getCookieParams();
 
         if (isset($cookieParams[$this->options->cookie])) {
-            $this->log(LogLevel::DEBUG, "Using token from cookie");
+            $this->log(LogLevel::DEBUG, 'Using token from cookie');
             if (preg_match($this->options->regexp, $cookieParams[$this->options->cookie], $matches)) {
                 return $matches[1];
             }
+
             return $cookieParams[$this->options->cookie];
         }
 
         /* If everything fails log and throw. */
-        $this->log(LogLevel::WARNING, "Token not found");
+        $this->log(LogLevel::WARNING, 'Token not found');
 
-        throw new TokenNotFoundException();
+        throw new TokenNotFoundException;
     }
 
     private function decodeToken(string $token): array
@@ -275,11 +276,11 @@ final class JwtAuthentication implements MiddlewareInterface
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed[] $context
+     * @param  mixed[]  $context
      */
     private function log(string $level, string $message, array $context = []): void
     {
-        if ($this->logger) {
+        if ($this->logger instanceof \Psr\Log\LoggerInterface) {
             $this->logger->log($level, $message, $context);
         }
     }
@@ -287,7 +288,7 @@ final class JwtAuthentication implements MiddlewareInterface
     /**
      * Set the rules.
      *
-     * @param RuleInterface[] $rules
+     * @param  RuleInterface[]  $rules
      */
     private function rules(array $rules): void
     {

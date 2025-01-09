@@ -9,11 +9,9 @@ use App\Domain\Repositories\AccountRepository;
 
 class SocialLoginAuth
 {
-
     public function __construct(
         private AccountRepository $accountRepository,
-    ) {
-    }
+    ) {}
 
     public function authenticate(AccountDto $accountDto): TokenLoginResponse
     {

@@ -3,14 +3,13 @@
 namespace Core\Providers;
 
 use Core\Data\Domain\ConnectionModel;
-use Core\Providers\AppProviderInterface;
 use DI\ContainerBuilder;
-use function Core\functions\inTesting;
 
+use function Core\functions\inTesting;
 
 class ConnectionProvider implements AppProviderInterface
 {
-    public function provide(ContainerBuilder $container)
+    public function provide(ContainerBuilder $container): void
     {
         $container->addDefinitions(
             [
@@ -21,9 +20,11 @@ class ConnectionProvider implements AppProviderInterface
                             memory: 'true'
                         );
                     }
+
                     if (isset($_ENV['DATABASE_URL'])) {
                         return new ConnectionModel(url: $_ENV['DATABASE_URL']);
                     }
+
                     // These are essentially mandatory, except for charset
                     $dbParams = [
                         'DRIVER',
@@ -32,7 +33,7 @@ class ConnectionProvider implements AppProviderInterface
                         'PORT',
                         'USER',
                         'PASSWORD',
-                        'CHARSET'
+                        'CHARSET',
                     ];
 
                     $connParams = array_reduce(
@@ -46,7 +47,7 @@ class ConnectionProvider implements AppProviderInterface
                     );
 
                     return new ConnectionModel(...$connParams);
-                }
+                },
             ]
         );
     }

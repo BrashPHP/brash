@@ -7,7 +7,6 @@ use Core\Http\Exceptions\BaseHttpException;
 use Core\Http\Exceptions\HttpInternalServerErrorException;
 use Psr\Http\Message\ServerRequestInterface;
 
-
 class CantGetUserInformationException extends HttpExceptionAdapter
 {
     public function wire(ServerRequestInterface $request): BaseHttpException

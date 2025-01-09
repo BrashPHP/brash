@@ -2,15 +2,16 @@
 
 namespace App\Presentation\Actions\Auth\Utilities;
 
-use Slim\Psr7\Cookies;
 use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Psr7\Cookies;
+
 use function Core\functions\isProd;
 
 class CookieTokenManager
 {
     public function appendCookieHeader(Response $response, string $refreshToken): Response
     {
-        $cookie = new Cookies();
+        $cookie = new Cookies;
         $values = $this->arrayValues();
         $values['value'] = $refreshToken;
 
@@ -27,7 +28,7 @@ class CookieTokenManager
     {
         $options = $this->arrayValues();
         $options['expires'] = time() - 3600;
-        $cookie = new Cookies();
+        $cookie = new Cookies;
         $cookie->set(REFRESH_TOKEN, $options);
 
         foreach ($cookie->toHeaders() as $header) {
@@ -43,9 +44,9 @@ class CookieTokenManager
             'expires' => time() + 31536000,
             'httponly' => 'true',
             // 'samesite' => $sameSite,
-            'path' => '/'
+            'path' => '/',
         ];
-        
+
         if (isProd()) {
             $options['samesite'] = 'Strict';
         }

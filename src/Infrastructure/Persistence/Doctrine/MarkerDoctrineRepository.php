@@ -2,7 +2,6 @@
 
 namespace App\Infrastructure\Persistence\Doctrine;
 
-
 use App\Data\Entities\Doctrine\DoctrineMarker;
 use App\Domain\Contracts\ModelInterface;
 use App\Domain\Exceptions\Marker\MarkerNameRepeated;
@@ -22,7 +21,6 @@ use Exception;
  */
 class MarkerDoctrineRepository extends DoctrineAbstractCrud implements MarkerRepositoryInterface
 {
-
     public function entity(): string
     {
         return DoctrineMarker::class;
@@ -31,7 +29,7 @@ class MarkerDoctrineRepository extends DoctrineAbstractCrud implements MarkerRep
     public function add(Marker $marker): bool
     {
         try {
-            $doctrineMarker = new DoctrineMarker();
+            $doctrineMarker = new DoctrineMarker;
             $doctrineMarker->fromModel($marker);
 
             $this->em->getConnection()->beginTransaction();
@@ -56,7 +54,7 @@ class MarkerDoctrineRepository extends DoctrineAbstractCrud implements MarkerRep
 
             return true;
         } catch (UniqueConstraintViolationException $e) {
-            $exception = new MarkerNameRepeated();
+            $exception = new MarkerNameRepeated;
             $violationMessage = explode('1062', $e->getMessage())[1] ?? $e->getMessage();
             $exception->addViolationQueue($violationMessage);
             $this->em->getConnection()->rollBack();
@@ -102,7 +100,7 @@ class MarkerDoctrineRepository extends DoctrineAbstractCrud implements MarkerRep
 
         if ($dM instanceof DoctrineMarker) {
             try {
-                $dMarker = new DoctrineMarker();
+                $dMarker = new DoctrineMarker;
                 $dMarker->setText($values['text'] ?? $dM->getText());
                 $dMarker->setName($values['name'] ?? $dM->getName());
                 $dMarker->setTitle($values['title'] ?? $dM->getTitle());
@@ -112,11 +110,10 @@ class MarkerDoctrineRepository extends DoctrineAbstractCrud implements MarkerRep
 
                 return $dMarker->toModel();
             } catch (UniqueConstraintViolationException) {
-                throw new MarkerNameRepeated();
+                throw new MarkerNameRepeated;
             }
         }
     }
-
 
     public function findByID(int $id): ?Marker
     {

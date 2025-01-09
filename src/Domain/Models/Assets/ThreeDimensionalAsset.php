@@ -2,7 +2,6 @@
 
 namespace App\Domain\Models\Assets;
 
-use App\Domain\Models\Assets\AbstractAsset;
 use Doctrine\Common\Collections\Collection;
 
 class ThreeDimensionalAsset extends AbstractAsset
@@ -18,8 +17,7 @@ class ThreeDimensionalAsset extends AbstractAsset
     }
 
     /**
-     * @param mixed $textures
-     *
+     * @param  mixed  $textures
      * @return self
      */
     public function setTextures(Collection $children)

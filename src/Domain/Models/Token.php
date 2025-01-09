@@ -15,8 +15,7 @@ readonly class Token implements JsonSerializable
         public string $role,
         public ?string $authType,
         public ?UuidInterface $uuid,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array

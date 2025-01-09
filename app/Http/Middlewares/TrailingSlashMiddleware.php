@@ -19,7 +19,7 @@ class TrailingSlashMiddleware implements MiddlewareInterface
      */
     public function __construct(private bool $trailingSlash = false)
     {
-        $this->responseFactory = new \Nyholm\Psr7\Factory\Psr17Factory();
+        $this->responseFactory = new \Nyholm\Psr7\Factory\Psr17Factory;
     }
 
     /**
@@ -30,7 +30,7 @@ class TrailingSlashMiddleware implements MiddlewareInterface
         $uri = $request->getUri();
         $path = $this->normalize($uri->getPath());
 
-        if ($uri->getPath() !== "/" && $this->responseFactory && ($uri->getPath() !== $path)) {
+        if ($uri->getPath() !== '/' && $this->responseFactory && ($uri->getPath() !== $path)) {
             return $this->responseFactory->createResponse(301)
                 ->withHeader('Location', (string) $uri->withPath($path));
         }
@@ -46,12 +46,13 @@ class TrailingSlashMiddleware implements MiddlewareInterface
 
         if (
             $this->trailingSlash
-            && !\str_ends_with($path, '/')
-            && !pathinfo($path, PATHINFO_EXTENSION)
+            && ! \str_ends_with($path, '/')
+            && ! pathinfo($path, PATHINFO_EXTENSION)
         ) {
-            return "{$path}/";
+            return $path.'/';
 
         }
+
         return rtrim($path, '/');
     }
 }

@@ -7,12 +7,12 @@ use App\Domain\Models\Assets\AbstractAsset;
 use App\Domain\Models\Assets\ThreeDimensionalAsset;
 use App\Domain\Models\Assets\Types\Interfaces\ConstrainedAssetFactoryInterface;
 
-
 class ThreeDimensionalAssetFactory implements ConstrainedAssetFactoryInterface
 {
     public function create(CreateAsset $command): AbstractAsset
     {
-        $asset = new ThreeDimensionalAsset();
+        $asset = new ThreeDimensionalAsset;
+
         return $asset->fromCommand($command);
     }
 
@@ -22,7 +22,7 @@ class ThreeDimensionalAssetFactory implements ConstrainedAssetFactoryInterface
             'obj',
             'fbx',
             'glb',
-            'gltf'
+            'gltf',
         ];
     }
 }

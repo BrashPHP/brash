@@ -3,19 +3,18 @@
 namespace App\Infrastructure\Persistence\Abstraction;
 
 use App\Domain\Contracts\ModelInterface;
+use App\Infrastructure\Persistence\Contracts\RepositoryInterface;
 use App\Infrastructure\Persistence\TargetRepositories\DoctrineTargetRepository;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
-use App\Infrastructure\Persistence\Contracts\RepositoryInterface;
 
 /**
  * @template T
+ *
  * @extends AbstractRepository<T>
  */
 abstract class DoctrineAbstractCrud extends AbstractRepository
 {
-    public function __construct(protected EntityManager $em)
-    {
-    }
+    public function __construct(protected EntityManager $em) {}
 
     public function repository(): RepositoryInterface
     {
@@ -25,7 +24,7 @@ abstract class DoctrineAbstractCrud extends AbstractRepository
     }
 
     /**
-     * @param T|int $subject
+     * @param  T|int  $subject
      * @return ?T
      */
     public function delete(ModelInterface|int $subject): ?object
@@ -43,7 +42,7 @@ abstract class DoctrineAbstractCrud extends AbstractRepository
     }
 
     /**
-     * @param T $model
+     * @param  T  $model
      */
     public function insert(object $model): void
     {

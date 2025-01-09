@@ -1,4 +1,5 @@
 <?php
+
 namespace Core\Async\Utils;
 
 use React\Promise\Promise;

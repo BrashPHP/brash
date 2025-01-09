@@ -17,8 +17,7 @@ class GetOneMarkerByIdAction extends Action
     public function __construct(
         private MarkerRepositoryInterface $repo,
         private PresignedUrlCreator $presignedUrlCreator
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): Response
     {
@@ -30,7 +29,7 @@ class GetOneMarkerByIdAction extends Action
 
         $marker = $this->repo->findByID($id);
 
-        if (!$marker instanceof \App\Domain\Models\Marker\Marker) {
+        if (! $marker instanceof \App\Domain\Models\Marker\Marker) {
             throw new HttpNotFoundException($request, 'No marker found using this id');
         }
 

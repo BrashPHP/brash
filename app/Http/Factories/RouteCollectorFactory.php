@@ -13,25 +13,22 @@ use Psr\Container\ContainerInterface;
 
 class RouteCollectorFactory
 {
-    public function __construct(private ContainerInterface $containerInterface)
-    {
-    }
+    public function __construct(private ContainerInterface $containerInterface) {}
 
     public function getRouterCollector(RouteCollectorInterface $routeCollectorInterface): RouterCollector
     {
         $validationMiddlewareFactory = new ValidationMiddlewareFactory($this->containerInterface);
-        $groupCollector = new GroupCollector();
-        $caching = new GroupCacheResult();
+        $groupCollector = new GroupCollector;
+        $caching = new GroupCacheResult;
         $routeFactory = new RouteFactory($groupCollector, $caching);
         $routeIncluder = new RouteIncluder(
             $routeCollectorInterface,
             $validationMiddlewareFactory
         );
+
         return new RouterCollector(
             $routeFactory,
             $routeIncluder
         );
     }
 }
-
-

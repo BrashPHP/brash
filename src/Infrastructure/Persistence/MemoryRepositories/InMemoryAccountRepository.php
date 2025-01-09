@@ -23,56 +23,57 @@ class InMemoryAccountRepository implements AccountRepository
     {
         $this->accounts = new ArrayCollection(
             [
-            new Account(
-                1,
-                'mail@mail.com',
-                'mailusername',
-                'password1',
-                'common',
-            ),
-            new Account(
-                2,
-                'mail2@mail.com',
-                'mailusername2',
-                'password2',
-                'common',
-            ),
-            new Account(
-                3,
-                'mail3@mail.com',
-                'mailusername3',
-                'password3',
-                'common',
-            ),
+                new Account(
+                    1,
+                    'mail@mail.com',
+                    'mailusername',
+                    'password1',
+                    'common',
+                ),
+                new Account(
+                    2,
+                    'mail2@mail.com',
+                    'mailusername2',
+                    'password2',
+                    'common',
+                ),
+                new Account(
+                    3,
+                    'mail3@mail.com',
+                    'mailusername3',
+                    'password3',
+                    'common',
+                ),
             ]
         );
     }
-    
-    public function listAll(): array{
+
+    public function listAll(): array
+    {
         return $this->accounts->toArray();
     }
 
     public function findByMail(string $mail): ?Account
     {
-        return $this->accounts->findFirst(static fn(Account $el) => $el->email === $mail);
+        return $this->accounts->findFirst(static fn (Account $el) => $el->email === $mail);
     }
 
     public function findByAccess(string $access): ?Account
     {
         $findBy = filter_var($access, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        return $this->accounts->findFirst(static fn(Account $el) => $el->$findBy === $access);
+        return $this->accounts->findFirst(static fn (Account $el) => $access === $el->$findBy);
     }
 
     public function findByUUID(string $uuid): ?Account
     {
-        return $this->accounts->findFirst(static fn(Account $el) => $el->uuid->equals(Uuid::fromString($uuid)));
+        return $this->accounts->findFirst(static fn (Account $el) => $el->uuid->equals(Uuid::fromString($uuid)));
     }
 
     public function findWithAuthType(string $email, AuthTypes $authType): ?Account
     {
         return $this->accounts->findFirst(
-            static fn(Account $el) => $el->email === $email && $el->authType === $authType->value
+            static fn (Account $el) => $el->email === $email && $el->authType === $authType->value
         );
     }
 

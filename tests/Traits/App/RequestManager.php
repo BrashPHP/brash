@@ -3,7 +3,6 @@
 namespace Tests\Traits\App;
 
 use Exception;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\StreamFactory;
 use Slim\Psr7\Headers;
@@ -25,9 +24,9 @@ class RequestManager
     ): Request {
         $uri = new Uri('', '', 80, $path);
         $handle = fopen('php://temp', 'w+');
-        $stream = (new StreamFactory())->createStreamFromResource($handle);
+        $stream = (new StreamFactory)->createStreamFromResource($handle);
 
-        $h = new Headers();
+        $h = new Headers;
         foreach ($headers as $name => $value) {
             $h->addHeader($name, $value);
         }
@@ -39,11 +38,11 @@ class RequestManager
         array|object $data,
         string $method,
         string $path,
-        array $headers = null,
-        array $serverParams = null,
-        array $cookies = null
+        ?array $headers = null,
+        ?array $serverParams = null,
+        ?array $cookies = null
     ): ServerRequestInterface {
-        if ((!$method) || !$path) {
+        if ((! $method) || ! $path) {
             throw new Exception('Unable to create request');
         }
 
@@ -72,21 +71,21 @@ class RequestManager
         $request->getBody()->write($encodedData);
         $request->getBody()->rewind();
         $requestParsedData = json_decode($encodedData, true);
-        
+
         return $request->withParsedBody($requestParsedData);
     }
 
     /**
      * Create a JSON request.
      *
-     * @param string                                $method The HTTP method
-     * @param string|\Psr\Http\Message\UriInterface $uri    The URI
-     * @param null|array                            $data   The json data
+     * @param  string  $method  The HTTP method
+     * @param  string|\Psr\Http\Message\UriInterface  $uri  The URI
+     * @param  null|array  $data  The json data
      */
     protected function createJsonRequest(
         string $method,
         $uri,
-        array|object $data = null
+        array|object|null $data = null
     ): ServerRequestInterface {
         $request = $this->createRequest($method, $uri);
 

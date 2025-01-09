@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Rule to decide by request path whether the request should be authenticated or not.
  */
-
 final class RequestPathRule implements RuleInterface
 {
     /**
@@ -21,8 +20,8 @@ final class RequestPathRule implements RuleInterface
      * }
      */
     private $options = [
-        "path" => ["/"],
-        "ignore" => []
+        'path' => ['/'],
+        'ignore' => [],
     ];
 
     /**
@@ -38,24 +37,25 @@ final class RequestPathRule implements RuleInterface
 
     public function __invoke(ServerRequestInterface $request): bool
     {
-        $uri = "/" . $request->getUri()->getPath();
-        $uri = preg_replace("#/+#", "/", $uri);
+        $uri = '/'.$request->getUri()->getPath();
+        $uri = preg_replace('#/+#', '/', $uri);
 
         /* If request path is matches ignore should not authenticate. */
-        foreach ((array) $this->options["ignore"] as $ignore) {
-            $ignore = rtrim($ignore, "/");
-            if (!!preg_match("@^{$ignore}(/.*)?$@", (string) $uri)) {
+        foreach ((array) $this->options['ignore'] as $ignore) {
+            $ignore = rtrim($ignore, '/');
+            if ((bool) preg_match(sprintf('@^%s(/.*)?$@', $ignore), (string) $uri)) {
                 return false;
             }
         }
 
         /* Otherwise check if path matches and we should authenticate. */
-        foreach ((array) $this->options["path"] as $path) {
-            $path = rtrim($path, "/");
-            if (!!preg_match("@^{$path}(/.*)?$@", (string) $uri)) {
+        foreach ((array) $this->options['path'] as $path) {
+            $path = rtrim($path, '/');
+            if ((bool) preg_match(sprintf('@^%s(/.*)?$@', $path), (string) $uri)) {
                 return true;
             }
         }
+
         return false;
     }
 }

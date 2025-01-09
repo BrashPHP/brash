@@ -5,16 +5,12 @@ namespace Core\Builder;
 use Core\Http\Interfaces\MiddlewareIncluderInterface;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
 
-
 class MiddlewareCollector
 {
-
-    public function __construct(private MiddlewareIncluderInterface $root)
-    {
-    }
+    public function __construct(private MiddlewareIncluderInterface $root) {}
 
     /**
-     * @var class-string<Middleware>|Middleware $providers
+     * @var class-string<Middleware>|Middleware
      */
     private array $middlewareClasses = [];
 

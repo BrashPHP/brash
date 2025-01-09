@@ -2,12 +2,10 @@
 
 namespace App\Domain\Events;
 
-
 use Psr\EventDispatcher\ListenerProviderInterface;
 
 class ListenerProvider implements ListenerProviderInterface
 {
-
     private array $listeners = [];
 
     /**  An event for which to return the relevant listeners.
@@ -28,6 +26,7 @@ class ListenerProvider implements ListenerProviderInterface
     public function addListener(string $eventType, ListenerInterface|callable $callable): self
     {
         $this->listeners[$eventType][] = $callable;
+
         return $this;
     }
 

@@ -1,23 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\Presentation\Auth;
-
 
 use App\Domain\Models\Account;
 use App\Domain\Repositories\AccountRepository;
 use App\Infrastructure\Cryptography\CookieTokenCreator;
 use Firebase\JWT\JWT;
 use Mockery\MockInterface;
-use Ramsey\Uuid\Uuid;
 use Psr\Http\Message\ServerRequestInterface;
+use Ramsey\Uuid\Uuid;
 
 beforeEach(function () {
     $this->app = $this->createAppInstance();
     putenv('REFRESH_TOKEN_SECRET=cookieblabla');
     putenv('JWT_SECRET=blabla');
-    $_ENV["REFRESH_TOKEN_SECRET"] = "cookieblabla";
-    $_ENV["JWT_SECRET"] = "blabla";
+    $_ENV['REFRESH_TOKEN_SECRET'] = 'cookieblabla';
+    $_ENV['JWT_SECRET'] = 'blabla';
 });
 
 test('should return401 for invalid cookie', function () {
@@ -29,7 +29,7 @@ test('should return401 for invalid cookie', function () {
         'statusCode' => 401,
         'data' => [
             'status' => 'error',
-            'message' => 'Cannot craft new token for invalid refresh token'
+            'message' => 'Cannot craft new token for invalid refresh token',
         ],
     ])->toBe(json_decode($response->getBody()->__toString(), true));
     expect(401)->toBe($response->getStatusCode());
@@ -37,11 +37,11 @@ test('should return401 for invalid cookie', function () {
 
 test('should return401 for expired cookie', function () {
     $app = $this->app;
-    $now = new \DateTime();
-    $future = new \DateTime();
+    $now = new \DateTime;
+    $future = new \DateTime;
     $future->sub(new \DateInterval('P15D'));
 
-    $jti = base64_encode(random_bytes(16)) . $now->getTimeStamp();
+    $jti = base64_encode(random_bytes(16)).$now->getTimeStamp();
 
     $payload = [
         'iat' => $now->getTimeStamp(),
@@ -61,7 +61,7 @@ test('should return401 for expired cookie', function () {
         'statusCode' => 401,
         'data' => [
             'status' => 'error',
-            'message' => 'Cannot craft new token for invalid refresh token'
+            'message' => 'Cannot craft new token for invalid refresh token',
         ],
     ])->toBe(json_decode($response->getBody()->__toString(), true));
     expect(401)->toBe($response->getStatusCode());
@@ -71,7 +71,7 @@ test('should return201 for valid cookie', function () {
     $repository = $this->getMockBuilder(AccountRepository::class)->getMock();
     $repository
         ->expects($this->once())
-        ->method("findByUUID")
+        ->method('findByUUID')
         ->willReturn(
             new Account(
                 2,

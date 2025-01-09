@@ -10,9 +10,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class PaginationService implements PaginationInterface
 {
-    public function __construct(private Query|QueryBuilder $query, private bool $fetchJoinCollection = true)
-    {
-    }
+    public function __construct(private Query|QueryBuilder $query, private bool $fetchJoinCollection = true) {}
 
     public function paginate(
         int $page = 1,
@@ -51,6 +49,6 @@ class PaginationService implements PaginationInterface
     {
         $iterator = $paginator->getIterator();
 
-        return !(iterator_count($iterator));
+        return ! (iterator_count($iterator));
     }
 }

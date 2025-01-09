@@ -9,7 +9,6 @@ use Core\Http\Attributes\Route;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-
 #[Route(path: '/{id}', method: 'GET', group: UsersEntrypoint::class)]
 class ViewUserAction extends UserAction
 {

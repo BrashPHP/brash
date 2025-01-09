@@ -8,8 +8,8 @@ use App\Data\Entities\Contracts\ModelCoercionInterface;
 use App\Data\Entities\Cycle\Traits\TimestampsTrait;
 use App\Data\Entities\Cycle\Traits\UuidTrait;
 use App\Domain\Models\Account;
-use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Table\Index;
 use Cycle\ORM\Entity\Behavior;
 use Cycle\ORM\Entity\Behavior\Uuid\Uuid4;
@@ -21,16 +21,17 @@ use Cycle\ORM\Entity\Behavior\Uuid\Uuid4;
     column: 'created_at' // Optional. By default 'null'. If not set, will be used information from property declaration.
 )]
 #[Behavior\UpdatedAt(
-    field: 'updated', // Required. By default 'updatedAt' 
+    field: 'updated', // Required. By default 'updatedAt'
     column: 'updated_at' // Optional. By default 'null'. If not set, will be used information from property declaration.
 )]
 #[Index(columns: ['username'], unique: true)]
 #[Index(columns: ['email'], unique: true)]
 class CycleAccount implements ModelCoercionInterface
 {
-    use UuidTrait;
     use TimestampsTrait;
-    #[Column(type: "primary")]
+    use UuidTrait;
+
+    #[Column(type: 'primary')]
     protected $id;
 
     #[Column(type: 'string', nullable: false)]
@@ -47,8 +48,6 @@ class CycleAccount implements ModelCoercionInterface
 
     #[Column(name: 'auth_type', type: 'string', nullable: true)]
     private ?string $authType;
-
-
 
     public function getId(): ?int
     {
@@ -80,7 +79,6 @@ class CycleAccount implements ModelCoercionInterface
         return $this->role;
     }
 
-
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -94,7 +92,6 @@ class CycleAccount implements ModelCoercionInterface
 
         return $this;
     }
-
 
     public function setRole(string $role): self
     {

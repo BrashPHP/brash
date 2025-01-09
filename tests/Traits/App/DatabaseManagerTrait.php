@@ -2,6 +2,4 @@
 
 namespace Tests\Traits\App;
 
-trait DatabaseManagerTrait
-{
-}
+trait DatabaseManagerTrait {}

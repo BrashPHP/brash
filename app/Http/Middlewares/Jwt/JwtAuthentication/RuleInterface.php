@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Core\Http\Middlewares\Jwt\JwtAuthentication;
 
-
 use Psr\Http\Message\ServerRequestInterface;
 
 interface RuleInterface

@@ -15,15 +15,13 @@ use App\Infrastructure\Cryptography\AsymmetricKeyGeneration\OpenSSLAsymmetricEnc
 use App\Infrastructure\Cryptography\DataEncryption\Encrypter;
 use App\Infrastructure\Cryptography\HashComparer;
 use App\Infrastructure\Cryptography\HashCreator;
-use League\OAuth2\Client\Provider\Google;
-
 use Core\Providers\AppProviderInterface;
-
 use DI\ContainerBuilder;
+use League\OAuth2\Client\Provider\Google;
 
 class DependenciesProvider implements AppProviderInterface
 {
-    public function provide(ContainerBuilder $container)
+    public function provide(ContainerBuilder $container): void
     {
         $container->addDefinitions($this->createDefinitions());
     }
@@ -38,20 +36,20 @@ class DependenciesProvider implements AppProviderInterface
         $encrypter = new Encrypter($_SERVER['ENCRYPTION_KEY'] ?? '');
 
         return [
-            ComparerInterface::class => new HashComparer(),
-            HasherInterface::class => new HashCreator(),
+            ComparerInterface::class => new HashComparer,
+            HasherInterface::class => new HashCreator,
             DataDecrypter::class => $encrypter,
             DataEncrypter::class => $encrypter,
-            AsymmetricEncrypter::class => new OpenSSLAsymmetricEncrypter(),
-            AsymmetricVerifier::class => new AsymmetricOpenSSLVerifier(),
-            
+            AsymmetricEncrypter::class => new OpenSSLAsymmetricEncrypter,
+            AsymmetricVerifier::class => new AsymmetricOpenSSLVerifier,
+
             Google::class => static function (): Google {
                 $clientId = $_ENV['GOOGLE_CLIENT_ID'];
                 $clientSecret = $_ENV['GOOGLE_CLIENT_SECRET'];
                 $redirectUri = $_ENV['GOOGLE_REDIRECT_URI'];
 
-                return new Google(compact('clientId', 'clientSecret', 'redirectUri'));
-            }
+                return new Google(['clientId' => $clientId, 'clientSecret' => $clientSecret, 'redirectUri' => $redirectUri]);
+            },
         ];
     }
 }

@@ -61,12 +61,12 @@ class InMemoryMuseumRepository implements MuseumRepository
 
     public function findByName(string $name): ?Museum
     {
-        return $this->museums->findFirst(static fn(Museum $el) => $el->name === $name);
+        return $this->museums->findFirst(static fn (Museum $el) => $el->name === $name);
     }
 
     public function findByUUID(string $uuid): ?Museum
     {
-        return $this->museums->findFirst(static fn(Museum $el) => $el->uuid->equals(Uuid::fromString($uuid)));
+        return $this->museums->findFirst(static fn (Museum $el) => $el->uuid->equals(Uuid::fromString($uuid)));
     }
 
     /**
@@ -106,10 +106,10 @@ class InMemoryMuseumRepository implements MuseumRepository
         $updatable = $this->findByID($id);
         if ($updatable instanceof Museum) {
             $fields = [
-                "email",
-                "name",
-                "description",
-                "info",
+                'email',
+                'name',
+                'description',
+                'info',
             ];
 
             foreach ($fields as $key) {

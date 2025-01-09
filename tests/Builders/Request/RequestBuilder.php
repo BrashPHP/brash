@@ -29,7 +29,7 @@ class RequestBuilder
     {
         $this->uri = new Uri('', '', 80, $this->path);
         $handle = fopen('php://temp', 'w+');
-        $this->stream = (new StreamFactory())->createStreamFromResource($handle);
+        $this->stream = (new StreamFactory)->createStreamFromResource($handle);
     }
 
     public function build()
@@ -90,7 +90,7 @@ class RequestBuilder
 
     private function getHeaders(): Headers
     {
-        $h = new Headers();
+        $h = new Headers;
         foreach ($this->headers as $name => $value) {
             $h->addHeader($name, $value);
         }

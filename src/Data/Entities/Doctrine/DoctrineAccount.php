@@ -8,13 +8,12 @@ use App\Data\Entities\Contracts\ModelCoercionInterface;
 use App\Data\Entities\Doctrine\Traits\TimestampsTrait;
 use App\Data\Entities\Doctrine\Traits\UuidTrait;
 use App\Domain\Models\Account;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
-
 
 #[Entity,Table(name: 'accounts'),HasLifecycleCallbacks]
 class DoctrineAccount implements ModelCoercionInterface
@@ -25,7 +24,7 @@ class DoctrineAccount implements ModelCoercionInterface
     #[Id]
     #[Column(type: 'integer')]
     #[GeneratedValue]
-    private int|null $id = null;
+    private ?int $id = null;
 
     #[Column(type: 'string', unique: true, nullable: false)]
     private string $email;
@@ -72,7 +71,6 @@ class DoctrineAccount implements ModelCoercionInterface
         return $this->role;
     }
 
-
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -80,14 +78,12 @@ class DoctrineAccount implements ModelCoercionInterface
         return $this;
     }
 
-
     public function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
-
 
     public function setRole(string $role): self
     {

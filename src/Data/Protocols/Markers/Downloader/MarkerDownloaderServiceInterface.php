@@ -15,8 +15,7 @@ interface MarkerDownloaderServiceInterface
     /**
      * Returns zip stream of object markers.
      *
-     * @param Marker[] $markers
-     *
+     * @param  Marker[]  $markers
      * @return false|resource
      */
     public function downloadMarkers(array $markers);

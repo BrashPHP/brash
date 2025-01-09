@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Core\Http\Middlewares\Jwt\JwtAuthentication;
-
-
 
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -12,7 +11,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class RequestMethodRule implements RuleInterface
 {
-
     /**
      * Stores all the options passed to the rule
      *
@@ -21,7 +19,7 @@ final class RequestMethodRule implements RuleInterface
      * }
      */
     private $options = [
-        "ignore" => ["OPTIONS"]
+        'ignore' => ['OPTIONS'],
     ];
 
     /**
@@ -36,6 +34,6 @@ final class RequestMethodRule implements RuleInterface
 
     public function __invoke(ServerRequestInterface $request): bool
     {
-        return !in_array($request->getMethod(), $this->options["ignore"]);
+        return ! in_array($request->getMethod(), $this->options['ignore']);
     }
 }

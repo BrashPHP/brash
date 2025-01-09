@@ -9,17 +9,15 @@ use App\Domain\Models\Security\SignatureToken;
 use App\Domain\Repositories\SignatureTokenRepositoryInterface;
 use App\Domain\Repositories\SignatureTokenRetrieverInterface;
 
-
-class InMemorySignatureTokenRepository implements
-    SignatureTokenRepositoryInterface,
-    SignatureTokenRetrieverInterface
+class InMemorySignatureTokenRepository implements SignatureTokenRepositoryInterface, SignatureTokenRetrieverInterface
 {
     /**
      * @var SignatureToken[]
      */
     private readonly array $tokens;
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         $this->tokens = [];
     }
 

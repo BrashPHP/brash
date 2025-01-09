@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Data\Entities\Cycle\Traits;
 
 use Cycle\Annotated\Annotation\Column;
-use Ramsey\Uuid\UuidInterface;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 trait UuidTrait
 {

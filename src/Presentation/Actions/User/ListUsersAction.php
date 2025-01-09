@@ -22,7 +22,7 @@ class ListUsersAction extends UserAction
             function (\Closure $resolve) {
                 $users = $this->userService->findAll();
 
-                $this->logger->info("Users list was viewed.");
+                $this->logger->info('Users list was viewed.');
 
                 $resolve($this->respondWithData($users));
             }

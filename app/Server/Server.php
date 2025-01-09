@@ -7,8 +7,8 @@ namespace Core\Server;
 use Core\Http\Interfaces\ApplicationInterface;
 use Core\Http\Middlewares\FiberMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
-use React\EventLoop\LoopInterface;
 use React\EventLoop\Loop;
+use React\EventLoop\LoopInterface;
 use React\Socket\SocketServer;
 
 use function React\Async\async;
@@ -28,26 +28,27 @@ final class Server
 
     public function run()
     {
-        $serverAddress = "{$this->address}:{$this->port}";
+        $serverAddress = sprintf('%s:%d', $this->address, $this->port);
 
         $http = new \React\Http\HttpServer(
             // new \React\Http\Middleware\StreamingRequestMiddleware(),
-            new FiberMiddleware(),
+            new FiberMiddleware,
             $this->createAsyncHandler(),
         );
 
-        echo "Server running at $serverAddress" . PHP_EOL;
+        echo 'Server running at '.$serverAddress.PHP_EOL;
 
         $socket = new SocketServer($serverAddress, loop: $this->loop);
 
         $http->listen($socket);
 
-        echo 'Listening on ' . str_replace('tcp:', 'http:', $socket->getAddress()) . PHP_EOL;
+        echo 'Listening on '.str_replace('tcp:', 'http:', $socket->getAddress()).PHP_EOL;
 
         $this->loop->run();
     }
 
-    public function close(){
+    public function close()
+    {
         $this->loop->stop();
     }
 

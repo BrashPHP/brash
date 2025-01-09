@@ -10,17 +10,15 @@ use Ramsey\Uuid\UuidInterface;
 
 class CookieTokenCreator implements TokenGeneratorInterface
 {
-    public function __construct(private UuidInterface $uuid)
-    {
-    }
+    public function __construct(private UuidInterface $uuid) {}
 
     public function createToken(string $secret): string
     {
-        $now = new DateTime();
-        $future = new DateTime();
+        $now = new DateTime;
+        $future = new DateTime;
         $future->add(new DateInterval('P15D'));
 
-        $jti = base64_encode(random_bytes(16)) . $now->getTimeStamp();
+        $jti = base64_encode(random_bytes(16)).$now->getTimeStamp();
 
         $payload = [
             'iat' => $now->getTimeStamp(),

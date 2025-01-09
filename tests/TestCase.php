@@ -13,6 +13,7 @@ use Tests\Traits\App\RequestManagerTrait;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 abstract class TestCase extends PHPUnit_TestCase
@@ -48,6 +49,4 @@ abstract class TestCase extends PHPUnit_TestCase
 
         DatabaseCleaner::truncateDoctrineDatabase($container);
     }
-
-
 }

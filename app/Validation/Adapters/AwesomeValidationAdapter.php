@@ -14,8 +14,7 @@ class AwesomeValidationAdapter extends AbstractValidator
         protected string $field,
         protected Validatable $rule,
         protected ?string $message = null
-    ) {
-    }
+    ) {}
 
     protected function makeValidation(mixed $subject): bool
     {

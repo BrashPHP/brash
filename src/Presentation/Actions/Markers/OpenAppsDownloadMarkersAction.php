@@ -14,8 +14,7 @@ class OpenAppsDownloadMarkersAction extends Action
 {
     public function __construct(
         private MarkerDownloaderServiceInterface $markerDonwloader
-    ) {
-    }
+    ) {}
 
     public function action(Request $request): Response
     {

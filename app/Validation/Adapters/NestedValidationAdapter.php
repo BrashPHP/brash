@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Core\Validation\Adapters;
 
-
 use Core\Validation\Composite\Composite;
 use Core\Validation\Interfaces\AbstractValidator;
 use Core\Validation\Interfaces\ValidationInterface;
 use Core\Validation\ValidationExceptions\ErrorBag;
 use Core\Validation\ValidationExceptions\ValidationError;
-
 
 class NestedValidationAdapter extends AbstractValidator
 {
@@ -18,7 +16,7 @@ class NestedValidationAdapter extends AbstractValidator
 
     public function __construct(protected string $field)
     {
-        $this->composite = new Composite();
+        $this->composite = new Composite;
         $this->message = sprintf('%s should be set as a dictionary or object', $this->field);
     }
 
@@ -38,9 +36,9 @@ class NestedValidationAdapter extends AbstractValidator
                 $errors = $this->mapErrors(
                     $this->composite->errorBag->errors
                 );
-                $errorBag = new ErrorBag();
+                $errorBag = new ErrorBag;
                 foreach ($errors as $value) {
-                      $errorBag->push($value);
+                    $errorBag->push($value);
                 }
 
                 return $errorBag->forField($this->field);
@@ -58,8 +56,7 @@ class NestedValidationAdapter extends AbstractValidator
     }
 
     /**
-     *
-     * @param  ValidationError[] $validationErrors
+     * @param  ValidationError[]  $validationErrors
      * @return ValidationError[]
      */
     private function mapErrors(array $validationErrors): array
@@ -72,9 +69,8 @@ class NestedValidationAdapter extends AbstractValidator
                     $error->getMessage()
                 );
 
-
                 return $newError->forField(
-                    sprintf('%s -> ', $parentField) . $error->getField()
+                    sprintf('%s -> ', $parentField).$error->getField()
                 );
             }, $validationErrors
         );

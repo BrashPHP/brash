@@ -2,24 +2,18 @@
 
 declare(strict_types=1);
 
-
 namespace App\Presentation\Actions\SocialLogin;
-
 
 use Core\Http\Action;
 use League\OAuth2\Client\Provider\Google;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-
 class GetAuthUrlGoogleAction extends Action
 {
     public function __construct(
         private Google $provider
-    ) {
-
-    }
-
+    ) {}
 
     /**
      * {@inheritdoc}

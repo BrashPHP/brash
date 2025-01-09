@@ -13,8 +13,7 @@ class CallbackValidationAdapter extends AbstractValidator
         protected string $field,
         protected Closure $rule,
         protected ?string $message = null
-    ) {
-    }
+    ) {}
 
     protected function makeValidation(mixed $subject): bool
     {

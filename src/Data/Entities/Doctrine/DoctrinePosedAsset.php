@@ -2,17 +2,15 @@
 
 namespace App\Data\Entities\Doctrine;
 
-use App\Data\Entities\Doctrine\DoctrineAsset;
 use App\Data\Entities\Doctrine\Traits\TimestampsTrait;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity, Table(name: "posed_assets"), HasLifecycleCallbacks]
+#[Entity, Table(name: 'posed_assets'), HasLifecycleCallbacks]
 class DoctrinePosedAsset
 {
     use TimestampsTrait;
@@ -22,7 +20,7 @@ class DoctrinePosedAsset
     #[
         Id,
         ManyToOne(targetEntity: DoctrineAsset::class),
-        JoinColumn(name: "asset_id", referencedColumnName: "id")
+        JoinColumn(name: 'asset_id', referencedColumnName: 'id')
     ]
     private DoctrineAsset $asset;
 

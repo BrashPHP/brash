@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Application\Providers;
 
-use function DI\autowire;
-use DI\ContainerBuilder;
 use App\Data\Protocols\AsymCrypto\SignerInterface;
 use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Data\Protocols\Auth\SignUpServiceInterface;
@@ -23,15 +21,19 @@ use App\Data\UseCases\Media\MediaCollectorVisitor;
 use App\Data\UseCases\Resources\DeliveryMan;
 use App\Data\UseCases\User\UserService;
 use Core\Providers\AppProviderInterface;
+use DI\ContainerBuilder;
+
+use function DI\autowire;
 
 class ServicesProvider implements AppProviderInterface
 {
-    public function provide(ContainerBuilder $container)
+    public function provide(ContainerBuilder $container): void
     {
         $serviceMapper = [];
         foreach ($this->createServiceDefinitions() as $key => $value) {
             $serviceMapper[$key] = autowire($value);
         }
+
         // Here we map our UserRepository interface to its in memory implementation
         $container->addDefinitions($serviceMapper);
     }
@@ -46,7 +48,7 @@ class ServicesProvider implements AppProviderInterface
             MarkerServiceStoreInterface::class => MarkerServiceStore::class,
             SignerInterface::class => AsymmetricSigner::class,
             MediaCollectorInterface::class => MediaCollectorVisitor::class,
-            ResourcesDownloaderInterface::class => DeliveryMan::class
+            ResourcesDownloaderInterface::class => DeliveryMan::class,
         ];
     }
 }

@@ -3,12 +3,12 @@
 namespace App\Data\Entities\Doctrine;
 
 use App\Data\Entities\Doctrine\Traits\TimestampsTrait;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity, Table(name: 'marker_assets'), HasLifecycleCallbacks]
@@ -18,15 +18,15 @@ class DoctrineMarkerAsset
 
     #[
         Id,
-        OneToOne(targetEntity: DoctrineMarker::class, cascade: ["persist", "remove"]),
-        JoinColumn(name: "marker_id", referencedColumnName: "id")
+        OneToOne(targetEntity: DoctrineMarker::class, cascade: ['persist', 'remove']),
+        JoinColumn(name: 'marker_id', referencedColumnName: 'id')
     ]
     private DoctrineMarker $marker;
 
     #[
         Id,
-        ManyToOne(targetEntity: DoctrineAsset::class, cascade: ["persist", "remove"]),
-        JoinColumn(name: "asset_id", referencedColumnName: "id")
+        ManyToOne(targetEntity: DoctrineAsset::class, cascade: ['persist', 'remove']),
+        JoinColumn(name: 'asset_id', referencedColumnName: 'id')
     ]
     private DoctrineAsset $asset;
 

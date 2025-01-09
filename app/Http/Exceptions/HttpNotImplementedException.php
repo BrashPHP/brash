@@ -8,13 +8,13 @@ use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @api
-*/
+ */
 final class HttpNotImplementedException extends BaseHttpException
 {
     public function __construct(
         ServerRequestInterface $request,
         string $message = 'Not implemented.',
-        \Throwable|null $previous = null,
+        ?\Throwable $previous = null,
     ) {
         parent::__construct(
             $request,

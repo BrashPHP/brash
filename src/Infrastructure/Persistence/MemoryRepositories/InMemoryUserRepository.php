@@ -18,7 +18,7 @@ class InMemoryUserRepository implements UserRepository
     /**
      * InMemoryUserRepository constructor.
      */
-    public function __construct(array $users = null)
+    public function __construct(?array $users = null)
     {
         $this->users = $users ?? [
             1 => new User(1, 'bill.gates', 'Bill', 'Gates'),
@@ -42,8 +42,8 @@ class InMemoryUserRepository implements UserRepository
      */
     public function findUserOfId(int $id): User
     {
-        if (!isset($this->users[$id])) {
-            throw new UserNotFoundException();
+        if (! isset($this->users[$id])) {
+            throw new UserNotFoundException;
         }
 
         return $this->users[$id];

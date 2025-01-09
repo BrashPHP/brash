@@ -17,8 +17,7 @@ class AsymmetricSigner implements SignerInterface
         private MuseumRepository $museumRepository,
         private AsymmetricEncrypter $encrypter,
         private SignatureTokenRepositoryInterface $tokenRepository
-    ) {
-    }
+    ) {}
 
     public function sign(UuidInterface $uuidInterface): string
     {
@@ -28,8 +27,8 @@ class AsymmetricSigner implements SignerInterface
             $signature = $this->encrypter->encrypt(
                 json_encode(
                     [
-                    'uuid' => $museum->uuid->toString(),
-                    'museum_name' => $museum->name,
+                        'uuid' => $museum->uuid->toString(),
+                        'museum_name' => $museum->name,
                     ]
                 )
             );
@@ -52,7 +51,7 @@ class AsymmetricSigner implements SignerInterface
             );
         }
 
-        throw new MuseumNotFoundException();
+        throw new MuseumNotFoundException;
     }
 
     private function createTokenResponse(string $uuid, string $publicKey): string

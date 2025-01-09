@@ -6,7 +6,6 @@ use Core\Builder\MiddlewareCollector;
 use Core\Http\Adapters\SlimFramework\SlimAppInterfaceBuilder;
 use Core\Http\Adapters\SlimFramework\SlimMiddlewareIncluder;
 use Core\Http\Adapters\SlimFramework\SlimRouteCollector;
-use Core\Http\Factories\RouteCollectorFactory;
 use Core\Http\Interfaces\ComponentsFactoryInterface;
 use Core\Http\Interfaces\ConfigurableApplicationInterface;
 use Core\Http\Interfaces\RouterInterface;
@@ -34,6 +33,7 @@ class SlimAppFactory implements ComponentsFactoryInterface
     public function createRouterInterface(): RouterInterface
     {
         $routerCollectorFactory = new RouteCollectorFactory($this->container);
+
         return $routerCollectorFactory->getRouterCollector(
             new SlimRouteCollector(
                 $this->app
@@ -44,7 +44,7 @@ class SlimAppFactory implements ComponentsFactoryInterface
     public function createConfigurableApplicationInterface(): ConfigurableApplicationInterface
     {
         $this->app->addRoutingMiddleware();
-        
+
         return new SlimAppInterfaceBuilder($this->app, $this->container->get(LoggerInterface::class));
     }
 }

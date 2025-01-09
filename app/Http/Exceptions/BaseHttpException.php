@@ -8,6 +8,7 @@ use Throwable;
 
 /**
  * @api
+ *
  * @method int getCode()
  */
 class BaseHttpException extends RuntimeException

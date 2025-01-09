@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 use App\Presentation\Actions\Markers\MarkerValidations\MarkerValidation;
-use Core\Validation\Facade\ValidationFacade;
+use Brash\Framework\Validation\Facade\ValidationFacade;
 
 use function PHPUnit\Framework\assertNotNull;
 
@@ -50,7 +50,7 @@ test('should fail with bad url in assets', function () {
     $result = $this->sut->validate($body['marker']);
 
     assertNotNull($result);
-    $this->assertStringContainsString('[{"asset":"asset does not match the defined requirements"}]', $result->getMessage());
+    $this->assertStringContainsString('[{"asset":"- These rules must pass for `{ \"file_name\": \"file.png\", \"media_type\": \"png\", \"path\": \"media\/path\", \"url\": \"badurl\" }`\n  - url must be a URL\n  - original_name must be present"}]', $result->getMessage());
 });
 test('should pass asset', function () {
     $body = [

@@ -2,8 +2,8 @@
 
 namespace Tests\Application\Validation;
 
-use Core\Validation\Facade\ValidationFacade;
-use Core\Validation\ValidationExceptions\ErrorBag;
+use Brash\Framework\Validation\Facade\ValidationFacade;
+use Brash\Framework\Validation\ValidationExceptions\ErrorBag;
 use Respect\Validation\Validator as v;
 
 test('should validate incorrect values using ValidationFacade', function () {
@@ -24,7 +24,7 @@ test('should validate using Awesome Validation', function () {
     $result = $factory->createValidations()->validate(['cpf' => 'gabo']);
 
     expect($result)->toBeInstanceOf(ErrorBag::class);
-    expect($result->messages)->toContainEqual(['cpf' => 'cpf does not match the defined requirements']);
+    expect($result->messages)->toContain(['cpf' => "- \"gabo\" must be a valid CPF number"]);
 
 });
 

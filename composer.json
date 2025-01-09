@@ -41,9 +41,7 @@
     "slim/psr7": "^1.7",
     "slim/slim": "^4.11",
     "spatie/php-structure-discoverer": "^2.0",
-    "symfony/cache": "^6.0",
-    "symfony/dotenv": "^6.0",
-    "symfony/process": "^7.1"
+    "symfony/dotenv": "^6.0"
   },
   "require-dev": {
     "laravel/pint": "^1.18.1",
@@ -65,10 +63,10 @@
   "autoload": {
     "psr-4": {
       "App\\": "src/",
-      "Core\\": "app/"
+      "Brash\\Framework\\": "src/"
     },
     "files": [
-      "app/functions/helpers.php"
+      "src/functions/helpers.php"
     ]
   },
   "autoload-dev": {
@@ -78,9 +76,8 @@
   },
   "scripts": {
     "start": "php -S localhost:8080 -t public",
-    "test": "phpunit --exclude-group doctrine,cycleorm",
+    "test": "pest --exclude-group doctrine,cycleorm",
     "test:doctrine": "phpunit --group doctrine",
-    "test:cycleorm": "phpunit --group cycleorm",
     "test:nodebug": "@php -c ./disable-xdebug.ini && phpunit",
     "test:update": "phpunit --migrate-configuration",
     "doctrine": "doctrine",

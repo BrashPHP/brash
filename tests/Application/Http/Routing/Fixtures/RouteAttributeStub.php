@@ -2,8 +2,8 @@
 
 namespace Tests\Application\Http\Routing\Fixtures;
 
-use Core\Http\Attributes\Route;
-use Core\Http\Attributes\RouteGroup;
+use Brash\Framework\Http\Attributes\Route;
+use Brash\Framework\Http\Attributes\RouteGroup;
 
 #[RouteGroup('/base', middleware: 'test-middleware')]
 class BasePath {}

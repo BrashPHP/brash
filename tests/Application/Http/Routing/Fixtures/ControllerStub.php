@@ -2,7 +2,7 @@
 
 namespace Tests\Application\Http\Routing\Fixtures;
 
-use Core\Http\Interfaces\ActionInterface;
+use Brash\Framework\Http\Interfaces\ActionInterface;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

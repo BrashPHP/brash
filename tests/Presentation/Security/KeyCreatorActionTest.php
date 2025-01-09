@@ -3,7 +3,7 @@
 declare(strict_types=1);
 use App\Data\Protocols\AsymCrypto\SignerInterface;
 use App\Presentation\Actions\ResourcesSecurity\KeyCreatorAction;
-use Core\Http\Exceptions\UnprocessableEntityException;
+use Brash\Framework\Http\Exceptions\UnprocessableEntityException;
 use Mockery\MockInterface;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;

@@ -2,7 +2,7 @@
 
 namespace Tests\Traits\App;
 
-use Core\Http\ErrorHandlers\HttpErrorHandler;
+use Brash\Framework\Http\ErrorHandlers\HttpErrorHandler;
 use Slim\App;
 use Slim\Middleware\ErrorMiddleware;
 

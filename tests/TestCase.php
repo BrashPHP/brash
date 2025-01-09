@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Core\Data\BehaviourComponents\DatabaseCleaner;
-use Core\Data\BehaviourComponents\DatabaseCreator;
+use Brash\Framework\Data\BehaviourComponents\DatabaseCleaner;
+use Brash\Framework\Data\BehaviourComponents\DatabaseCreator;
 use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
 use Tests\Traits\App\AppTestTrait;
 use Tests\Traits\App\InstanceManagerTrait;

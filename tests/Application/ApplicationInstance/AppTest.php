@@ -2,7 +2,7 @@
 
 namespace Tests\Application\Server;
 
-use Core\Http\Exceptions\BadRequestException;
+use Brash\Framework\Http\Exceptions\BadRequestException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tests\Traits\App\InstanceManager;

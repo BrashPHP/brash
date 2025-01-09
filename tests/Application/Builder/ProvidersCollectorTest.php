@@ -1,7 +1,7 @@
 <?php
 
-use Core\Builder\ProvidersCollector;
-use Core\Providers\AppProviderInterface;
+use Brash\Framework\Builder\ProvidersCollector;
+use Brash\Framework\Providers\AppProviderInterface;
 use DI\ContainerBuilder;
 
 class ProviderStubClass implements AppProviderInterface

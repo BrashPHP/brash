@@ -2,7 +2,7 @@
 
 use App\Domain\Models\User;
 use App\Domain\Repositories\UserRepository;
-use Core\Http\Domain\ActionPayload;
+use Brash\Framework\Http\Domain\ActionPayload;
 use DI\Container;
 use Tests\Traits\App\InstanceManager;
 use Tests\Traits\App\RequestManager;

@@ -5,7 +5,7 @@
 // cli-config.php
 declare(strict_types=1);
 
-use Core\Http\Factories\ContainerFactory;
+use Brash\Framework\Http\Factories\ContainerFactory;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;

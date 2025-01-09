@@ -1,8 +1,8 @@
 <?php
 
-use Core\Http\Routing\Cache\GroupCacheResult;
-use Core\Http\Routing\GroupCollector;
-use Core\Http\Routing\RouteFactory;
+use Brash\Framework\Http\Routing\Cache\GroupCacheResult;
+use Brash\Framework\Http\Routing\GroupCollector;
+use Brash\Framework\Http\Routing\RouteFactory;
 use Tests\Application\Http\Routing\Fixtures\ControllerStub;
 use Tests\Application\Http\Routing\Fixtures\RouteAttributeStub;
 

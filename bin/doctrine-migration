@@ -5,7 +5,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use App\Application\Providers\DoctrineDefinitionsProvider;
-use Core\Http\Factories\ContainerFactory;
+use Brash\Framework\Http\Factories\ContainerFactory;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;

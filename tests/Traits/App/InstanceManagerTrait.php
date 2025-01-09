@@ -6,9 +6,9 @@ use App\Application\Providers\DependenciesProvider;
 use App\Application\Providers\DoctrineDefinitionsProvider;
 use App\Application\Providers\RepositoriesProvider;
 use App\Application\Providers\ServicesProvider;
-use Core\Builder\AppBuilderManager;
-use Core\Http\Factories\ContainerFactory;
-use Core\Http\Interfaces\ApplicationInterface;
+use Brash\Framework\Builder\AppBuilderManager;
+use Brash\Framework\Http\Factories\ContainerFactory;
+use Brash\Framework\Http\Interfaces\ApplicationInterface;
 use Psr\Container\ContainerInterface;
 
 trait InstanceManagerTrait

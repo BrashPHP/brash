@@ -3,7 +3,7 @@
 <?php
 
 use App\Application\Providers\DoctrineDefinitionsProvider;
-use Core\Http\Factories\ContainerFactory;
+use Brash\Framework\Http\Factories\ContainerFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;

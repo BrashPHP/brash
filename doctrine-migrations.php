@@ -10,7 +10,7 @@ return [
     ],
 
     'migrations_paths' => [
-        'Core\Data\Migrations' => __DIR__.'/app/Data/Migrations',
+        'Brash\Framework\Data\Migrations' => __DIR__.'/app/Data/Migrations',
     ],
 
     'all_or_nothing' => true,

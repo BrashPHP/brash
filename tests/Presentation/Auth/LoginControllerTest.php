@@ -8,10 +8,10 @@ use App\Data\Protocols\Auth\LoginServiceInterface;
 use App\Domain\Dto\Credentials;
 use App\Domain\Dto\TokenLoginResponse;
 use App\Presentation\Actions\Auth\LoginController;
-use Core\Http\Domain\ActionPayload;
-use Core\Http\Errors\ActionError;
-use Core\Http\Errors\ErrorsEnum;
-use Core\Validation\Interfaces\ValidationInterface;
+use Brash\Framework\Http\Domain\ActionPayload;
+use Brash\Framework\Http\Errors\ActionError;
+use Brash\Framework\Http\Errors\ErrorsEnum;
+use Brash\Framework\Validation\Interfaces\ValidationInterface;
 use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
 

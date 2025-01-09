@@ -57,7 +57,7 @@ class LoggerProvider implements AppProviderInterface
 
 ### ROADMAP
 
-[] Incluir testes para camada HTTP do CORE
+[] Incluir testes para camada HTTP do Brash\Framework
 [] RouteCollector
 [] RouteGroup
 [] Server.php

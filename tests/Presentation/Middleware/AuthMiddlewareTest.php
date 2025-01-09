@@ -19,8 +19,6 @@ beforeEach(function () {
 });
 
 test('should pass when jwt is provided', function () {
-    self::autowireContainer(AccountRepository::class, new InMemoryAccountRepository);
-
     $dto = new AccountDto(email: 'mail.com', username: 'user', password: 'pass');
     $repository = $this->getContainer()->get(AccountRepository::class);
     $account = $repository->insert($dto);

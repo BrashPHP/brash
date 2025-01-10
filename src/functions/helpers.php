@@ -7,15 +7,6 @@ namespace Brash\Framework\functions;
 define('REFRESH_TOKEN', 'refresh-token');
 define('JWT_NAME', 'jwt-token');
 
-/**
- * Redirect to a new page.
- *
- * @param  string  $path
- */
-function redirect($path): void
-{
-    header('Location: /'.$path);
-}
 
 if (! function_exists('fromRootPath')) {
     function fromRootPath(string $path)
@@ -35,7 +26,7 @@ if (! function_exists('println')) {
 
 // provides a dump & die helper
 if (! function_exists('dd')) {
-    function dd(...$args)
+    function dd(...$args): never
     {
         dump(...$args);
 
@@ -45,7 +36,7 @@ if (! function_exists('dd')) {
 
 // provides a dump helper
 if (! function_exists('d')) {
-    function d(...$args)
+    function d(...$args): void
     {
         dump(...$args);
     }

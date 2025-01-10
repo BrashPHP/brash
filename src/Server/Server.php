@@ -31,7 +31,6 @@ final class Server
         $serverAddress = sprintf('%s:%d', $this->address, $this->port);
 
         $http = new \React\Http\HttpServer(
-            // new \React\Http\Middleware\StreamingRequestMiddleware(),
             new FiberMiddleware,
             $this->createAsyncHandler(),
         );

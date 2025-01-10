@@ -41,6 +41,7 @@
     "slim/psr7": "^1.7",
     "slim/slim": "^4.11",
     "spatie/php-structure-discoverer": "^2.0",
+    "symfony/cache": "^7.2",
     "symfony/dotenv": "^6.0"
   },
   "require-dev": {

@@ -2,9 +2,7 @@
 
 namespace Brash\Framework\Builder;
 
-use App\Presentation\Middleware\JWTAuthMiddleware;
-use App\Presentation\Middleware\ResponseAdapterMiddleware;
-use App\Presentation\Middleware\SessionMiddleware;
+use App\Http\Middlewares\ResponseAdapterMiddleware;
 use Brash\Framework\Exceptions\ConfigException;
 use Brash\Framework\Http\Factories\SlimAppFactory;
 use Brash\Framework\Http\Interfaces\ApplicationInterface;
@@ -26,8 +24,6 @@ class AppBuilderManager
      * @var MiddlewareInterface|class-string<MiddlewareInterface>
      */
     private array $middlewares = [
-        SessionMiddleware::class,
-        JWTAuthMiddleware::class,
         BodyParsingMiddleware::class,
         ResponseAdapterMiddleware::class,
         TrailingSlashMiddleware::class,
@@ -42,7 +38,7 @@ class AppBuilderManager
         $this->componentsFactory = new SlimAppFactory($container);
     }
 
-    public function appendMiddleware(MiddlewareInterface $middlewareInterface)
+    public function appendMiddleware(MiddlewareInterface $middlewareInterface): void
     {
         $this->middlewares[] = $middlewareInterface;
     }
@@ -70,12 +66,12 @@ class AppBuilderManager
         );
     }
 
-    public function useDefaultErrorHandler(bool $enable)
+    public function useDefaultErrorHandler(bool $enable): void
     {
         $this->enableErrorHandler = $enable;
     }
 
-    public function useDefaultShutdownHandler(bool $enable)
+    public function useDefaultShutdownHandler(bool $enable): void
     {
         if (! $this->enableErrorHandler) {
             throw new ConfigException('Unable to use default shutdown handler when error handler is not enabled');

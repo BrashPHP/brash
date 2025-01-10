@@ -2,9 +2,9 @@
 
 namespace Brash\Framework\Http\Routing;
 
+use Brash\Framework\Http\Attributes\Route as RouteAttribute;
 use Brash\Framework\Http\Domain\GroupModel;
 use Brash\Framework\Http\Domain\RouteModel;
-use Brash\Framework\Http\Attributes\Route as RouteAttribute;
 use Brash\Framework\Http\Interfaces\ActionInterface;
 use Brash\Framework\Http\Routing\Cache\GroupCacheResult;
 
@@ -13,8 +13,7 @@ final class RouteFactory
     public function __construct(
         private GroupCollector $groupCollector,
         private GroupCacheResult $cache
-    ) {
-    }
+    ) {}
 
     public function make(RouteAttribute $routeAttribute, ActionInterface|string $controller): ?RouteModel
     {
@@ -27,13 +26,14 @@ final class RouteFactory
         $path = $routeAttribute->path;
         $group = $routeAttribute->group;
 
-        if (!is_null($group)) {
+        if (! is_null($group)) {
             $groupResult = $this->getGroupResult($group);
             if ($groupResult->skip) {
                 return null;
             }
-            $path = implode("/", [trim($groupResult->prefix, "/"), trim(trim($path), "/")]);
-            
+
+            $path = implode('/', [trim($groupResult->prefix, '/'), trim(trim($path), '/')]);
+
             $result = [];
 
             foreach ($groupResult->middlewares as $m) {
@@ -54,6 +54,7 @@ final class RouteFactory
             if (is_array($routeAttribute->middleware)) {
                 return $middlewares;
             }
+
             return [$middlewares];
         }
 

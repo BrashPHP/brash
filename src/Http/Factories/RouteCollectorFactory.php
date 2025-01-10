@@ -13,7 +13,9 @@ use Psr\Container\ContainerInterface;
 
 class RouteCollectorFactory
 {
-    public function __construct(private ContainerInterface $containerInterface) {}
+    public function __construct(
+        private ContainerInterface $containerInterface,
+    ) {}
 
     public function getRouterCollector(RouteCollectorInterface $routeCollectorInterface): RouterCollector
     {
@@ -26,9 +28,12 @@ class RouteCollectorFactory
             $validationMiddlewareFactory
         );
 
+        $actionsPath = $this->containerInterface->has('actions_path') ? $this->containerInterface->get('actions_path') : getcwd();
+
         return new RouterCollector(
             $routeFactory,
-            $routeIncluder
+            $routeIncluder,
+            $actionsPath
         );
     }
 }

@@ -4,34 +4,31 @@ declare(strict_types=1);
 
 namespace Brash\Framework\Validation\Factories;
 
-use Closure;
 use Brash\Framework\Validation\Adapters\AwesomeValidationAdapter;
 use Brash\Framework\Validation\Adapters\CallbackValidationAdapter;
 use Brash\Framework\Validation\Adapters\NestedValidationAdapter;
 use Brash\Framework\Validation\Interfaces\AbstractValidator;
+use Closure;
 use Respect\Validation\Validatable;
 
 class ValidatorFactory
 {
     public function create(mixed $validation, string $key, string|array|null $message = null): ?AbstractValidator
     {
+        $mountedValidation = null;
         if (is_array($validation)) {
-            return $this->validationIsArray(
+            $mountedValidation = $this->validationIsArray(
                 $validation,
                 $key,
                 $message
             );
+        } elseif ($validation instanceof Validatable) {
+            $mountedValidation = $this->validationIsAwesomeValidatable($validation, $key, $message);
+        } elseif (is_callable($validation)) {
+            $mountedValidation = $this->validationIsACallable($validation, $key, $message);
         }
 
-        if ($validation instanceof Validatable) {
-            return $this->validationIsAwesomeValidatable($validation, $key, $message);
-        }
-
-        if (is_callable($validation)) {
-            return $this->validationIsACallable($validation, $key, $message);
-        }
-
-        return null;
+        return $mountedValidation;
     }
 
     private function validationIsACallable(

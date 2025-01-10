@@ -24,7 +24,8 @@ test('should validate using Awesome Validation', function () {
     $result = $factory->createValidations()->validate(['cpf' => 'gabo']);
 
     expect($result)->toBeInstanceOf(ErrorBag::class);
-    expect($result->messages)->toContain(['cpf' => "- \"gabo\" must be a valid CPF number"]);
+
+    expect($result->messages)->toContain(['cpf' => '- "gabo" must be a valid CPF number']);
 
 });
 

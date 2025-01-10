@@ -9,9 +9,6 @@ use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * This class stores all the options passed to the middleware.
- */
 class JwtAuthOptions
 {
     public array $secret;
@@ -20,9 +17,6 @@ class JwtAuthOptions
 
     public bool $secure;
 
-    /**
-     * @var array<string>
-     */
     public array $relaxed;
 
     public string $header;
@@ -33,19 +27,10 @@ class JwtAuthOptions
 
     public string $attribute;
 
-    /**
-     * @var array<string>
-     */
     public array $path;
 
-    /**
-     * @var RuleInterface[]
-     */
     public array $rules;
 
-    /**
-     * @var array<string>
-     */
     public array $ignore;
 
     public ?\Closure $before;
@@ -72,8 +57,8 @@ class JwtAuthOptions
         ?callable $after = null,
         ?callable $error = null
     ) {
-        $this->secret = $this->checkSecret($secret);
-        $this->algorithm = $this->applyAlgorithm($this->secret, $algorithm);
+        $this->secret = $this->validateSecret($secret);
+        $this->algorithm = $this->assignAlgorithm($this->secret, $algorithm);
         $this->secure = $secure;
         $this->relaxed = $relaxed;
         $this->header = $header;
@@ -81,16 +66,16 @@ class JwtAuthOptions
         $this->cookie = $cookie;
         $this->attribute = $attribute;
         $this->path = $path;
-        $this->rules = $rules;
         $this->ignore = $ignore;
-        $this->before = $this->toClosure($before);
-        $this->after = $this->toClosure($after);
-        $this->error = $this->toClosure($error);
+        $this->rules = $rules;
+        $this->before = $this->convertToClosure($before);
+        $this->after = $this->convertToClosure($after);
+        $this->error = $this->convertToClosure($error);
     }
 
     public static function fromArray(array $data): self
     {
-        $values = [
+        $defaults = [
             'secret' => '',
             'algorithm' => 'HS256',
             'secure' => true,
@@ -106,18 +91,13 @@ class JwtAuthOptions
             'after' => null,
             'error' => null,
         ];
-        $inArray = [];
 
-        foreach ($values as $key => $value) {
-            $inArray[$key] = $data[$key] ?? $value;
-        }
-
-        return new self(...$inArray);
+        return new self(...array_merge($defaults, $data));
     }
 
-    public function bindToAuthentication(JwtAuthentication $target): self
+    public function bindToAuthentication(JwtAuthentication $auth): self
     {
-        $this->jwtAuthentication = $target;
+        $this->jwtAuthentication = $auth;
 
         return $this;
     }
@@ -137,29 +117,27 @@ class JwtAuthOptions
         return $this->after?->call($this->jwtAuthentication, $response, $params);
     }
 
-    private function checkSecret($secret): array
+    private function validateSecret(string|array $secret): array
     {
-        if (! (is_array($secret) || is_string($secret) || $secret instanceof \ArrayAccess)) {
+        if (! is_string($secret) && ! is_array($secret)) {
             throw new InvalidArgumentException(
-                'Secret must be either a string or an array of "kid" => "secret" pairs'
+                'Secret must be a string or an array of "kid" => "secret" pairs.'
             );
         }
 
         return (array) $secret;
     }
 
-    private function applyAlgorithm(array $secret, $algorithm)
+    private function assignAlgorithm(array $secret, string|array $algorithm): array
     {
         if (is_string($algorithm)) {
-            $secretIndex = array_keys($secret);
-
-            return array_fill_keys($secretIndex, $algorithm);
+            return array_fill_keys(array_keys($secret), $algorithm);
         }
 
         foreach (array_keys($secret) as $key) {
-            if (! in_array($key, $algorithm)) {
+            if (! array_key_exists($key, $algorithm)) {
                 throw new InvalidArgumentException(
-                    'All secrets must have a corresponding algorithm'
+                    'Each secret must have a corresponding algorithm.'
                 );
             }
         }
@@ -167,12 +145,12 @@ class JwtAuthOptions
         return $algorithm;
     }
 
-    private function toClosure(?callable $closure): ?\Closure
+    private function convertToClosure(?callable $callback): ?\Closure
     {
-        if (! is_null($closure) && ! $closure instanceof \Closure) {
-            return \Closure::fromCallable($closure);
+        if ($callback instanceof \Closure || $callback === null) {
+            return $callback;
         }
 
-        return $closure;
+        return \Closure::fromCallable($callback);
     }
 }

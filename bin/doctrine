@@ -12,7 +12,7 @@ use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $containerFactory = new ContainerFactory();
-$containerFactory->addProviders(DoctrineDefinitionsProvider::class);
+
 $container = $containerFactory->get();
 $entityManager = $container->get(EntityManagerInterface::class);
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Brash\Framework\Validation\Adapters;
 
-use Closure;
 use Brash\Framework\Validation\Interfaces\AbstractValidator;
+use Closure;
 
 class CallbackValidationAdapter extends AbstractValidator
 {

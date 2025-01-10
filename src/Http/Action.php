@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Brash\Framework\Http;
 
-use App\Domain\Exceptions\Protocols\HttpSpecializedAdapter;
 use Brash\Framework\Http\Domain\ActionPayload;
 use Brash\Framework\Http\Errors\HttpExceptionAdapter;
 use Brash\Framework\Http\Exceptions\BaseHttpException;
@@ -48,8 +47,8 @@ abstract class Action implements ActionInterface
             );
 
             return $response;
-        } catch (HttpSpecializedAdapter|HttpExceptionAdapter $httpSpecializedAdapter) {
-            throw $httpSpecializedAdapter->wire($request);
+        } catch (HttpExceptionAdapter $httpExceptionAdapter) {
+            throw $httpExceptionAdapter->wire($request);
         }
     }
 

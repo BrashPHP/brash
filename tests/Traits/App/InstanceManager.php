@@ -2,10 +2,6 @@
 
 namespace Tests\Traits\App;
 
-use App\Application\Providers\DependenciesProvider;
-use App\Application\Providers\DoctrineDefinitionsProvider;
-use App\Application\Providers\RepositoriesProvider;
-use App\Application\Providers\ServicesProvider;
 use Brash\Framework\Builder\AppBuilderManager;
 use Brash\Framework\Http\Factories\ContainerFactory;
 use Brash\Framework\Http\Interfaces\ApplicationInterface;
@@ -51,12 +47,6 @@ class InstanceManager
     public static function setUpContainer(): ContainerInterface
     {
         $containerFactory = new ContainerFactory;
-        $containerFactory->addProviders(
-            new DependenciesProvider,
-            new RepositoriesProvider,
-            new ServicesProvider,
-            new DoctrineDefinitionsProvider
-        );
 
         return $containerFactory->get();
     }

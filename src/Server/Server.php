@@ -6,6 +6,8 @@ namespace Brash\Framework\Server;
 
 use Brash\Framework\Http\Interfaces\ApplicationInterface;
 use Brash\Framework\Http\Middlewares\FiberMiddleware;
+use Brash\WebSocketMiddleware\MiddlewareFactory;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Loop;
 use React\EventLoop\LoopInterface;
@@ -16,6 +18,7 @@ use function React\Async\async;
 final class Server
 {
     private LoopInterface $loop;
+    private array $handlers = [];
 
     public function __construct(
         private ApplicationInterface $app,
@@ -26,27 +29,36 @@ final class Server
         $this->loop = $loop ?? Loop::get();
     }
 
-    public function run()
+    public function addHandler(callable $handler): void
+    {
+        $this->handlers[] = $handler;
+    }
+
+    public function run(): void
     {
         $serverAddress = sprintf('%s:%d', $this->address, $this->port);
+        $fiberMiddleware = new FiberMiddleware();
+        $httpHandler = $this->createAsyncHandler();
+
+        $handlers = [$fiberMiddleware, ...$this->handlers, $httpHandler];
+
 
         $http = new \React\Http\HttpServer(
-            new FiberMiddleware,
-            $this->createAsyncHandler(),
+            ...$handlers
         );
 
-        echo 'Server running at '.$serverAddress.PHP_EOL;
+        echo 'Server running at ' . $serverAddress . PHP_EOL;
 
         $socket = new SocketServer($serverAddress, loop: $this->loop);
 
         $http->listen($socket);
 
-        echo 'Listening on '.str_replace('tcp:', 'http:', $socket->getAddress()).PHP_EOL;
+        echo 'Listening on ' . str_replace('tcp:', 'http:', $socket->getAddress()) . PHP_EOL;
 
         $this->loop->run();
     }
 
-    public function close()
+    public function close(): void
     {
         $this->loop->stop();
     }
@@ -54,7 +66,7 @@ final class Server
     private function createAsyncHandler()
     {
         return async(
-            function (ServerRequestInterface $request) {
+            function (ServerRequestInterface $request): ResponseInterface {
                 return $this->app->handle($request);
             }
         );

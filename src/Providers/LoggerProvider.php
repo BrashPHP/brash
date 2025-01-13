@@ -6,11 +6,14 @@ namespace Brash\Framework\Providers;
 
 use Bramus\Monolog\Formatter\ColoredLineFormatter;
 use DI\ContainerBuilder;
-use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Amp\File;
+use Amp\ByteStream;
+use Amp\Log\ConsoleFormatter;
+use Amp\Log\StreamHandler;
 
 use function Brash\Framework\functions\isProd;
 
@@ -33,8 +36,8 @@ class LoggerProvider implements AppProviderInterface
                 $processor = new UidProcessor;
                 $logger->pushProcessor($processor);
 
-                $handler = new StreamHandler($loggerSettings['path'], $loggerSettings['level']);
-                $handler->setFormatter(new ColoredLineFormatter);
+                $handler = new StreamHandler(ByteStream\getStdout(), $loggerSettings['level']);
+                $handler->setFormatter(new ConsoleFormatter());
 
                 $logger->pushHandler($handler);
 

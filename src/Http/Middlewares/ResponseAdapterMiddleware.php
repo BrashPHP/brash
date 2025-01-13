@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middlewares;
+namespace Brash\Framework\Http\Middlewares;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

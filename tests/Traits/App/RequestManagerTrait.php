@@ -3,11 +3,8 @@
 namespace Tests\Traits\App;
 
 use Exception;
+use Nyholm\Psr7\Uri;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Psr7\Factory\StreamFactory;
-use Slim\Psr7\Headers;
-use Slim\Psr7\Request;
-use Slim\Psr7\Uri;
 use Tests\Builders\Request\RequestBuilder;
 
 class BadRequestConfig extends Exception {}
@@ -26,16 +23,19 @@ trait RequestManagerTrait
         array $serverParams = [],
         array $cookies = []
     ): ServerRequestInterface {
-        $uri = new Uri('', '', 80, $path);
-        $handle = fopen('php://temp', 'w+');
-        $stream = (new StreamFactory)->createStreamFromResource($handle);
-
-        $h = new Headers;
+        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+        $uri = $psr17Factory->createUri($path)->withPort(80);
+        $handle = 'php://temp';
+        $stream = $psr17Factory->createStream($handle);
+        $request = $psr17Factory->createServerRequest($method, $uri, $serverParams);
+    
         foreach ($headers as $name => $value) {
-            $h->addHeader($name, $value);
+            $request = $request->withAddedHeader($name, $value);
         }
+        
+        $request = $request->withCookieParams($cookies);
 
-        return new Request($method, $uri, $h, $cookies, $serverParams, $stream);
+        return $request->withBody($stream);
     }
 
     protected function constructPostRequest(

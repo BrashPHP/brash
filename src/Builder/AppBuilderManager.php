@@ -2,12 +2,13 @@
 
 namespace Brash\Framework\Builder;
 
-use App\Http\Middlewares\ResponseAdapterMiddleware;
+
 use Brash\Framework\Exceptions\ConfigException;
 use Brash\Framework\Http\Factories\SlimAppFactory;
 use Brash\Framework\Http\Interfaces\ApplicationInterface;
 use Brash\Framework\Http\Interfaces\ComponentsFactoryInterface;
 use Brash\Framework\Http\Middlewares\BodyParsing\BodyParsingMiddleware;
+use Brash\Framework\Http\Middlewares\ResponseAdapterMiddleware;
 use Brash\Framework\Http\Middlewares\TrailingSlashMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;

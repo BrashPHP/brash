@@ -15,7 +15,8 @@ class RouteCollectorFactory
 {
     public function __construct(
         private ContainerInterface $containerInterface,
-    ) {}
+    ) {
+    }
 
     public function getRouterCollector(RouteCollectorInterface $routeCollectorInterface): RouterCollector
     {
@@ -28,7 +29,9 @@ class RouteCollectorFactory
             $validationMiddlewareFactory
         );
 
-        $actionsPath = $this->containerInterface->has('actions_path') ? $this->containerInterface->get('actions_path') : getcwd();
+        $actionsPath = $this->containerInterface->has('actions_path') ? $this->containerInterface->get('actions_path') : (
+            getcwd() . DIRECTORY_SEPARATOR . "src"
+        );
 
         return new RouterCollector(
             $routeFactory,

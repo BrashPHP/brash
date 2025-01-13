@@ -18,12 +18,13 @@ class RouterCollector implements RouterInterface
 {
     public function __construct(
         private RouteFactory $routeFactory,
-        private RouteIncluder $routeIncluder
+        private RouteIncluder $routeIncluder,
+        private string $paths
     ) {}
 
     public function run(): void
     {
-        $el = Discover::in(__DIR__)->classes();
+        $el = Discover::in(directories: $this->paths)->classes();
         $extendsAction = $el->extending(Action::class)->get();
         $implementsAction = $el->implementing(ActionInterface::class)->get();
 

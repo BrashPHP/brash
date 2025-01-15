@@ -7,7 +7,6 @@ namespace Brash\Framework\functions;
 define('REFRESH_TOKEN', 'refresh-token');
 define('JWT_NAME', 'jwt-token');
 
-
 if (! function_exists('fromRootPath')) {
     function fromRootPath(string $path)
     {

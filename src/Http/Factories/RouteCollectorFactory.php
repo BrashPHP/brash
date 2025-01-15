@@ -3,6 +3,7 @@
 namespace Brash\Framework\Http\Factories;
 
 use Brash\Framework\Http\Interfaces\RouteCollectorInterface;
+use Brash\Framework\Http\Interfaces\RouterInterface;
 use Brash\Framework\Http\Middlewares\Factories\ValidationMiddlewareFactory;
 use Brash\Framework\Http\Routing\Cache\GroupCacheResult;
 use Brash\Framework\Http\Routing\GroupCollector;
@@ -15,10 +16,9 @@ class RouteCollectorFactory
 {
     public function __construct(
         private ContainerInterface $containerInterface,
-    ) {
-    }
+    ) {}
 
-    public function getRouterCollector(RouteCollectorInterface $routeCollectorInterface): RouterCollector
+    public function getRouterCollector(RouteCollectorInterface $routeCollectorInterface): RouterInterface
     {
         $validationMiddlewareFactory = new ValidationMiddlewareFactory($this->containerInterface);
         $groupCollector = new GroupCollector;
@@ -30,7 +30,7 @@ class RouteCollectorFactory
         );
 
         $actionsPath = $this->containerInterface->has('actions_path') ? $this->containerInterface->get('actions_path') : (
-            getcwd() . DIRECTORY_SEPARATOR . "src"
+            getcwd().DIRECTORY_SEPARATOR.'src'
         );
 
         return new RouterCollector(

@@ -11,8 +11,8 @@ use function implode;
 final class HttpMethodNotAllowedException extends BaseHttpException
 {
     public function __construct(
-        public ServerRequestInterface $request,
-        public ?\Throwable $previous = null,
+        ServerRequestInterface $request,
+        ?\Throwable $previous = null,
         public array $allowedMethods = []
     ) {
         parent::__construct(

@@ -6,7 +6,6 @@ namespace Brash\Framework\Server;
 
 use Brash\Framework\Http\Interfaces\ApplicationInterface;
 use Brash\Framework\Http\Middlewares\FiberMiddleware;
-use Brash\WebSocketMiddleware\MiddlewareFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use React\EventLoop\Loop;
@@ -18,6 +17,10 @@ use function React\Async\async;
 final class Server
 {
     private LoopInterface $loop;
+
+    /**
+     * @var callable[]
+     */
     private array $handlers = [];
 
     public function __construct(
@@ -29,31 +32,32 @@ final class Server
         $this->loop = $loop ?? Loop::get();
     }
 
-    public function addHandler(callable $handler): void
+    public function addHandler(callable $handler): static
     {
         $this->handlers[] = $handler;
+
+        return $this;
     }
 
     public function run(): void
     {
         $serverAddress = sprintf('%s:%d', $this->address, $this->port);
-        $fiberMiddleware = new FiberMiddleware();
+        $fiberMiddleware = new FiberMiddleware;
         $httpHandler = $this->createAsyncHandler();
 
         $handlers = [$fiberMiddleware, ...$this->handlers, $httpHandler];
-
 
         $http = new \React\Http\HttpServer(
             ...$handlers
         );
 
-        echo 'Server running at ' . $serverAddress . PHP_EOL;
+        echo 'Server running at '.$serverAddress.PHP_EOL;
 
         $socket = new SocketServer($serverAddress, loop: $this->loop);
 
         $http->listen($socket);
 
-        echo 'Listening on ' . str_replace('tcp:', 'http:', $socket->getAddress()) . PHP_EOL;
+        echo 'Listening on '.str_replace('tcp:', 'http:', $socket->getAddress()).PHP_EOL;
 
         $this->loop->run();
     }

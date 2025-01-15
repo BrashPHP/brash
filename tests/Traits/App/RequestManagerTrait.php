@@ -23,16 +23,16 @@ trait RequestManagerTrait
         array $serverParams = [],
         array $cookies = []
     ): ServerRequestInterface {
-        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory;
         $uri = $psr17Factory->createUri($path)->withPort(80);
         $handle = 'php://temp';
         $stream = $psr17Factory->createStream($handle);
         $request = $psr17Factory->createServerRequest($method, $uri, $serverParams);
-    
+
         foreach ($headers as $name => $value) {
             $request = $request->withAddedHeader($name, $value);
         }
-        
+
         $request = $request->withCookieParams($cookies);
 
         return $request->withBody($stream);

@@ -11,7 +11,6 @@ use React\Promise\PromiseInterface;
 
 class FiberMiddleware
 {
-
     public function __invoke(ServerRequestInterface $request, callable $next): PromiseInterface
     {
         $deferred = null;

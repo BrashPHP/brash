@@ -4,6 +4,7 @@ namespace Brash\Framework\Http\Routing;
 
 use Brash\Framework\Http\Attributes\RouteGroup;
 use Brash\Framework\Http\Domain\GroupModel;
+use Psr\Http\Server\MiddlewareInterface;
 
 final class GroupCollector
 {

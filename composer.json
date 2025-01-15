@@ -78,7 +78,7 @@
   },
   "scripts": {
     "start": "php -S localhost:8080 -t public",
-    "test": "pest --exclude-group doctrine,cycleorm",
+    "test": "pest --exclude-group doctrine",
     "test:doctrine": "phpunit --group doctrine",
     "test:nodebug": "@php -c ./disable-xdebug.ini && phpunit",
     "test:update": "phpunit --migrate-configuration",

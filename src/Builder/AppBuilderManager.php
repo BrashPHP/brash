@@ -2,7 +2,6 @@
 
 namespace Brash\Framework\Builder;
 
-
 use Brash\Framework\Exceptions\ConfigException;
 use Brash\Framework\Http\Factories\SlimAppFactory;
 use Brash\Framework\Http\Interfaces\ApplicationInterface;

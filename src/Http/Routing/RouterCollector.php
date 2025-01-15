@@ -33,7 +33,7 @@ class RouterCollector implements RouterInterface
         $controllers
             ->map(fn (DiscoveredStructure|string $controller) => new ReflectionClass($controller))
             ->map(fn (ReflectionClass $reflectionClass): ?RouteModel => $this->createRouteModel($reflectionClass))
-            ->filter(fn (?RouteModel $route) => $route instanceof \Brash\Framework\Http\Domain\RouteModel)
+            ->filter(fn (?RouteModel $route) => $route instanceof RouteModel)
             ->map(fn (RouteModel $route) => $this->routeIncluder->include($route));
     }
 

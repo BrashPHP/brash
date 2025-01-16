@@ -3,9 +3,7 @@
 namespace Tests\Traits\App;
 
 use Exception;
-use Nyholm\Psr7\Uri;
 use Psr\Http\Message\ServerRequestInterface;
-use Tests\Builders\Request\RequestBuilder;
 
 class BadRequestConfig extends Exception {}
 
@@ -38,7 +36,7 @@ trait RequestManagerTrait
         return $request->withBody($stream);
     }
 
-    protected function constructPostRequest(
+    public function constructPostRequest(
         array|object $data,
         string $method,
         string $path,
@@ -46,27 +44,14 @@ trait RequestManagerTrait
         ?array $serverParams = null,
         ?array $cookies = null
     ): ServerRequestInterface {
-        if (! ($method && $path)) {
-            throw new BadRequestConfig('Unable to create request');
-        }
-
-        $requestBuilder = new RequestBuilder($method, $path);
-        if ($headers) {
-            $requestBuilder->withHeaders($headers);
-        }
-
-        if ($serverParams) {
-            $requestBuilder->withServerParam($serverParams);
-        }
-
-        if ($cookies) {
-            $requestBuilder->withCookies($cookies);
-        }
-
-        $request = $requestBuilder->build();
-        $this->setRequestParsedBody($request, $data);
-
-        return $request;
+        return (new RequestManager)->constructPostRequest(
+            $data,
+            $method,
+            $path,
+            $headers,
+            $serverParams,
+            $cookies,
+        );
     }
 
     protected function setRequestParsedBody(ServerRequestInterface $request, array|object $data): ServerRequestInterface

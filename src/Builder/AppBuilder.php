@@ -12,7 +12,7 @@ use Brash\Framework\Http\Middlewares\TrailingSlashMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
-class AppBuilderManager
+class AppBuilder
 {
     private bool $displayErrors;
 

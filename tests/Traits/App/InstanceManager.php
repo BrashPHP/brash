@@ -2,7 +2,7 @@
 
 namespace Tests\Traits\App;
 
-use Brash\Framework\Builder\AppBuilderManager;
+use Brash\Framework\Builder\AppBuilder;
 use Brash\Framework\Http\Factories\ContainerFactory;
 use Brash\Framework\Http\Interfaces\ApplicationInterface;
 use Psr\Container\ContainerInterface;
@@ -18,14 +18,14 @@ class InstanceManager
      */
     final public function getAppInstance(): ApplicationInterface
     {
-        $appBuilder = new AppBuilderManager($this->getContainer());
+        $appBuilder = new AppBuilder($this->getContainer());
 
         return $appBuilder->build();
     }
 
     final public function createAppInstance()
     {
-        $appBuilder = new AppBuilderManager($this->getContainer(true));
+        $appBuilder = new AppBuilder($this->getContainer(true));
 
         return $appBuilder->build();
     }

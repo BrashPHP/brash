@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Brash\Framework\Builder\AppBuilderManager;
+use Brash\Framework\Builder\AppBuilder;
 use Brash\Framework\Http\Factories\ContainerFactory;
 use Brash\Framework\Server\Server;
 use React\EventLoop\Loop;
@@ -17,7 +17,7 @@ Loop::set(EventLoopAdapter::get());
 
 $containerFactory = new ContainerFactory(enableCompilation: isProd());
 
-$appBuilder = new AppBuilderManager($containerFactory->get());
+$appBuilder = new AppBuilder($containerFactory->get());
 $appBuilder->useDefaultShutdownHandler(true);
 $app = $appBuilder->build();
 

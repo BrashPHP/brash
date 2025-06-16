@@ -25,7 +25,6 @@ class ConnectionProvider implements AppProviderInterface
                         return new ConnectionModel(url: $_ENV['DATABASE_URL']);
                     }
 
-                    // These are essentially mandatory, except for charset
                     $dbParams = [
                         'DRIVER',
                         'HOST',

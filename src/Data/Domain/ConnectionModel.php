@@ -49,6 +49,6 @@ readonly class ConnectionModel
             'password' => $this->password,
             'charset' => $this->charset,
             'memory' => $this->memory,
-        ], fn ($value): bool => ! is_null($value) && $value !== '');
+        ], fn ($value): bool => $value !== null && $value !== '');
     }
 }

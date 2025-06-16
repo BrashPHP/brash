@@ -42,7 +42,7 @@ test('should get last inserted entity', function (): void {
         {
             $src = __DIR__;
             $container->addDefinitions([
-                'doctrine_metadata_dirs' => [$src.'/Models'],
+                'doctrine_metadata_dirs' => [join(array: [$src, 'Models'], separator: DIRECTORY_SEPARATOR)],
             ]);
         }
     });

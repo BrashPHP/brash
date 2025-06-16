@@ -70,7 +70,7 @@ final class Server
     private function createAsyncHandler(): callable
     {
         return async(
-            fn(ServerRequestInterface $request): ResponseInterface => $this->app->handle($request)
+            fn (ServerRequestInterface $request): ResponseInterface => $this->app->handle($request)
         );
     }
 }

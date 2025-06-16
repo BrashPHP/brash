@@ -44,9 +44,9 @@ class ManagerRegistry extends AbstractManagerRegistry
         $connections[$connectionName] = $connectionName;
         $managers[$managerName] = $managerName;
 
-        $this->factories[$connectionName] = fn() => $this->getManager($connectionName)->getConnection();
+        $this->factories[$connectionName] = fn () => $this->getManager($connectionName)->getConnection();
 
-        $this->factories[$managerName] = fn(): \Doctrine\ORM\EntityManagerInterface => $this->createManager();
+        $this->factories[$managerName] = fn (): \Doctrine\ORM\EntityManagerInterface => $this->createManager();
 
         reset($connections);
 

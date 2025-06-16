@@ -27,7 +27,7 @@ $_ENV['REFRESH_TOKEN_SECRET'] = 'REFRESH_TOKEN_SECRET';
 |
 */
 
-expect()->extend('toBeOne', fn() => $this->toBe(1));
+expect()->extend('toBeOne', fn () => $this->toBe(1));
 
 /*
 |--------------------------------------------------------------------------

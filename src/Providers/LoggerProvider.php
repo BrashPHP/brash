@@ -24,10 +24,10 @@ class LoggerProvider implements AppProviderInterface
             // Should be set to false in production
             'logger' => [
                 'name' => 'kitsune',
-                'path' => (getenv('docker') || ! getenv('log-file')) ? 'php://stdout' : $currentWorkingDir.'/temp/logs/app.log',
+                'path' => (getenv('docker') || (in_array(getenv('log-file'), ['', '0'], true) || getenv('log-file') === [] || getenv('log-file') === false)) ? 'php://stdout' : $currentWorkingDir.'/temp/logs/app.log',
                 'level' => isProd() ? Logger::INFO : Logger::DEBUG,
             ],
-            LoggerInterface::class => static function (ContainerInterface $c) {
+            LoggerInterface::class => static function (ContainerInterface $c): \Monolog\Logger {
                 $loggerSettings = $c->get('logger');
                 $logger = new Logger($loggerSettings['name']);
 

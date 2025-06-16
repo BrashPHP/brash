@@ -18,7 +18,7 @@ final class RequestMethodRule implements RuleInterface
      *   ignore: array<string>,
      * }
      */
-    private $options = [
+    private array $options = [
         'ignore' => ['OPTIONS'],
     ];
 

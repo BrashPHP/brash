@@ -17,12 +17,12 @@ class WebSocketGateway implements ConnectionHandlerInterface
     /**
      * @var Collection<Connection>
      */
-    private Collection $connections;
+    private readonly Collection $connections;
 
-    private WebsocketListenerProvider $listenerProvider;
+    private readonly WebsocketListenerProvider $listenerProvider;
 
     public function __construct(
-        private LoggerInterface $logger,
+        private readonly LoggerInterface $logger,
     ) {
         $this->connections = new ArrayCollection;
         $this->listenerProvider = new WebsocketListenerProvider;

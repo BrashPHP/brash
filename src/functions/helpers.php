@@ -8,9 +8,9 @@ define('REFRESH_TOKEN', 'refresh-token');
 define('JWT_NAME', 'jwt-token');
 
 if (! function_exists('fromRootPath')) {
-    function fromRootPath(string $path)
+    function fromRootPath(string $path): string
     {
-        $root = dirname(dirname(__DIR__));
+        $root = dirname(__DIR__, 2);
 
         return sprintf('%s/%s', $root, $path);
     }
@@ -73,7 +73,7 @@ if (! function_exists('mode')) {
  * Provides information about the system's mode, whether it is in production mode or not.
  */
 if (! function_exists('inTesting')) {
-    function inTesting()
+    function inTesting(): bool
     {
         $mode = $_ENV['MODE'] ?? '';
 
@@ -85,7 +85,7 @@ if (! function_exists('inTesting')) {
  * Provides information about the system's mode, whether it is in production mode or not.
  */
 if (! function_exists('isProd')) {
-    function isProd()
+    function isProd(): bool
     {
         $mode = $_ENV['MODE'] ?? '';
 

@@ -10,9 +10,9 @@ use JsonSerializable;
 class ActionPayload implements JsonSerializable
 {
     public function __construct(
-        private int $statusCode = 200,
-        private array|object|null $data = null,
-        private ?ActionError $error = null
+        private readonly int $statusCode = 200,
+        private readonly array|object|null $data = null,
+        private readonly ?ActionError $error = null
     ) {}
 
     public function getStatusCode(): int
@@ -20,10 +20,7 @@ class ActionPayload implements JsonSerializable
         return $this->statusCode;
     }
 
-    /**
-     * @return array|null|object
-     */
-    public function getData()
+    public function getData(): object|array|null
     {
         return $this->data;
     }

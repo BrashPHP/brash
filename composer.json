@@ -85,6 +85,8 @@
       "rector",
       "pint"
     ],
+    "test:types": "phpstan",
+    "refactor": "rector",
     "test:update": "phpunit --migrate-configuration",
     "test:lint": "pint --test",
     "doctrine": "doctrine",

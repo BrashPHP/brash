@@ -14,9 +14,9 @@ use Psr\Http\Server\MiddlewareInterface;
 
 class AppBuilder
 {
-    private bool $displayErrors;
+    private readonly bool $displayErrors;
 
-    private ComponentsFactoryInterface $componentsFactory;
+    private readonly ComponentsFactoryInterface $componentsFactory;
 
     /**
      * Application Global Middlewares
@@ -30,7 +30,7 @@ class AppBuilder
     ];
 
     public function __construct(
-        private ContainerInterface $container,
+        private readonly ContainerInterface $container,
         private bool $enableErrorHandler = true,
         private bool $enableShutdownHandler = true,
     ) {

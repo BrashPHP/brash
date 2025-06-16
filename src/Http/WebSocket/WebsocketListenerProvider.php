@@ -10,7 +10,7 @@ class WebsocketListenerProvider implements ListenerProviderInterface
     /**
      * @var \WeakMap<object,\Brash\Websocket\Events\Protocols\ListenerInterface[]|callable[]>
      */
-    private \WeakMap $listeners;
+    private readonly \WeakMap $listeners;
 
     public function __construct()
     {

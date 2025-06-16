@@ -17,11 +17,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 final class SlimAppAdapter implements ApplicationInterface
 {
-    private RouteCollectorInterface $routeCollectorInterface;
+    private readonly RouteCollectorInterface $routeCollectorInterface;
 
     private bool $isStarted = false;
 
-    public function __construct(private \Slim\App $slimApp)
+    public function __construct(private readonly \Slim\App $slimApp)
     {
         $this->routeCollectorInterface = new SlimRouteCollector($slimApp);
     }
@@ -54,7 +54,7 @@ final class SlimAppAdapter implements ApplicationInterface
         $this->isStarted = true;
     }
 
-    private function prepareOnTheFlyRequests()
+    private function prepareOnTheFlyRequests(): void
     {
         $this->routeCollectorInterface->map(
             ['OPTIONS'],
@@ -63,12 +63,12 @@ final class SlimAppAdapter implements ApplicationInterface
         );
     }
 
-    private function setNotFound()
+    private function setNotFound(): void
     {
         $this->routeCollectorInterface->map(
             ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
             '/{routes:.+}',
-            function ($request) {
+            function ($request): never {
                 throw new HttpNotFoundException($request);
             }
         );

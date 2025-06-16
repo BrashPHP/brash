@@ -15,7 +15,7 @@ class SettingsProvider implements AppProviderInterface
 
     private function createSettings(): array
     {
-        $root = dirname(dirname(__DIR__));
+        $root = dirname(__DIR__, 2);
 
         return [
             'root' => $root,

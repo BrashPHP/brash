@@ -14,9 +14,9 @@ use Psr\Container\ContainerInterface;
 
 class ContainerFactory
 {
-    private ContainerBuilder $containerBuilder;
+    private readonly ContainerBuilder $containerBuilder;
 
-    private ProvidersCollector $providersCollector;
+    private readonly ProvidersCollector $providersCollector;
 
     private array $defaultProviders = [
         SettingsProvider::class,
@@ -27,7 +27,7 @@ class ContainerFactory
     ];
 
     public function __construct(
-        private bool $enableCompilation = false,
+        private readonly bool $enableCompilation = false,
     ) {
         $this->containerBuilder = new ContainerBuilder;
         $this->providersCollector = new ProvidersCollector;
@@ -40,7 +40,7 @@ class ContainerFactory
         }
     }
 
-    public function addProviders(AppProviderInterface|string ...$providers)
+    public function addProviders(AppProviderInterface|string ...$providers): void
     {
         foreach ($providers as $provider) {
             $this->providersCollector->addProvider($provider);

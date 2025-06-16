@@ -8,16 +8,14 @@ class Promisefy
 {
     public static function promisify($callbackBasedFunction): callable
     {
-        return function (...$args) use ($callbackBasedFunction) {
-            return new Promise(function ($resolve, $reject) use ($args, $callbackBasedFunction) {
-                $callbackBasedFunction(...$args, function ($error, $result) use ($resolve, $reject) {
-                    if ($error) {
-                        $reject($error);
-                    } else {
-                        $resolve($result);
-                    }
-                });
+        return fn(...$args): \React\Promise\Promise => new Promise(function ($resolve, $reject) use ($args, $callbackBasedFunction): void {
+            $callbackBasedFunction(...$args, function ($error, $result) use ($resolve, $reject): void {
+                if ($error) {
+                    $reject($error);
+                } else {
+                    $resolve($result);
+                }
             });
-        };
+        });
     }
 }

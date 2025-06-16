@@ -8,7 +8,7 @@ use Brash\Framework\Providers\AppProviderInterface;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use Tests\Infrastructure\Persistence\Orm\Models\UserModel;
 
-test('if setup container works', function () {
+test('if setup container works', function (): void {
     $containerFactory = new ContainerFactory;
     $containerFactory->addProviders(new class implements AppProviderInterface
     {
@@ -27,14 +27,14 @@ test('if setup container works', function () {
     expect($doctrine)->toHaveKey('connection');
 });
 
-test('if entity manager is not null', function () {
+test('if entity manager is not null', function (): void {
     $container = $this->getContainer();
     $em = $container->get(EntityManager::class);
 
     expect($em)->toBeObject();
 });
 
-test('should get last inserted entity', function () {
+test('should get last inserted entity', function (): void {
     $containerFactory = new ContainerFactory;
     $containerFactory->addProviders(new class implements AppProviderInterface
     {

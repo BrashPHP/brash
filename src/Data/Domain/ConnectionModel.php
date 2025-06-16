@@ -27,7 +27,7 @@ readonly class ConnectionModel
                 $user,
                 $password,
                 $charset,
-            ], fn ($el) => $el === ''))
+            ], fn ($el): bool => $el === ''))
         ) {
             throw new ConfigException(
                 "'DATABASE_URL' must be used if fields".
@@ -37,7 +37,7 @@ readonly class ConnectionModel
         }
     }
 
-    public function getAsArray()
+    public function getAsArray(): array
     {
         return array_filter([
             'url' => $this->url,
@@ -49,6 +49,6 @@ readonly class ConnectionModel
             'password' => $this->password,
             'charset' => $this->charset,
             'memory' => $this->memory,
-        ], fn ($value) => ! is_null($value) && $value !== '');
+        ], fn ($value): bool => ! is_null($value) && $value !== '');
     }
 }

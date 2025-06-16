@@ -11,7 +11,7 @@ use Slim\App;
 
 use function Brash\Framework\functions\isProd;
 
-final class SlimAppInterfaceBuilder implements ConfigurableApplicationInterface
+final readonly class SlimAppInterfaceBuilder implements ConfigurableApplicationInterface
 {
     public function __construct(private App $app, private LoggerInterface $logger) {}
 

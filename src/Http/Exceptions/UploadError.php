@@ -12,7 +12,7 @@ class UploadError extends HttpBadRequestException
         ?string $object = null,
         ?Throwable $previous = null
     ) {
-        $message = $object ? sprintf('Object %s could not be uploaded', $object) : 'An error occured while uploading';
+        $message = $object !== null && $object !== '' && $object !== '0' ? sprintf('Object %s could not be uploaded', $object) : 'An error occured while uploading';
         parent::__construct($request, $message, previous: $previous);
     }
 }

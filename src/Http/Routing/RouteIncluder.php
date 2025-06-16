@@ -10,8 +10,8 @@ use Brash\Framework\Http\Middlewares\Factories\ValidationMiddlewareFactory;
 class RouteIncluder
 {
     public function __construct(
-        private RouteCollectorInterface $routeCollectorInterface,
-        private ValidationMiddlewareFactory $validationMiddlewareFactory
+        private readonly RouteCollectorInterface $routeCollectorInterface,
+        private readonly ValidationMiddlewareFactory $validationMiddlewareFactory
     ) {}
 
     public function include(RouteModel $route): void

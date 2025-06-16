@@ -50,7 +50,7 @@ class HttpErrorHandler extends SlimErrorHandler
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    private function logErrorMessage(Throwable $error, int $statusCode, ErrorsEnum $errorType)
+    private function logErrorMessage(Throwable $error, int $statusCode, ErrorsEnum $errorType): void
     {
         $isServerError = $statusCode >= 500 && $statusCode < 600;
         $template = [

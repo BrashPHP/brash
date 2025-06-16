@@ -17,8 +17,8 @@ use Psr\Log\LoggerInterface;
 class DatabaseKeepAliveMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private LoggerInterface $logger,
-        private ReopeningEntityManagerDecorator $reopeningEntityManagerDecorator
+        private readonly LoggerInterface $logger,
+        private readonly ReopeningEntityManagerDecorator $reopeningEntityManagerDecorator
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

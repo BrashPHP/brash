@@ -10,7 +10,7 @@ abstract class AbstractValidator implements ValidationInterface
 {
     protected string $field;
 
-    protected ?string $message;
+    protected ?string $message = null;
 
     public function validate(array $input): ?ValidationError
     {

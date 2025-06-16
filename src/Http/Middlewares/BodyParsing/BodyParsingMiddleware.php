@@ -104,13 +104,13 @@ class BodyParsingMiddleware implements MiddlewareInterface
         $jsonBodyParser = new JsonBodyParser;
         $this->registerBodyParser('application/json', $jsonBodyParser->parse(...));
 
-        $this->registerBodyParser('application/x-www-form-urlencoded', static function ($input) {
+        $this->registerBodyParser('application/x-www-form-urlencoded', static function ($input): array {
             parse_str($input, $data);
 
             return $data;
         });
 
-        $xmlCallable = static function ($input) {
+        $xmlCallable = static function ($input): ?\SimpleXMLElement {
             $backup = self::disableXmlEntityLoader(true);
             $backup_errors = libxml_use_internal_errors(true);
             $result = simplexml_load_string($input);

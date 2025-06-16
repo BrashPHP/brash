@@ -16,9 +16,9 @@ use Slim\Factory\AppFactory;
 
 class SlimAppFactory implements ComponentsFactoryInterface
 {
-    private App $app;
+    private readonly App $app;
 
-    public function __construct(private ContainerInterface $container)
+    public function __construct(private readonly ContainerInterface $container)
     {
         $this->app = AppFactory::create(container: $container);
     }

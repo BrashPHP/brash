@@ -74,7 +74,7 @@ class RequestManager
      */
     protected function createJsonRequest(
         string $method,
-        $uri,
+        string $uri,
         array|object|null $data = null
     ): ServerRequestInterface {
         $request = $this->createRequest($method, $uri);

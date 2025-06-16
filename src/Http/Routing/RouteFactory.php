@@ -8,7 +8,7 @@ use Brash\Framework\Http\Domain\RouteModel;
 use Brash\Framework\Http\Interfaces\ActionInterface;
 use Brash\Framework\Http\Routing\Cache\GroupCacheResult;
 
-final class RouteFactory
+final readonly class RouteFactory
 {
     public function __construct(
         private GroupCollector $groupCollector,

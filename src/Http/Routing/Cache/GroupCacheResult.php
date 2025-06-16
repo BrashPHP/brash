@@ -29,10 +29,6 @@ class GroupCacheResult
     {
         $key = $this->forgeKey($group);
 
-        if (isset($this->cache[$key])) {
-            return $this->cache[$key];
-        }
-
-        return null;
+        return $this->cache[$key] ?? null;
     }
 }

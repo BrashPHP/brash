@@ -12,12 +12,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class TrailingSlashMiddleware implements MiddlewareInterface
 {
-    private ResponseFactoryInterface $responseFactory;
+    private readonly ResponseFactoryInterface $responseFactory;
 
     /**
      * Configure whether add or remove the slash.
      */
-    public function __construct(private bool $trailingSlash = false)
+    public function __construct(private readonly bool $trailingSlash = false)
     {
         $this->responseFactory = new \Nyholm\Psr7\Factory\Psr17Factory;
     }
@@ -47,7 +47,7 @@ class TrailingSlashMiddleware implements MiddlewareInterface
         if (
             $this->trailingSlash
             && ! \str_ends_with($path, '/')
-            && ! pathinfo($path, PATHINFO_EXTENSION)
+            && (in_array(pathinfo($path, PATHINFO_EXTENSION), ['', '0'], true) || pathinfo($path, PATHINFO_EXTENSION) === [])
         ) {
             return $path.'/';
 

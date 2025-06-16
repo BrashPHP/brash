@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 class RouteCollectorFactory
 {
     public function __construct(
-        private ContainerInterface $containerInterface,
+        private readonly ContainerInterface $containerInterface,
     ) {}
 
     public function getRouterCollector(RouteCollectorInterface $routeCollectorInterface): RouterInterface

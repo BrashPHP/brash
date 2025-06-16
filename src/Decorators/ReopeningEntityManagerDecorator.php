@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 
 class ReopeningEntityManagerDecorator extends EntityManagerDecorator
 {
-    public function __construct(private ContainerInterface $container)
+    public function __construct(private readonly ContainerInterface $container)
     {
         parent::__construct(
             EntityManagerBuilder::produce(
@@ -18,7 +18,7 @@ class ReopeningEntityManagerDecorator extends EntityManagerDecorator
         );
     }
 
-    public function get()
+    public function get(): \Doctrine\Persistence\ObjectManager
     {
         return $this->wrapped;
     }
@@ -34,7 +34,7 @@ class ReopeningEntityManagerDecorator extends EntityManagerDecorator
         return $this->wrapped;
     }
 
-    private function generateNewEm()
+    private function generateNewEm(): \Doctrine\ORM\EntityManagerInterface
     {
         $settings = $this->container->get('settings');
         $doctrine = $settings['doctrine'];

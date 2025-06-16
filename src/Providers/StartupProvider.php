@@ -29,7 +29,7 @@ class StartupProvider implements AppProviderInterface
         $this->setCustomValidations();
     }
 
-    private function setCustomValidations()
+    private function setCustomValidations(): void
     {
         Factory::setDefaultInstance(
             (new Factory)

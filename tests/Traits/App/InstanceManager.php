@@ -23,7 +23,7 @@ class InstanceManager
         return $appBuilder->build();
     }
 
-    final public function createAppInstance()
+    final public function createAppInstance(): \Brash\Framework\Http\Interfaces\ApplicationInterface
     {
         $appBuilder = new AppBuilder($this->getContainer(true));
 
@@ -35,7 +35,7 @@ class InstanceManager
         return self::requireContainer($forceUpdate);
     }
 
-    public function autowireContainer($key, $instance)
+    public function autowireContainer(string $key, $instance): void
     {
         /**
          * @var \DI\Container

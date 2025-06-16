@@ -10,10 +10,10 @@ use Tests\Traits\App\InstanceManager;
 const ENCODE = 'application/json';
 const ENDPOINT = '/test';
 
-test('should capture successful response', function () {
+test('should capture successful response', function (): void {
     $instanceApp = new InstanceManager;
     $app = $instanceApp->createAppInstance();
-    $app->map(['GET'], ENDPOINT, function (ServerRequestInterface $_, ResponseInterface $response) {
+    $app->map(['GET'], ENDPOINT, function (ServerRequestInterface $_, ResponseInterface $response): \Psr\Http\Message\ResponseInterface {
         $json = json_encode(['res' => true]);
         $response->getBody()->write($json);
 
@@ -36,7 +36,7 @@ test('should capture successful response', function () {
     expect($body)->toBe(['res' => true]);
 });
 
-test('should capture 5XX response', function () {
+test('should capture 5XX response', function (): void {
     $instanceApp = new InstanceManager;
     $app = $instanceApp->createAppInstance();
     $app->map(
@@ -73,7 +73,7 @@ test('should capture 5XX response', function () {
     ]);
 });
 
-test('should capture mapped error response', function () {
+test('should capture mapped error response', function (): void {
     $instanceApp = new InstanceManager;
     $app = $instanceApp->createAppInstance();
     $app->map(

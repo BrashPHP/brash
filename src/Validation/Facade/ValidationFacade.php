@@ -11,7 +11,7 @@ use Brash\Framework\Validation\Interfaces\ValidationInterface;
 
 class ValidationFacade
 {
-    public function __construct(private array $rules, private array $messages = []) {}
+    public function __construct(private readonly array $rules, private array $messages = []) {}
 
     public function createValidations(): ValidationInterface
     {

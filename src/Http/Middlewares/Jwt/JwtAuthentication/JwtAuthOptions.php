@@ -15,24 +15,6 @@ class JwtAuthOptions
 
     public array $algorithm;
 
-    public bool $secure;
-
-    public array $relaxed;
-
-    public string $header;
-
-    public string $regexp;
-
-    public string $cookie;
-
-    public string $attribute;
-
-    public array $path;
-
-    public array $rules;
-
-    public array $ignore;
-
     public ?\Closure $before;
 
     public ?\Closure $after;
@@ -44,30 +26,21 @@ class JwtAuthOptions
     public function __construct(
         string|array $secret,
         string|array $algorithm = 'HS256',
-        bool $secure = true,
-        array $relaxed = ['localhost', '127.0.0.1'],
-        string $header = 'Authorization',
-        string $regexp = "/Bearer\s+(.*)$/i",
-        string $cookie = 'token',
-        string $attribute = 'token',
-        array $path = ['/'],
-        array $ignore = [],
-        array $rules = [],
+        public bool $secure = true,
+        public array $relaxed = ['localhost', '127.0.0.1'],
+        public string $header = 'Authorization',
+        public string $regexp = "/Bearer\s+(.*)$/i",
+        public string $cookie = 'token',
+        public string $attribute = 'token',
+        public array $path = ['/'],
+        public array $ignore = [],
+        public array $rules = [],
         ?callable $before = null,
         ?callable $after = null,
         ?callable $error = null
     ) {
         $this->secret = $this->validateSecret($secret);
         $this->algorithm = $this->assignAlgorithm($this->secret, $algorithm);
-        $this->secure = $secure;
-        $this->relaxed = $relaxed;
-        $this->header = $header;
-        $this->regexp = $regexp;
-        $this->cookie = $cookie;
-        $this->attribute = $attribute;
-        $this->path = $path;
-        $this->ignore = $ignore;
-        $this->rules = $rules;
         $this->before = $this->convertToClosure($before);
         $this->after = $this->convertToClosure($after);
         $this->error = $this->convertToClosure($error);

@@ -12,7 +12,7 @@ class ProviderStubClass implements AppProviderInterface
     }
 }
 
-test('should collect Providers in correct oder and call them with correct values', function () {
+test('should collect Providers in correct oder and call them with correct values', function (): void {
     $providersCollector = new ProvidersCollector;
     $testStubProviders1 = new class implements AppProviderInterface
     {

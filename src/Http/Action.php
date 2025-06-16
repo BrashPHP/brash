@@ -77,7 +77,7 @@ abstract class Action implements ActionInterface
         if (! isset($this->args[$name])) {
             throw new class($name) extends HttpExceptionAdapter
             {
-                public function __construct(private string $name) {}
+                public function __construct(private readonly string $name) {}
 
                 public function wire(Request $request): BaseHttpException
                 {

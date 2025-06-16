@@ -15,7 +15,7 @@ class FiberMiddleware
     {
         $deferred = null;
         $fiber = new \Fiber(
-            function () use ($request, $next, &$deferred) {
+            function () use ($request, $next, &$deferred): \Generator|\Psr\Http\Message\ResponseInterface|\React\Promise\PromiseInterface {
                 $response = $next($request);
                 assert($response instanceof ResponseInterface || $response instanceof PromiseInterface || $response instanceof \Generator);
 

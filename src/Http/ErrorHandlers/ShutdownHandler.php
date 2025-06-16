@@ -12,15 +12,15 @@ use Slim\ResponseEmitter;
 class ShutdownHandler
 {
     public function __construct(
-        private Request $request,
-        private ErrorHandlerInterface $errorHandler,
-        private bool $displayErrorDetails
+        private readonly Request $request,
+        private readonly ErrorHandlerInterface $errorHandler,
+        private readonly bool $displayErrorDetails
     ) {}
 
-    public function __invoke()
+    public function __invoke(): void
     {
         $error = error_get_last();
-        if ($error) {
+        if ($error !== null && $error !== []) {
             $errorFile = $error['file'];
             $errorLine = $error['line'];
             $errorMessage = $error['message'];

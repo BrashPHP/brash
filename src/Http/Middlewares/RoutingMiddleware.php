@@ -11,7 +11,7 @@ use Slim\Middleware\RoutingMiddleware as SlimRoutingMiddleware;
 
 class RoutingMiddleware implements MiddlewareInterface
 {
-    private SlimRoutingMiddleware $routingMiddleware;
+    private readonly SlimRoutingMiddleware $routingMiddleware;
 
     public function __construct(App $app)
     {

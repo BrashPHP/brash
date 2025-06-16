@@ -10,12 +10,9 @@ final class CallableHandler implements RequestHandlerInterface
 {
     private $callable;
 
-    private $response;
-
-    public function __construct(callable $callable, ResponseInterface $response)
+    public function __construct(callable $callable, private readonly \Psr\Http\Message\ResponseInterface $response)
     {
         $this->callable = $callable;
-        $this->response = $response;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

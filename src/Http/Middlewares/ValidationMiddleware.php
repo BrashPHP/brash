@@ -16,7 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 class ValidationMiddleware implements MiddlewareInterface
 {
-    public function __construct(private ValidationInterface $validationInterface) {}
+    public function __construct(private readonly ValidationInterface $validationInterface) {}
 
     public function process(Request $request, RequestHandler $handler): Response
     {

@@ -27,7 +27,7 @@ final class DoctrineConnectionFactory
         );
     }
 
-    private function getFromUrl(string $url)
+    private function getFromUrl(string $url): array
     {
         $dsnParser = new DsnParser(['mysql' => 'mysqli', 'postgresql' => 'pdo_pgsql']);
 

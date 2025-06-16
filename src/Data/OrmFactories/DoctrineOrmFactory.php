@@ -13,11 +13,11 @@ final class DoctrineOrmFactory
     public function create(): array
     {
         return [
-            ManagerRegistry::class => static fn (ContainerInterface $container) => new ManagerRegistry($container->get('doctrine'), $container->get(LoggerInterface::class)),
+            ManagerRegistry::class => static fn (ContainerInterface $container): \Brash\Framework\Data\Doctrine\ManagerRegistry => new ManagerRegistry($container->get('doctrine'), $container->get(LoggerInterface::class)),
 
             ReopeningEntityManagerDecorator::class => static fn (
                 ContainerInterface $container
-            ) => new ReopeningEntityManagerDecorator($container),
+            ): \Brash\Framework\Decorators\ReopeningEntityManagerDecorator => new ReopeningEntityManagerDecorator($container),
 
             EntityManagerInterface::class => static fn (
                 ContainerInterface $container

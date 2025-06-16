@@ -7,7 +7,7 @@ use Psr\Http\Server\MiddlewareInterface as Middleware;
 
 class MiddlewareCollector
 {
-    public function __construct(private MiddlewareIncluderInterface $root) {}
+    public function __construct(private readonly MiddlewareIncluderInterface $root) {}
 
     /**
      * @var class-string<Middleware>|Middleware
@@ -19,7 +19,7 @@ class MiddlewareCollector
         $this->middlewareClasses[] = $middleware;
     }
 
-    public function collect()
+    public function collect(): void
     {
         foreach ($this->middlewareClasses as $middlewareClass) {
             $this->root->add($middlewareClass);

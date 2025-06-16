@@ -7,7 +7,7 @@ use Psr\Http\Server\MiddlewareInterface;
 
 class SlimRoute implements MiddlewareAttachableInterface
 {
-    public function __construct(private \Slim\Interfaces\RouteInterface $route) {}
+    public function __construct(private readonly \Slim\Interfaces\RouteInterface $route) {}
 
     public function add(MiddlewareInterface|string|callable ...$middleware): void
     {

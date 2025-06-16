@@ -17,9 +17,9 @@ use Spatie\StructureDiscoverer\Discover;
 class RouterCollector implements RouterInterface
 {
     public function __construct(
-        private RouteFactory $routeFactory,
-        private RouteIncluder $routeIncluder,
-        private string $paths
+        private readonly RouteFactory $routeFactory,
+        private readonly RouteIncluder $routeIncluder,
+        private readonly string $paths
     ) {}
 
     public function run(): void
@@ -31,9 +31,9 @@ class RouterCollector implements RouterInterface
         $controllers = new ArrayCollection(array_merge($extendsAction, $implementsAction));
 
         $controllers
-            ->map(fn (DiscoveredStructure|string $controller) => new ReflectionClass($controller))
+            ->map(fn (DiscoveredStructure|string $controller): \ReflectionClass => new ReflectionClass($controller))
             ->map(fn (ReflectionClass $reflectionClass): ?RouteModel => $this->createRouteModel($reflectionClass))
-            ->filter(fn (?RouteModel $route) => $route instanceof RouteModel)
+            ->filter(fn (?RouteModel $route): bool => $route instanceof RouteModel)
             ->map(fn (RouteModel $route) => $this->routeIncluder->include($route));
     }
 

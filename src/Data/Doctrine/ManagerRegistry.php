@@ -27,14 +27,14 @@ class ManagerRegistry extends AbstractManagerRegistry
     /**
      * @var \Closure[]
      */
-    private $factories = [];
+    private array $factories = [];
 
     /**
      * @var object[]
      */
-    private $services = [];
+    private array $services = [];
 
-    public function __construct(private array $doctrineParams, private LoggerInterface $loggerInterface)
+    public function __construct(private readonly array $doctrineParams, private readonly LoggerInterface $loggerInterface)
     {
         $connectionName = 'default';
         $managerName = 'default';
@@ -44,18 +44,13 @@ class ManagerRegistry extends AbstractManagerRegistry
         $connections[$connectionName] = $connectionName;
         $managers[$managerName] = $managerName;
 
-        $this->factories[$connectionName] = function () use ($connectionName) {
-            return $this->getManager($connectionName)->getConnection();
-        };
+        $this->factories[$connectionName] = fn() => $this->getManager($connectionName)->getConnection();
 
-        $this->factories[$managerName] = function () {
-            return $this->createManager();
-        };
+        $this->factories[$managerName] = fn(): \Doctrine\ORM\EntityManagerInterface => $this->createManager();
 
         reset($connections);
-        reset($managers);
 
-        parent::__construct('ORM', $connections, $managers, key($connections), key($managers), Proxy::class);
+        parent::__construct('ORM', $connections, $managers, key($connections), array_key_first($managers), Proxy::class);
 
         $this->registerUuidType();
     }

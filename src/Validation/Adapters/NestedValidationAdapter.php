@@ -12,7 +12,7 @@ use Brash\Framework\Validation\ValidationExceptions\ValidationError;
 
 class NestedValidationAdapter extends AbstractValidator
 {
-    private Composite $composite;
+    private readonly Composite $composite;
 
     public function __construct(protected string $field)
     {
@@ -62,7 +62,7 @@ class NestedValidationAdapter extends AbstractValidator
     private function mapErrors(array $validationErrors): array
     {
         return array_map(
-            function (ValidationError $error) {
+            function (ValidationError $error): \Brash\Framework\Validation\ValidationExceptions\ValidationError {
                 $parentField = $this->field;
 
                 $newError = new ValidationError(

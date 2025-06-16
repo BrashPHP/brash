@@ -6,8 +6,8 @@ use Brash\Framework\Validation\Facade\ValidationFacade;
 use Brash\Framework\Validation\ValidationExceptions\ErrorBag;
 use Respect\Validation\Validator as v;
 
-test('should validate incorrect values using ValidationFacade', function () {
-    $factory = new ValidationFacade(['name' => fn ($value) => $value !== 'gabo']);
+test('should validate incorrect values using ValidationFacade', function (): void {
+    $factory = new ValidationFacade(['name' => fn ($value): bool => $value !== 'gabo']);
 
     /** @var ErrorBag */
     $result = $factory->createValidations()->validate(['name' => 'gabo']);
@@ -17,7 +17,7 @@ test('should validate incorrect values using ValidationFacade', function () {
 
 });
 
-test('should validate using Awesome Validation', function () {
+test('should validate using Awesome Validation', function (): void {
     $factory = new ValidationFacade(['cpf' => v::cpf()]);
 
     /** @var ErrorBag */
@@ -29,8 +29,8 @@ test('should validate using Awesome Validation', function () {
 
 });
 
-test('should validate nested values', function () {
-    $factory = new ValidationFacade(['object' => ['type' => fn ($value) => $value === 'car']]);
+test('should validate nested values', function (): void {
+    $factory = new ValidationFacade(['object' => ['type' => fn ($value): bool => $value === 'car']]);
 
     /** @var ErrorBag */
     $result = $factory->createValidations()->validate(['object' => ['type' => '']]);
@@ -42,8 +42,8 @@ test('should validate nested values', function () {
 
 });
 
-test('should validate correct values', function () {
-    $factory = new ValidationFacade(['person' => fn ($value) => $value === 'optimusprime']);
+test('should validate correct values', function (): void {
+    $factory = new ValidationFacade(['person' => fn ($value): bool => $value === 'optimusprime']);
 
     $result = $factory->createValidations()->validate(['person' => 'optimusprime']);
 

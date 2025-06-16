@@ -16,7 +16,7 @@ use function React\Async\async;
 
 final class Server
 {
-    private LoopInterface $loop;
+    private readonly LoopInterface $loop;
 
     /**
      * @var callable[]
@@ -24,10 +24,10 @@ final class Server
     private array $handlers = [];
 
     public function __construct(
-        private ApplicationInterface $app,
+        private readonly ApplicationInterface $app,
         ?LoopInterface $loop = null,
-        private string $address = '0.0.0.0',
-        private int $port = 8080,
+        private readonly string $address = '0.0.0.0',
+        private readonly int $port = 8080,
     ) {
         $this->loop = $loop ?? Loop::get();
     }
@@ -67,12 +67,10 @@ final class Server
         $this->loop->stop();
     }
 
-    private function createAsyncHandler()
+    private function createAsyncHandler(): callable
     {
         return async(
-            function (ServerRequestInterface $request): ResponseInterface {
-                return $this->app->handle($request);
-            }
+            fn(ServerRequestInterface $request): ResponseInterface => $this->app->handle($request)
         );
     }
 }

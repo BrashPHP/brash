@@ -22,28 +22,28 @@ abstract class TestCase extends PHPUnit_TestCase
     use InstanceManagerTrait;
     use RequestManagerTrait;
 
-    public static function createDatabase()
+    public static function createDatabase(): void
     {
         $container = self::requireContainer();
 
         DatabaseCreator::create($container);
     }
 
-    final public static function truncateDatabase()
+    final public static function truncateDatabase(): void
     {
         $container = self::requireContainer();
 
         DatabaseCleaner::truncate($container);
     }
 
-    public static function createDatabaseDoctrine()
+    public static function createDatabaseDoctrine(): void
     {
         $container = self::requireContainer();
 
         DatabaseCreator::createDoctrineDatabase($container);
     }
 
-    final public static function truncateDatabaseDoctrine()
+    final public static function truncateDatabaseDoctrine(): void
     {
         $container = self::requireContainer();
 

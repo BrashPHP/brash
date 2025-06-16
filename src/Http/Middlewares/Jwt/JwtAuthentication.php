@@ -31,11 +31,6 @@ final class JwtAuthentication implements MiddlewareInterface
     use DoublePassTrait;
 
     /**
-     * PSR-3 compliant logger.
-     */
-    private ?LoggerInterface $logger;
-
-    /**
      * The rules stack.
      *
      * @var SplStack<RuleInterface>
@@ -48,13 +43,14 @@ final class JwtAuthentication implements MiddlewareInterface
 
     public function __construct(
         JwtAuthOptions $options,
-        ?LoggerInterface $logger = null,
+        /**
+         * PSR-3 compliant logger.
+         */
+        private ?LoggerInterface $logger = null,
         ?ResponseFactoryInterface $responseFactoryInterface = null
     ) {
         /* Setup stack for rules */
         $this->rules = new SplStack;
-
-        $this->logger = $logger;
 
         $this->options = $options->bindToAuthentication($this);
 
@@ -220,7 +216,7 @@ final class JwtAuthentication implements MiddlewareInterface
 
         if (isset($cookieParams[$this->options->cookie])) {
             $this->log(LogLevel::DEBUG, 'Using token from cookie');
-            if (preg_match($this->options->regexp, $cookieParams[$this->options->cookie], $matches)) {
+            if (preg_match($this->options->regexp, (string) $cookieParams[$this->options->cookie], $matches)) {
                 return $matches[1];
             }
 

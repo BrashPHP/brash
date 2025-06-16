@@ -14,6 +14,5 @@ readonly class WsGateway
      */
     public function __construct(
         public string|array $events
-    ) {
-    }
+    ) {}
 }

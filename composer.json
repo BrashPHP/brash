@@ -81,7 +81,12 @@
     "test": "pest --exclude-group doctrine",
     "test:doctrine": "phpunit --group doctrine",
     "test:nodebug": "@php -c ./disable-xdebug.ini && phpunit",
+    "lint": [
+      "rector",
+      "pint"
+    ],
     "test:update": "phpunit --migrate-configuration",
+    "test:lint": "pint --test",
     "doctrine": "doctrine",
     "doctrine:create-db": "doctrine orm:clear-cache:metadata && doctrine orm:schema-tool:create && doctrine dbal:run-sql database/bootstrap.sql",
     "doctrine:update-db": "doctrine orm:schema-tool:update",

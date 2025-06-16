@@ -3,8 +3,6 @@
 namespace Brash\Framework\Http\WebSocket;
 
 use Brash\Framework\Http\Attributes\WebSocket\WsGateway;
-use Brash\Framework\Http\WebSocket\WebSocketEventHandlerInterface;
-use Brash\Framework\Http\WebSocket\WebSocketGateway;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\Loop;
